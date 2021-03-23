@@ -7,7 +7,7 @@ assignees: SrGMC
 
 ---
 
-**¿Dónde propone esta función?
+**¿Dónde propone esta función?**
 - [ ] Sitio web
 - [ ] Servidor Node.js
 - [ ] Servidor Rust
