@@ -14,8 +14,6 @@ Empieza con las siguientes plantillas:
 - [Solicitud de nueva ciudad](https://github.com/SrGMC/hermes-issues/issues/new?assignees=SrGMC&labels=city+request&template=es_city_request.md&title=%5BCIUDAD%5D+): Sugerir una nueva ciudad.
 - [Solicitud de lugar](https://github.com/SrGMC/hermes-issues/issues/new?assignees=SrGMC&labels=place+request&template=es_place_request.md&title=%5BLUGAR%5D+): Sugiere una edición o un nuevo lugar.
 
-Traducción realizada con la versión gratuita del traductor www.DeepL.com/Translator
-
 ## Inglés
 
 Welcome to the hermes issues repository. Here, you can report any bug that you find or suggest edits and new places and cities to the platform.
