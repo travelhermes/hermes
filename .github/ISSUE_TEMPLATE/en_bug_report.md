@@ -1,7 +1,7 @@
 ---
-name: Bug report
+name: "[EN] Bug report"
 about: Create a report to help us improve
-title: "[BUG] "
+title: "[EN][BUG] "
 labels: bug
 assignees: SrGMC
 
