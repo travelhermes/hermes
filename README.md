@@ -44,7 +44,7 @@ Se provee un archivo de `docker-compose` como punto de inicio.
 
 Los pasos de despligue son los siguientes:
 
-1. Preparación de la Web
+1. Preparación de la web
     1. `js/common.js`: Cambie la constante `TILESERVER_ENDPOINT` para que apunte al servidor de tiles para los mapas.
     2. Reemplace, si lo desea, los términos y condiciones y la política de privacidad que se ofrecen como ejemplo.
         - **Nota**: Tenga en cuenta que Hermes está bajo la licencia GPL-3.0 
@@ -64,8 +64,12 @@ Los pasos de despligue son los siguientes:
     2. `db.json`: Este archivo contiene los lugares que se almacenarán en la base de datos. Añada este archivo en el directorio `server/db/db.json`. Se muestra un ejemplo en la raíz de este repositorio.
     3. Metric-FF: Compile el código fuente de [Metric-FF 1.2](https://fai.cs.uni-saarland.de/hoffmann/metric-ff.html) acorde a la arquitectura de su máquina. Mueva el ejecutable `ff` generado a  `server/planner/ff`.
 3. Genere la imagen del servidor: Desde `server/`, ejecute `docker build -t srgmc/hermes .`
-4. Creación de la base de datos: Inicie el contenedor de la base de datos que va a utilizar para Hermes y la instancia de Graphhopper. Una vez iniciado, dirígase a `server/db` y ejecute el comando `node init.js && addPlaces.js`. Esto añadirá todas las tablas a la base de datos y posteriormente añadirá todos los lugares de `db.json`. Puede generar este archivo con los scripts del directorio `data/`
-5. Configure  `docker-compose.yaml` para que las rutas sean las correctas.
+4. Configure  `docker-compose.yaml` para que las rutas sean las correctas.
+5. Creación de la base de datos: 
+    1. Inicie el contenedor de la base de datos que va a utilizar para Hermes con `docker-compose up mariadb`.
+    2. Inicie la instancia de Graphhopper.
+    3. Dirígase a `server/db` y ejecute el comando `node init.js && addPlaces.js`. 
+        - Esto añadirá todas las tablas a la base de datos y posteriormente añadirá todos los lugares de `db.json`. Puede generar este archivo con los scripts del directorio `data/`.
 6. Iniciar el servidor: Inicie el servidor con `docker-compose up -d`
 7. Configuración de cron: En el archivo `crontab`, se muestra un ejemplo de una tarea períodica.
 
