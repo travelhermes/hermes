@@ -24,7 +24,7 @@ COPY . /usr/src/app
 
 # Install hermes-rust package
 WORKDIR /usr/src/app/hermes-rust
-#RUN npm i
+RUN npm i
 #RUN neon build --release
 
 WORKDIR /usr/src/app
