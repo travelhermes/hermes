@@ -1,0 +1,28 @@
+version: "3"
+
+services:
+    hermes:
+        image: srgmc/hermes
+        networks:
+            - default
+        volumes:
+            - ./config.json:/usr/src/app/config.json
+            - ./web:/usr/src/app/web:ro
+        ports:
+            - 8080:80
+        security_opt:
+            - no-new-privileges:true
+        restart: always
+
+    mariadb:
+        image: yobasystems/alpine-mariadb
+        networks:
+            - default
+        env_file: ./mariadb.env
+        volumes:
+            - ./volumes/mariadb:/var/lib/mysql
+        ports:
+            - 3306:3306
+        security_opt:
+            - no-new-privileges:true
+         restart: always

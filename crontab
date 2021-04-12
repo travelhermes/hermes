@@ -1,0 +1,1 @@
+0 0 * * * docker exec -it hermes_hermes_1 node cron.js > /var/log/hermes.log

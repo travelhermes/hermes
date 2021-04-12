@@ -1,0 +1,32 @@
+{
+    "host": "",
+    "database": "mariadb://username:password@address:port/database",
+    "graphhopper": "",
+    "secret": "random 32 char string",
+    "hCaptcha": {
+        "secret": "",
+        "sitekey": ""
+    },
+    "mail": {
+        "service": "gmail",
+        "user": "email address",
+        "password": "password",
+        "from": "Hermes <email address>"
+    },
+    "foursquare": {
+        "categories": [
+            {
+                "id": 1,
+                "fsqId": "5032792091d4c4b30a586d5c",
+                "name": "Salas de conciertos",
+                "timeSpent": 1
+            },
+            {
+                "id": 2,
+                "fsqId": "4bf58dd8d48988d138941735",
+                "name": "Mezquitas",
+                "timeSpent": 1
+            }
+        ]
+    }
+}

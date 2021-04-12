@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="utf-8" />
+        <link rel="shortcut icon" type="image/png" href="/assets/favicon.png" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta
+            name="description"
+            content="Hermes es un sistema recomendador y planificador turístico, para facilitarte la tarea más tediosa de todo viaje: planificarlo"
+        />
+        <meta name="author" content="Álvaro Galisteo" />
+        <title>Plan - Hermes</title>
+
+        <!-- CSS -->
+        <link href="/css/bootstrap.min.css" rel="stylesheet" />
+        <link href="/css/bootstrap-icons.css" rel="stylesheet" />
+        <link href="/css/common.css" rel="stylesheet" />
+        <link href="/css/plans.css" rel="stylesheet" />
+    </head>
+    <body class="d-flex flex-column min-vh-100">
+        <div
+            class="modal fade"
+            id="loader"
+            data-bs-backdrop="static"
+            data-bs-keyboard="false"
+            tabindex="-1"
+            aria-hidden="true"
+        >
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content text-center py-5">
+                    <div class="spinner-border mx-auto" role="status">
+                        <span class="visually-hidden">Cargando...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div
+            class="modal fade"
+            id="planStatus"
+            data-bs-backdrop="static"
+            data-bs-keyboard="false"
+            tabindex="-1"
+            aria-hidden="true"
+        >
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content text-center py-5 px-3">
+                    <div id="planningStatus" class="d-none">
+                        <div class="spinner-border mx-auto" role="status"></div>
+                        <div class="fs-3 my-2">Planificando</div>
+
+                        <div class="text-muted fs-6 px-2">
+                            Hermes está acabando de planificar las rutas. Esto puede tardar hasta 5 minutos. Por favor,
+                            espere.
+                        </div>
+                    </div>
+                    <div id="timedoutStatus" class="d-none">
+                        <div class="fs-2 text-danger mx-auto" role="status">
+                            <i class="bi bi-exclamation-circle me-1"></i>
+                        </div>
+                        <div class="fs-3 text-danger my-2">Ruta no encontrada</div>
+
+                        <div class="text-muted fs-6 px-2">
+                            Hermes no ha podido encontrar una ruta. Es posible que hayas añadido demasiados sitios o que
+                            hayas establecido poco tiempo. Prueba a eliminar la ruta y crearla de nuevo reduciendo la
+                            cantidad de sitios o aumentando la duración del plan.
+                        </div>
+                    </div>
+                    <div id="internalErrorStatus" class="d-none">
+                        <div class="fs-2 text-danger mx-auto" role="status">
+                            <i class="bi bi-x-circle me-1"></i>
+                        </div>
+                        <div class="fs-3 text-danger my-2">Error interno</div>
+                        <div class="text-muted fs-6 px-2">
+                            Se ha producido un error interno mientras se planficaba tu ruta. Por favor, elimina la ruta
+                            y créala de nuevo más tarde. Si el error persiste,
+                            <a href="/help/">contacta con nosotros</a>.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal" id="deleteConfirm" tabindex="-1" aria-labelledby="deleteConfirmLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteConfirmLabel">Eliminar ruta</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p class="fs-4">¿Estás seguro de querer eliminar el plan?</p>
+                        <p>Esto eliminará todas las rutas y las modificaciones que hayas realizado sobre ellas</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button
+                            type="button"
+                            class="btn btn-danger"
+                            original-data="Sí, estoy seguro"
+                            onclick="deletePlan(this);"
+                        >
+                            Sí, estoy seguro
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="searchModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollabl">
+                <form class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="searchModalLabel">Insertar lugar</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Introduce un criterio de búsqueda</p>
+                        <input type="text" id="inputSearch" class="w-100" placeholder="Buscar lugar" />
+                        <div class="text-center">
+                            <div class="alert alert-primary w-100 mt-2 d-inline-block d-none" role="alert">
+                                Sin resultados. Prueba con otro criterio de búsqueda <br />
+                                ¿Te falta algún lugar?
+                                <a href="https://github.com/SrGMC/hermes">Háznoslo saber</a>
+                            </div>
+                        </div>
+                        <div id="searchItems"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        <button
+                            type="submit"
+                            class="btn btn-primary"
+                            onclick="search(this); return false;"
+                            original-data="Buscar"
+                        >
+                            Buscar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
+            <a class="navbar-brand col-md-4 col-lg-3 me-0 px-3" href="/dashboard/">
+                <img class="logo" src="/assets/logo_light_256.png" alt="" width="28" height="28" />
+                Hermes
+            </a>
+            <div class="w-100"></div>
+            <div class="nav navbar-nav navbar-secondary px-3 text-secondary">
+                <div class="text-nowrap">
+                    <a href="/dashboard/">
+                        <i
+                            class="bi bi-compass"
+                            style="font-size: 1.75rem"
+                            data-bs-toggle="tooltip"
+                            data-bs-placement="bottom"
+                            data-bs-original-title="Recomendaciones"
+                            title="Recomendaciones"
+                        ></i>
+                    </a>
+                    <a href="/plans/" class="active">
+                        <i
+                            class="bi bi-journals"
+                            style="font-size: 1.75rem"
+                            data-bs-toggle="tooltip"
+                            data-bs-placement="bottom"
+                            data-bs-original-title="Planes"
+                            title="Planes"
+                        ></i>
+                    </a>
+                    <a href="/ratings/">
+                        <i
+                            class="bi bi-star-fill"
+                            style="font-size: 1.75rem"
+                            data-bs-toggle="tooltip"
+                            data-bs-placement="bottom"
+                            data-bs-original-title="Puntuaciones"
+                            title="Puntuaciones"
+                        ></i>
+                    </a>
+                    <a href="/profile/">
+                        <i
+                            class="bi bi-person-square"
+                            style="font-size: 1.75rem"
+                            data-bs-toggle="tooltip"
+                            data-bs-placement="bottom"
+                            data-bs-original-title="Perfil"
+                            title="Perfil"
+                        ></i>
+                    </a>
+                    <a href="/help/">
+                        <i
+                            class="bi bi-question-circle"
+                            style="font-size: 1.75rem"
+                            data-bs-toggle="tooltip"
+                            data-bs-placement="bottom"
+                            data-bs-original-title="Ayuda"
+                            title="Ayuda"
+                        ></i>
+                    </a>
+                </div>
+            </div>
+        </header>
+
+        <div class="w-100 text-center bg-dark text-white py-5">
+            <div class="h5 text-muted mx-2">
+                <span id="days" class="mx-2"></span> |
+                <div class="mx-2 d-inline-block">
+                    <input type="date" class="form-control d-inline-block edit-mode-disable" disabled id="start-date" style="width: 150px" onchange="updateDates(this);">
+                    <i class="mx-md-1 bi bi-arrow-right"></i> <input type="date" class="form-control d-inline-block" disabled id="end-date" style="width: 150px">
+                </div>
+            </div>
+            <input
+                type="text"
+                name="name"
+                id="name"
+                class="form-control fs-1 w-75 text-center d-inline-block mb-1 mx-2 edit-mode-disable"
+                disabled
+            />
+            <textarea
+                type="text"
+                name="description"
+                id="description"
+                class="form-control fs-5 w-75 text-center d-inline-block mb-1 mx-1 edit-mode-disable"
+                disabled
+            ></textarea>
+            <h6 id="status"></h6>
+            <!-- TODO: If platform has multiple cities, add location here -->
+            <div class="btn-group mt-3 edit-mode-hide" role="group" aria-label="Acciones" id="actions">
+                <button type="button" class="btn btn-secondary" id="editButton" onclick="edit = true; editMode();">
+                    <i class="mx-md-1 bi bi-pencil-fill"></i>
+                    Editar
+                </button>
+                <button
+                    type="button"
+                    class="btn btn-danger"
+                    data-bs-dismiss="modal"
+                    data-bs-toggle="modal"
+                    data-bs-target="#deleteConfirm"
+                >
+                    <i class="mx-md-1 bi bi-trash-fill"></i>
+                    Eliminar
+                </button>
+            </div>
+            <div class="btn-group mt-3 edit-mode-show d-none" role="group" aria-label="Acciones" id="actions">
+                <button
+                    type="button"
+                    class="btn btn-success"
+                    onclick="savePlan(this);"
+                    original-data="<i class='mx-md-1 bi bi-save'></i>Guardar"
+                >
+                    <i class="mx-md-1 bi bi-save"></i>
+                    Guardar
+                </button>
+                <button type="button" class="btn btn-secondary" onclick="edit = false; cancelEdit();">
+                    <i class="mx-md-1 bi bi-x-circle"></i>
+                    Cancelar
+                </button>
+            </div>
+        </div>
+        <div class="container-fluid main w-md-75 text-center my-4">
+            <main class="ms-sm-auto px-md-4 d-none" id="mainPlan">
+                <div>
+                    <div class="text-muted">Día</div>
+                    <div class="h5" id="displayDay"></div>
+                </div>
+                <div class="btn-group mt-3" role="group" aria-label="Cambiar día">
+                    <button
+                        id="prev"
+                        type="button"
+                        class="btn btn-outline-secondary"
+                        id="prevButton"
+                        onclick="prevDay(this)"
+                    >
+                        <i class="mx-md-1 bi bi-arrow-left"></i>
+                        <span class="d-none d-lg-inline"> Anterior día </span>
+                    </button>
+                    <button
+                        id="next"
+                        type="button"
+                        class="btn btn-outline-secondary"
+                        id="nextButton"
+                        onclick="nextDay(this)"
+                    >
+                        <span class="d-none d-lg-inline"> Siguiente día </span>
+                        <i class="mx-md-1 bi bi-arrow-right"></i>
+                    </button>
+                </div>
+
+                <div class="mt-4" id="planning"></div>
+            </main>
+        </div>
+
+        <!-- Footer -->
+        <footer class="mt-auto pt-5 text-center mb-md-5">
+            <p>
+                Creado por
+                <a href="https://galisteo.me">Álvaro Galisteo</a><br />
+                <a href="/attributions/">Atribuciones</a> -
+                <a href="/help/">Ayuda</a> - 
+                <a href="/terms/">Terminos y condiciones</a> - 
+                <a href="/privacy/">Política de privacidad</a>
+            </p>
+        </footer>
+
+        <!--
+            Templates
+        -->
+        <!-- Place card template -->
+        <template id="templateCardPlace">
+            <div class="item">
+                <div class="h6 text-muted time-start edit-mode-hide"></div>
+                <div class="card my-3 text-start item-card">
+                    <div class="row g-0">
+                        <div class="col-md-4">
+                            <div
+                                class="w-100 h-100 img"
+                                style="
+                                    background: url('/assets/default_image.png');
+                                    background-repeat: no-repeat;
+                                    background-size: cover;
+                                    background-position: center;
+                                    min-height: 200px;
+                                "
+                            ></div>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h5 class="card-title my-0 title"></h5>
+                                <div class="d-inline fs-6">
+                                    <i class="mx-md-1 bi bi-clock-history text-primary"></i>
+                                    <span class="time"></span>
+                                </div>
+                                <p class="card-text description my-2"></p>
+                                <div class="btn-group edit-mode-hide" role="group" aria-label="Acciones">
+                                    <a href="#" target="_blank" class="btn btn-outline-primary wiki">
+                                        <svg
+                                            style="height: 16px"
+                                            aria-hidden="true"
+                                            focusable="false"
+                                            role="img"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            viewBox="0 0 640 512"
+                                        >
+                                            <path
+                                                fill="currentColor"
+                                                d="M640 51.2l-.3 12.2c-28.1.8-45 15.8-55.8 40.3-25 57.8-103.3 240-155.3 358.6H415l-81.9-193.1c-32.5 63.6-68.3 130-99.2 193.1-.3.3-15 0-15-.3C172 352.3 122.8 243.4 75.8 133.4 64.4 106.7 26.4 63.4.2 63.7c0-3.1-.3-10-.3-14.2h161.9v13.9c-19.2 1.1-52.8 13.3-43.3 34.2 21.9 49.7 103.6 240.3 125.6 288.6 15-29.7 57.8-109.2 75.3-142.8-13.9-28.3-58.6-133.9-72.8-160-9.7-17.8-36.1-19.4-55.8-19.7V49.8l142.5.3v13.1c-19.4.6-38.1 7.8-29.4 26.1 18.9 40 30.6 68.1 48.1 104.7 5.6-10.8 34.7-69.4 48.1-100.8 8.9-20.6-3.9-28.6-38.6-29.4.3-3.6 0-10.3.3-13.6 44.4-.3 111.1-.3 123.1-.6v13.6c-22.5.8-45.8 12.8-58.1 31.7l-59.2 122.8c6.4 16.1 63.3 142.8 69.2 156.7L559.2 91.8c-8.6-23.1-36.4-28.1-47.2-28.3V49.6l127.8 1.1.2.5z"
+                                            ></path>
+                                        </svg>
+                                    </a>
+                                    <a href="#" target="_blank" class="btn btn-outline-primary link">
+                                        <i class="bi bi-link-45deg"></i>
+                                    </a>
+                                    <a href="#" target="_blank" class="btn btn-outline-success maps">
+                                        <i class="mx-md-1 bi bi-map"></i>
+                                        Ver en Google Maps
+                                    </a>
+                                </div>
+                                <div class="btn-group edit-mode-show d-none" role="group" aria-label="Acciones">
+                                    <button onclick="removeItem(this)" class="btn btn-outline-danger remove">
+                                        <i class="mx-md-1 bi bi-trash-fill"></i>
+                                        <span class="d-none d-lg-inline"> Eliminar </span>
+                                    </button>
+                                </div>
+                                <textarea
+                                    onchange="updateNotes(this)"
+                                    placeholder="Notas"
+                                    class="edit-mode-disable notes w-100 d-block form-control mt-2"
+                                    disabled
+                                    style="height: 80px"
+                                ></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="h6 text-muted time-end edit-mode-hide"></div>
+                <div class="my-3 text-center edit-mode-show d-none">
+                    <button
+                        class="btn btn-primary my-1"
+                        onclick="openInsertPlace(this);"
+                        data-bs-toggle="modal"
+                        data-bs-target="#searchModal"
+                    >
+                        <i class="bi bi-geo-alt-fill me-1"></i>Insertar lugar
+                    </button>
+                    <button class="btn btn-primary my-1" onclick="insertCustom(this)">
+                        <i class="bi bi-plus-circle me-1"></i>Insertar personalizado
+                    </button>
+                    <button class="btn btn-primary my-1" onclick="insertRest(this)">
+                        <i class="bi bi-tree-fill me-1"></i>Insertar descanso
+                    </button>
+                    <button class="btn btn-primary my-1" onclick="insertWait(this)">
+                        <i class="bi bi-hourglass-split me-1"></i>Insertar espera
+                    </button>
+                </div>
+            </div>
+        </template>
+        <template id="templateCardStart">
+            <div class="item">
+                <div class="card my-3 text-start item-card w-md-50 mx-auto">
+                    <div class="row g-0">
+                        <div class="col-md-4 d-none d-md-block">
+                            <img class="w-100" src="/assets/start.png" />
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h5 class="card-title my-0">Inicio</h5>
+                                <p class="card-text my-2">Este es tu punto de inicio.</p>
+                                <div class="btn-group" role="group" aria-label="Acciones">
+                                    <a href="#" target="_blank" class="btn btn-outline-success maps">
+                                        <i class="mx-md-1 bi bi-map"></i>
+                                        Ver en Google Maps
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="h6 text-muted time-end edit-mode-hide"></div>
+                <div class="my-3 text-center edit-mode-show d-none">
+                    <button
+                        class="btn btn-primary my-1"
+                        onclick="openInsertPlace(this);"
+                        data-bs-toggle="modal"
+                        data-bs-target="#searchModal"
+                    >
+                        <i class="bi bi-geo-alt-fill me-1"></i>Insertar lugar
+                    </button>
+                    <button class="btn btn-primary my-1" onclick="insertCustom(this)">
+                        <i class="bi bi-plus-circle me-1"></i>Insertar personalizado
+                    </button>
+                    <button class="btn btn-primary my-1" onclick="insertRest(this)">
+                        <i class="bi bi-tree-fill me-1"></i>Insertar descanso
+                    </button>
+                    <button class="btn btn-primary my-1" onclick="insertWait(this)">
+                        <i class="bi bi-hourglass-split me-1"></i>Insertar espera
+                    </button>
+                </div>
+            </div>
+        </template>
+        <template id="templateCardWait">
+            <div class="item">
+                <div class="h6 text-muted time-start edit-mode-hide"></div>
+                <div class="card my-3 text-start item-card w-md-50 mx-auto">
+                    <div class="row g-0">
+                        <div class="col-md-4 d-none d-md-block">
+                            <img class="w-100" src="/assets/wait.png" />
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h5 class="card-title my-0 title">Esperar</h5>
+                                <div class="d-inline fs-6">
+                                    <i class="mx-md-1 bi bi-clock-history text-primary"></i>
+
+                                    <input
+                                        type="number"
+                                        class="time form-control d-inline-block edit-mode-disable"
+                                        style="width: 80px"
+                                        disabled
+                                        min="0"
+                                        step="1"
+                                        onchange="updateCustomTime(this)"
+                                    />
+                                    minutos
+                                </div>
+                                <p class="card-text description mt-2 mb-0">
+                                    El siguiente lugar a visitar aún no ha abierto, por lo que tendrás que esperar hasta
+                                    que abra.
+                                </p>
+                                <div
+                                    class="btn-group edit-mode-show d-none my-2 mb-0"
+                                    role="group"
+                                    aria-label="Acciones"
+                                >
+                                    <button onclick="removeItem(this)" class="btn btn-outline-danger remove">
+                                        <i class="mx-md-1 bi bi-trash-fill"></i>
+                                        <span class="d-none d-lg-inline"> Eliminar </span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="h6 text-muted time-end edit-mode-hide"></div>
+                <div class="my-3 text-center edit-mode-show d-none">
+                    <button
+                        class="btn btn-primary my-1"
+                        onclick="openInsertPlace(this);"
+                        data-bs-toggle="modal"
+                        data-bs-target="#searchModal"
+                    >
+                        <i class="bi bi-geo-alt-fill me-1"></i>Insertar lugar
+                    </button>
+                    <button class="btn btn-primary my-1" onclick="insertCustom(this)">
+                        <i class="bi bi-plus-circle me-1"></i>Insertar personalizado
+                    </button>
+                    <button class="btn btn-primary my-1" onclick="insertRest(this)">
+                        <i class="bi bi-tree-fill me-1"></i>Insertar descanso
+                    </button>
+                    <button class="btn btn-primary my-1" onclick="insertWait(this)">
+                        <i class="bi bi-hourglass-split me-1"></i>Insertar espera
+                    </button>
+                </div>
+            </div>
+        </template>
+        <template id="templateCardRest">
+            <div class="item">
+                <div class="h6 text-muted time-start edit-mode-hide"></div>
+                <div class="card my-3 text-start item-card w-md-50 mx-auto">
+                    <div class="row g-0">
+                        <div class="col-md-4 d-none d-md-block">
+                            <img class="w-100" src="/assets/rest.png" />
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h5 class="card-title my-0 title">Descanso</h5>
+                                <div class="d-inline fs-6">
+                                    <i class="mx-md-1 bi bi-clock-history text-primary"></i>
+
+                                    <input
+                                        type="number"
+                                        class="time form-control d-inline-block edit-mode-disable"
+                                        style="width: 80px"
+                                        disabled
+                                        min="0"
+                                        step="1"
+                                        onchange="updateCustomTime(this)"
+                                    />
+                                    minutos
+                                </div>
+                                <p class="card-text description mt-2 mb-0">
+                                    Este es el período de descanso que has definido al crear el plan
+                                </p>
+                                <div
+                                    class="btn-group edit-mode-show d-none mt-2 mb-0"
+                                    role="group"
+                                    aria-label="Acciones"
+                                >
+                                    <button onclick="removeItem(this)" class="btn btn-outline-danger remove">
+                                        <i class="mx-md-1 bi bi-trash-fill"></i>
+                                        <span class="d-none d-lg-inline"> Eliminar </span>
+                                    </button>
+                                </div>
+                                <textarea
+                                    onchange="updateNotes(this)"
+                                    placeholder="Notas"
+                                    class="edit-mode-disable notes w-100 d-block form-control mt-2 mb-1 me-2"
+                                    disabled
+                                    style="height: 80px"
+                                ></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="h6 text-muted time-end edit-mode-hide"></div>
+                <div class="my-3 text-center edit-mode-show d-none">
+                    <button
+                        class="btn btn-primary my-1"
+                        onclick="openInsertPlace(this);"
+                        data-bs-toggle="modal"
+                        data-bs-target="#searchModal"
+                    >
+                        <i class="bi bi-geo-alt-fill me-1"></i>Insertar lugar
+                    </button>
+                    <button class="btn btn-primary my-1" onclick="insertCustom(this)">
+                        <i class="bi bi-plus-circle me-1"></i>Insertar personalizado
+                    </button>
+                    <button class="btn btn-primary my-1" onclick="insertRest(this)">
+                        <i class="bi bi-tree-fill me-1"></i>Insertar descanso
+                    </button>
+                    <button class="btn btn-primary my-1" onclick="insertWait(this)">
+                        <i class="bi bi-hourglass-split me-1"></i>Insertar espera
+                    </button>
+                </div>
+            </div>
+        </template>
+        <template id="templateCardCustom">
+            <div class="item">
+                <div class="h6 text-muted time-start edit-mode-hide"></div>
+                <div class="card my-3 text-start item-card">
+                    <div class="row g-0">
+                        <div class="col-md-4 d-none d-md-block">
+                            <div
+                                class="w-100 h-100 img"
+                                style="
+                                    background: url('/assets/default_image.png');
+                                    background-repeat: no-repeat;
+                                    background-size: cover;
+                                    background-position: center;
+                                "
+                            ></div>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h5 class="card-title my-0 title">Personalizado</h5>
+                                <div class="d-inline fs-6">
+                                    <i class="mx-md-1 bi bi-clock-history text-primary"></i>
+
+                                    <input
+                                        type="number"
+                                        class="time form-control d-inline-block edit-mode-disable"
+                                        style="width: 80px"
+                                        disabled
+                                        min="0"
+                                        step="1"
+                                        onchange="updateCustomTime(this)"
+                                    />
+                                    minutos
+                                </div>
+                                <p class="card-text description mt-2 mb-0">
+                                    Este es un lugar que has creado de forma manual, y que no está en la base de datos
+                                    de Hermes.
+                                </p>
+                                <div class="btn-group edit-mode-show d-none my-2" role="group" aria-label="Acciones">
+                                    <button onclick="removeItem(this)" class="btn btn-outline-danger remove">
+                                        <i class="mx-md-1 bi bi-trash-fill"></i>
+                                        <span class="d-none d-lg-inline"> Eliminar </span>
+                                    </button>
+                                </div>
+                                <textarea
+                                    onchange="updateNotes(this)"
+                                    placeholder="Notas"
+                                    class="edit-mode-disable notes w-100 d-block form-control"
+                                    disabled
+                                    style="height: 80px"
+                                ></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="h6 text-muted time-end edit-mode-hide"></div>
+                <div class="my-3 text-center edit-mode-show d-none">
+                    <button
+                        class="btn btn-primary my-1"
+                        onclick="openInsertPlace(this);"
+                        data-bs-toggle="modal"
+                        data-bs-target="#searchModal"
+                    >
+                        <i class="bi bi-geo-alt-fill me-1"></i>Insertar lugar
+                    </button>
+                    <button class="btn btn-primary my-1" onclick="insertCustom(this)">
+                        <i class="bi bi-plus-circle me-1"></i>Insertar personalizado
+                    </button>
+                    <button class="btn btn-primary my-1" onclick="insertRest(this)">
+                        <i class="bi bi-tree-fill me-1"></i>Insertar descanso
+                    </button>
+                    <button class="btn btn-primary my-1" onclick="insertWait(this)">
+                        <i class="bi bi-hourglass-split me-1"></i>Insertar espera
+                    </button>
+                </div>
+            </div>
+        </template>
+
+        <template id="templatePlanning">
+            <div
+                class="d-inline-block"
+                tabindex="0"
+                data-bs-toggle="tooltip"
+                title="Hermes está terminando de planificando tu ruta. Esto puede tardar hasta 5 minutos."
+            >
+                <div class="spinner-border spinner-border-sm me-1" role="status"></div>
+                Planificando
+            </div>
+        </template>
+        <template id="templateActive">
+            <div
+                class="d-inline-block"
+                tabindex="0"
+                data-bs-toggle="tooltip"
+                title="¡Tu ruta está activa! Esto significa que estas realizandola o está pendiente de realizar."
+            >
+                <i class="bi bi-compass me-1"></i>Activo
+            </div>
+        </template>
+        <template id="templateDone">
+            <div class="d-inline-block" tabindex="0" data-bs-toggle="tooltip" title="Esta ruta ya ha sido completada.">
+                <i class="bi bi-check2-circle me-1"></i>Completado
+            </div>
+        </template>
+        <template id="templateTimedout">
+            <div
+                class="d-inline-block text-danger"
+                tabindex="0"
+                data-bs-toggle="tooltip"
+                title="Hermes no ha podido encontrar una ruta. Es posible que hayas añadido demasiados sitios o que hayas establecido poco tiempo. Prueba a eliminar la ruta y crearla de nuevo reduciendo la cantidad de sitios o aumentando la duración del día/plan."
+            >
+                <i class="bi bi-exclamation-circle me-1"></i>Ruta no encontrada
+            </div>
+        </template>
+        <template id="templateInternalError">
+            <div
+                class="d-inline-block text-danger"
+                tabindex="0"
+                data-bs-toggle="tooltip"
+                title="Se ha producido un error interno mientras se planficaba tu ruta. Por favor, elimina la ruta y créala de nuevo más tarde. Si el error persiste, contacta con nosotros."
+            >
+                <i class="bi bi-x-circle me-1"></i>Error interno
+            </div>
+        </template>
+
+        <!-- Travel time template -->
+        <template id="templateTravel">
+            <div class="my-3 edit-mode-hide">
+                <div class="fs-3 d-inline-block">
+                    <i class="fas fa-walking"></i>
+                    <i class="fas fa-car d-none"></i>
+                </div>
+                <span class="mx-3 my-auto fs-5 time"></span>
+            </div>
+        </template>
+
+        <!-- Search card -->
+        <template id="templateSearchCard">
+            <div class="card search-card my-2">
+                <div class="card-header">
+                    <h3 class="my-0">
+                        <span class="title"> </span>
+                        <a href="" target="_blank" class="wikipedia text-primary">
+                            <svg
+                                style="height: 24px; margin-left: 15px; text-decoration: none; padding-bottom: 5px"
+                                aria-hidden="true"
+                                focusable="false"
+                                role="img"
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 640 512"
+                            >
+                                <path
+                                    fill="currentColor"
+                                    d="M640 51.2l-.3 12.2c-28.1.8-45 15.8-55.8 40.3-25 57.8-103.3 240-155.3 358.6H415l-81.9-193.1c-32.5 63.6-68.3 130-99.2 193.1-.3.3-15 0-15-.3C172 352.3 122.8 243.4 75.8 133.4 64.4 106.7 26.4 63.4.2 63.7c0-3.1-.3-10-.3-14.2h161.9v13.9c-19.2 1.1-52.8 13.3-43.3 34.2 21.9 49.7 103.6 240.3 125.6 288.6 15-29.7 57.8-109.2 75.3-142.8-13.9-28.3-58.6-133.9-72.8-160-9.7-17.8-36.1-19.4-55.8-19.7V49.8l142.5.3v13.1c-19.4.6-38.1 7.8-29.4 26.1 18.9 40 30.6 68.1 48.1 104.7 5.6-10.8 34.7-69.4 48.1-100.8 8.9-20.6-3.9-28.6-38.6-29.4.3-3.6 0-10.3.3-13.6 44.4-.3 111.1-.3 123.1-.6v13.6c-22.5.8-45.8 12.8-58.1 31.7l-59.2 122.8c6.4 16.1 63.3 142.8 69.2 156.7L559.2 91.8c-8.6-23.1-36.4-28.1-47.2-28.3V49.6l127.8 1.1.2.5z"
+                                ></path></svg
+                        ></a>
+                        <a href="" target="_blank" class="url text-primary">
+                            <i class="bi bi-link-45deg"></i>
+                        </a>
+                    </h3>
+                </div>
+                <div class="row g-0">
+                    <div class="col-md-4">
+                        <div
+                            class="w-100 h-100 img"
+                            style="
+                                background: url('/assets/default_image.png');
+                                background-repeat: no-repeat;
+                                background-size: cover;
+                                background-position: center;
+                            "
+                        ></div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <div class="btn-group" role="group" aria-label="Acciones">
+                                <button
+                                    type="button"
+                                    class="btn btn-primary"
+                                    onclick="insertPlace(this);"
+                                    data-bs-dismiss="modal"
+                                >
+                                    <i class="bi bi-plus-circle me-1"></i>
+                                    Insertar lugar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="description mx-3 my-2 fs-6"></div>
+            </div>
+        </template>
+
+        <script src="/js/bootstrap.bundle.min.js"></script>
+        <script src="/js/fontawesome.min.js"></script>
+        <script src="/js/fa-solid.min.js"></script>
+        <script src="/js/common.js"></script>
+        <script src="/js/plan.js"></script>
+        <script
+            async
+            defer
+            data-website-id="0f73de68-9610-4a9c-a7a8-ab61ab30208a"
+            src="https://u.fcld.ml/umami.js"
+        ></script>
+    </body>
+</html>

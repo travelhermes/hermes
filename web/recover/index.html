@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es" class="h-100">
+    <head>
+        <meta charset="utf-8" />
+        <link rel="shortcut icon" type="image/png" href="/assets/favicon.png" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta
+            name="description"
+            content="Hermes es un sistema recomendador y planificador turístico, para facilitarte la tarea más tediosa de todo viaje: planificarlo"
+        />
+        <meta name="author" content="Álvaro Galisteo" />
+        <title>Recuperar contraseña - Hermes</title>
+
+        <!-- CSS -->
+        <link href="/css/bootstrap.min.css" rel="stylesheet" />
+        <link href="/css/bootstrap-icons.css" rel="stylesheet" />
+        <link href="/css/signin.css" rel="stylesheet" />
+    </head>
+    <body class="d-flex h-100 text-center text-white bg-dark">
+        <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
+            <main class="mb-auto mt-auto">
+                <img class="mt-4" src="/assets/logo_light_256.png" alt="" width="128" height="128" />
+
+                <form class="form-recover" onsubmit="recover(this); return false;">
+                    <div class="mb-3">
+                        ¿Has recordado la contraseña? <a href="/signin/" class="text-white">Acceder</a>
+                    </div>
+                    <div class="alert alert-danger d-none" role="alert" id="invalidLink" style="text-shadow: none">
+                        Enlace de cambio de contraseña inválido
+                    </div>
+                    <div class="join">
+                        <label for="inputPassword1" class="visually-hidden">Nueva contraseña</label>
+                        <input
+                            type="password"
+                            id="inputPassword1"
+                            class="form-control"
+                            placeholder="Nueva contraseña"
+                            required
+                        />
+                        <label for="inputPassword2" class="visually-hidden">Repetir contraseña</label>
+                        <input
+                            type="password"
+                            id="inputPassword2"
+                            class="form-control"
+                            placeholder="Repetir contraseña"
+                            required
+                            onkeyup="validate(this);"
+                        />
+                        <div class="mt-2 d-none" id="inputInvalid">
+                            <i class="bi bi-exclamation-circle"></i> Las contraseñas no coinciden
+                        </div>
+                    </div>
+                    <button class="mt-2 w-100 btn btn-lg btn-primary" type="submit" id="inputSubmit" disabled original-data="Guardar cambios">
+                        Guardar cambios
+                    </button>
+                </form>
+            </main>
+
+            <!-- Footer -->
+            <footer class="mt-auto pt-5 text-white-50">
+                <p>
+                    Creado por
+                    <a href="https://galisteo.me" class="text-white">Álvaro Galisteo</a><br />
+                    <a href="/attributions/" class="text-white">Atribuciones</a> - 
+                    <a href="/help/" class="text-white">Ayuda</a> -  
+                    <a href="/terms/" class="text-white">Terminos y condiciones</a> -  
+                    <a href="/privacy/" class="text-white">Política de privacidad</a>
+                </p>
+            </footer>
+        </div>
+
+        <script src="/js/bootstrap.bundle.min.js"></script>
+        <script src="/js/common.js"></script>
+        <script src="/js/recover.js"></script>
+        <script
+            async
+            defer
+            data-website-id="0f73de68-9610-4a9c-a7a8-ab61ab30208a"
+            src="https://u.fcld.ml/umami.js"
+        ></script>
+    </body>
+</html>

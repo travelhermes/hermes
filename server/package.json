@@ -1,0 +1,33 @@
+{
+    "name": "hermes",
+    "version": "0.0.1",
+    "description": "Hermes: Sistema recomendador y planificador de puntos de interés",
+    "main": "index.js",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/SrGMC/hermes.git"
+    },
+    "author": "Álvaro Galisteo (https://alvaro.galisteo.me)",
+    "license": "GPL-3.0",
+    "bugs": {
+        "url": "https://github.com/SrGMC/hermes-issues/issues"
+    },
+    "homepage": "https://github.com/SrGMC/hermes#readme",
+    "dependencies": {
+        "axios": "^0.21.1",
+        "bcrypt": "^5.0.1",
+        "fastify": "^3.12.0",
+        "fastify-cookie": "^5.1.0",
+        "fastify-cors": "^5.2.0",
+        "fastify-helmet": "^5.2.0",
+        "fastify-rate-limit": "^5.4.1",
+        "fastify-static": "^4.0.1",
+        "fastify-strip-html": "^0.0.2",
+        "geolib": "^3.3.1",
+        "mariadb": "^2.5.3",
+        "nodemailer": "^6.5.0",
+        "ora": "^5.3.0",
+        "pug": "^3.0.2",
+        "sequelize": "^6.5.0"
+    }
+}

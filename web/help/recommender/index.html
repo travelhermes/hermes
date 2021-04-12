@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en" class="h-100">
+    <head>
+        <meta charset="utf-8" />
+        <link rel="shortcut icon" type="image/png" href="/assets/favicon.png" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta
+            name="description"
+            content="Hermes es un sistema recomendador y planificador turístico, para facilitarte la tarea más tediosa de todo viaje: planificarlo"
+        />
+
+        <title>Recomendaciones | Ayuda - Hermes</title>
+
+        <!-- Bootstrap core CSS -->
+        <link href="/css/bootstrap.min.css" rel="stylesheet" />
+        <link href="/css/bootstrap-icons.css" rel="stylesheet" />
+
+        <!-- Custom styles for this template -->
+        <link href="/css/index.css" rel="stylesheet" />
+    </head>
+    <body class="d-flex h-100 text-white bg-dark" style="box-shadow: none">
+        <div class="cover-container-big d-flex w-100 h-100 p-3 mx-auto flex-column">
+            <header class="mb-3 text-center">
+                <h1 class="mb-3">
+                    <a href="/" class="text-white text-decoration-none">
+                        <img class="logo" src="/assets/logo_light_256.png" alt="" width="64" height="64" />
+                        Hermes
+                    </a>
+                </h1>
+            </header>
+
+            <main class="px-3 mb-5 text-justify">
+                <a href="javascript:window.history.back()" class="text-white fs-5 mb-5">
+                    <i class="bi bi-box-arrow-in-left mx-1"></i>Volver
+                </a>
+                <h1 class="mt-2"><i class="bi bi-hand-thumbs-up-fill mx-1"></i> Recomendaciones</h1>
+                <p class="fs-5">Descubre como descubrir.</p>
+
+                <p class="mt-3">El recomendador de Hermes es la interfaz principal. Desde ella, podrás:</p>
+                <ul>
+                    <li>Explorar recomendaciones basadas en tus puntuaciones y preferencias</li>
+                    <li>Ver información y fotografías de lugares en el mapa</li>
+                    <li>Seleccionar lugares para crear un plan</li>
+                    <li>Planificar un nuevo plan con los lugares seleccionados</li>
+                </ul>
+                <h2 class="mt-2 border-bottom pb-2">1. Explorar</h2>
+                <p class="mt-3">
+                    El panel de explorar se compone de dos secciones: el listado de lugares y el mapa. En el listado de
+                    lugares podrás ver todas las recomendaciones que Hermes ha creado para tí. Por otro lado, con el
+                    mapa podrás poner todos los lugares en contexto y saber donde se encuentran.
+                </p>
+                <p class="mt-3 text-center">
+                    <a href="/assets/help/recommender_1.png"
+                        ><img class="w-50 border rounded" src="/assets/help/recommender_1.png"
+                    /></a>
+                </p>
+                <p class="mt-3">
+                    En el listado de lugares, cada lugar está representado por una &quot;carta&quot;. En esta, se
+                    muestra el nombre del lugar, sus categorías, una descripción, el tiempo de visita, la puntuación
+                    media del sitio y el porcentaje de predicción de Hermes.
+                </p>
+                <p class="mt-3">
+                    <i class="bi bi-exclamation-circle me-1"></i> <b>Nota:</b> Una puntuación de 0 significa que aún no
+                    tenemos puntuaciones para ese lugar.
+                </p>
+                <h3 class="mt-2 border-bottom pb-2">1.1. Información de un lugar</h3>
+                <p class="mt-3">
+                    Al hacer click en un lugar, ya sea en el mapa o en el listado de lugares, se abrirá un panel en el
+                    mapa con información del lugar
+                </p>
+                <p class="mt-3 text-center">
+                    <a href="/assets/help/recommender_2.png"
+                        ><img class="w-50 border rounded" src="/assets/help/recommender_2.png"
+                    /></a>
+                </p>
+                <p class="mt-3">Desde este panel podrás ver:</p>
+                <ul>
+                    <li><i class="bi bi-images"></i> Fotografías del lugar</li>
+                    <li><i class="bi bi-building"></i> Nombre</li>
+                    <li><i class="bi bi-geo-fill"></i> Dirección</li>
+                    <li><span style="font-family: Times New Roman">W</span> Enlace a Wikipedia (si existe)</li>
+                    <li><i class="bi bi-link-45deg"></i> Enlace a la web oficial del sitio (si existe)</li>
+                    <li><i class="bi bi-twitter"></i> Enlace a Twitter (si existe)</li>
+                    <li><i class="bi bi-facebook"></i> Enlace a Facebook (si existe)</li>
+                    <li><i class="bi bi-instagram"></i> Enlace a Instagram (si existe)</li>
+                </ul>
+
+                <h3 class="mt-2 border-bottom pb-2">1.2. Buscador</h3>
+                <p class="mt-3">
+                    En la parte superior se encuentra un buscador. Cuando introduzcas un criterio de búsqueda,
+                    aparecerán los 5 resultados más relevantes.
+                </p>
+                <p class="mt-3 text-center">
+                    <a href="/assets/help/recommender_3.png"
+                        ><img class="w-75 border rounded" src="/assets/help/recommender_3.png"
+                    /></a>
+                </p>
+                <p class="mt-3">
+                    En los resultados, podrás ver el nombre del lugar, su descripción y sus categorías, de modo que
+                    puedas reconocer si es el lugar que buscas de forma rápida. Además, al pulsar sobre uno de los
+                    resultados, este se mostrará en el mapa con información adicional.
+                </p>
+                <h2 class="mt-2 border-bottom pb-2">2. Seleccionar lugares</h2>
+                <p class="mt-3">
+                    Una vez que hayas explorado un lugar, podrás añadirlo a una lista para crear un plan que lo
+                    contenga.
+                </p>
+                <p class="mt-3">
+                    Para añadir un lugar, una vez abierto su panel de información en el mapa, pulsa en el botón
+                    <a href="#" class="btn btn-sm btn-primary">Añadir al plan</a>. Para eliminarlo o deseleccionarlo del
+                    plan, pulsa en el botón <a href="#" class="btn btn-sm btn-danger">Eliminar del plan</a> o en el
+                    botón <a href="#" class="btn btn-sm btn-outline-danger"><i class="bi bi-calendar2-x"></i></a> que se
+                    encuentra situado en la parte superior derecha de la carta del lugar en el listado de lugares.
+                </p>
+                <p class="mt-3">
+                    Cada vez que selecciones un lugar, este se marcará con un reborde verde en el listado de lugares,
+                    además de cambiar el color del &quot;pin&quot; en el mapa de azul a verde.
+                </p>
+                <h3 class="mt-2 border-bottom pb-2">2.1. Vaciar la lista de lugares seleccionados</h3>
+                <p class="mt-3">
+                    Si deseas vaciar la lista de lugares seleccionados, pulsa el botón
+                    <a href="#" class="text-danger mx-1"><i class="bi bi-calendar2-x"></i></a> que se encuentra en la parte
+                    superior del listado de lugares.
+                </p>
+                <p class="mt-3 text-center">
+                    <a href="/assets/help/recommender_4.png"
+                        ><img class="w-50 border rounded" src="/assets/help/recommender_4.png"
+                    /></a>
+                </p>
+                <p class="mt-3">Al hacerlo, se abrirá una confirmación de que deseas vaciar la selección.</p>
+                <h2 class="mt-2 border-bottom pb-2">3. Planificar un nuevo plan</h2>
+                <p class="mt-3">
+                    Una vez hayas seleccionado un mínimo de 3 lugares, podrás crear un nuevo plan pulsando en el botón
+                    <a href="#" class="btn btn-sm btn-success">Planificar</a>
+                </p>
+                <p class="mt-3 text-center">
+                    <a href="/assets/help/recommender_6.png"
+                        ><img class="w-50 border rounded" src="/assets/help/recommender_6.png"
+                    /></a>
+                </p>
+                <p class="mt-3">
+                    Al pulsar en este botón, se abrirá una ventana modal en la que se te solicitarán los siguientes
+                    datos:
+                </p>
+                <ol>
+                    <li>
+                        Información
+                        <ul>
+                            <li><i class="bi bi-cursor-text"></i> <strong>Nombre del plan</strong></li>
+                            <li><i class="bi bi-card-text"></i> <strong>Descripción del plan</strong></li>
+                        </ul>
+                    </li>
+                    <li>
+                        Horas
+                        <ul>
+                            <li>
+                                <i class="bi bi-clock"></i> <strong>Duración del día</strong>: Hora de inicio y de fin
+                                en la que comenzarás y terminarás el día. <br>
+                                <i class="bi bi-exclamation-circle me-1"></i><b>Nota:</b> Una vez establecida la duración del día, no podrás cambiarla más adelante.
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        Lugar de inicio
+                        <ul>
+                            <li>
+                                <i class="bi bi-geo-alt-fill"></i> Selecciona en el mapa el lugar donde te alojas
+                                durante el viaje o el lugar en el que quieres <strong>empezar todos los días</strong>.
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        Días
+                        <ul>
+                            <li>
+                                <i class="bi bi-calendar-range-fill"></i> <strong>Duración del plan</strong>: Día de
+                                inicio y de fin en la que comenzarás y terminarás el plan. En función de los datos que
+                                hayas provisto anteriormente, se calculará una duración mínima del plan, de manera que
+                                Hermes pueda encontrar un plan. Si no estás satisfecho con la duración mínima, elimina
+                                lugares del plan o aumenta la duración del día.<br><i class="bi bi-exclamation-circle me-1"></i><b>Nota:</b> Una vez establecida la duración del plan, no podrás cambiarla más adelante, aunque podrás adelantar o atrasar la fecha de inicio.
+                            </li>
+                        </ul>
+                    </li>
+                </ol>
+
+                <p class="mt-3">
+                    Si deseas añadir descansos (por ejemplo, para la hora de la comida), podrás añadirlos posteriormente al <a href="/help/planner/" class="text-white">editar un plan</a>.
+                </p>
+
+                <div class="text-center">
+                    <h1 class="mt-5">¿Necesitas más ayuda?</h1>
+                    <p class="fs-4">Escríbenos un correo electrónico. Estaremos encantados de ayudarte.</p>
+                    <a href="mailto:hermes@galisteo.me?subject=Hermes: " class="btn btn-primary btn-lg"
+                        ><i class="bi bi-envelope-open-fill me-1"></i>Enviar un mensaje</a
+                    >
+                </div>
+            </main>
+
+            <footer class="mt-auto text-white-50 text-center">
+                <p>
+                    Creado por
+                    <a href="https://galisteo.me" class="text-white">Álvaro Galisteo</a><br />
+                    <a href="/attributions/" class="text-white">Atribuciones</a> -
+
+                    <a href="/help/" class="text-white">Ayuda</a> - 
+
+                    <a href="/terms/" class="text-white">Terminos y condiciones</a> - 
+
+                    <a href="/privacy/" class="text-white">Política de privacidad</a>
+                </p>
+            </footer>
+        </div>
+        <script
+            async
+            defer
+            data-website-id="0f73de68-9610-4a9c-a7a8-ab61ab30208a"
+            src="https://u.fcld.ml/umami.js"
+        ></script>
+    </body>
+</html>

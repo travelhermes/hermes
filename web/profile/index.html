@@ -1,0 +1,1083 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="utf-8" />
+        <link rel="shortcut icon" type="image/png" href="/assets/favicon.png" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta
+            name="description"
+            content="Hermes es un sistema recomendador y planificador turístico, para facilitarte la tarea más tediosa de todo viaje: planificarlo"
+        />
+        <meta name="author" content="Álvaro Galisteo" />
+        <title>Perfil - Hermes</title>
+
+        <!-- CSS -->
+        <link href="/css/bootstrap.min.css" rel="stylesheet" />
+        <link href="/css/bootstrap-icons.css" rel="stylesheet" />
+        <link href="/css/common.css" rel="stylesheet" />
+        <link href="/css/profile.css" rel="stylesheet" />
+    </head>
+    <body>
+        <div
+            class="modal fade"
+            id="loader"
+            data-bs-backdrop="static"
+            data-bs-keyboard="false"
+            tabindex="-1"
+            aria-hidden="true"
+        >
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content text-center py-5">
+                    <div class="spinner-border mx-auto" role="status">
+                        <span class="visually-hidden">Cargando...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal" id="deleteConfirm" tabindex="-1" aria-labelledby="deleteConfirmLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title text-danger" id="deleteConfirmLabel">Eliminar tu cuenta</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p class="fs-4">¿Estás seguro de querer eliminar tu cuenta?</p>
+                        <p>
+                            Esto eliminará todas puntuaciones y planes creados. Esta acción no es reversible.<br />
+                            Una vez eliminada la cuenta, ya no podrás acceder y necesitarás crear una cuenta nueva.
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-success" data-bs-dismiss="modal">
+                            ¡No! ¡Sácame de aquí!
+                        </button>
+                        <button
+                            type="button"
+                            class="btn btn-danger"
+                            data-bs-dismiss="modal"
+                            data-bs-toggle="modal"
+                            data-bs-target="#deletePassword"
+                        >
+                            Sí, estoy seguro
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div
+            class="modal fade"
+            id="deletePassword"
+            tabindex="-1"
+            aria-labelledby="deletePasswordLabel"
+            aria-hidden="true"
+        >
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title text-danger" id="deletePasswordLabel">Eliminar tu cuenta</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div
+                            class="alert alert-danger d-none"
+                            role="alert"
+                            id="invalidPassword"
+                            style="text-shadow: none"
+                        >
+                            Contraseña o usuario incorrectos
+                        </div>
+                        <p>Introduce tu contraseña para continuar</p>
+                        <input type="password" id="inputDeletePassword" placeholder="Contraseña" />
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-success" data-bs-dismiss="modal">¡Sácame de aquí!</button>
+                        <button
+                            type="button"
+                            class="btn btn-danger"
+                            onclick="deleteAccount(this);"
+                            id="inputDeleteSubmit"
+                            original-data="Eliminar mi cuenta"
+                        >
+                            Eliminar mi cuenta
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
+            <a class="navbar-brand col-md-4 col-lg-3 me-0 px-3" href="/dashboard/">
+                <img class="logo" src="/assets/logo_light_256.png" alt="" width="28" height="28" />
+                Hermes
+            </a>
+            <div class="w-100"></div>
+            <div class="nav navbar-nav navbar-secondary px-3 text-secondary">
+                <div class="text-nowrap">
+                    <a href="/dashboard/">
+                        <i
+                            class="bi bi-compass"
+                            style="font-size: 1.75rem"
+                            data-bs-toggle="tooltip"
+                            data-bs-placement="bottom"
+                            data-bs-original-title="Recomendaciones"
+                            title="Recomendaciones"
+                        ></i>
+                    </a>
+                    <a href="/plans/">
+                        <i
+                            class="bi bi-journals"
+                            style="font-size: 1.75rem"
+                            data-bs-toggle="tooltip"
+                            data-bs-placement="bottom"
+                            data-bs-original-title="Planes"
+                            title="Planes"
+                        ></i>
+                    </a>
+                    <a href="/ratings/">
+                        <i
+                            class="bi bi-star-fill"
+                            style="font-size: 1.75rem"
+                            data-bs-toggle="tooltip"
+                            data-bs-placement="bottom"
+                            data-bs-original-title="Puntuaciones"
+                            title="Puntuaciones"
+                        ></i>
+                    </a>
+                    <a href="/profile/" class="active">
+                        <i
+                            class="bi bi-person-square"
+                            style="font-size: 1.75rem"
+                            data-bs-toggle="tooltip"
+                            data-bs-placement="bottom"
+                            data-bs-original-title="Perfil"
+                            title="Perfil"
+                        ></i>
+                    </a>
+                    <a href="/help/">
+                        <i
+                            class="bi bi-question-circle"
+                            style="font-size: 1.75rem"
+                            data-bs-toggle="tooltip"
+                            data-bs-placement="bottom"
+                            data-bs-original-title="Ayuda"
+                            title="Ayuda"
+                        ></i>
+                    </a>
+                </div>
+            </div>
+        </header>
+
+        <div class="container-fluid main w-md-75 mt-3">
+            <div class="text-center">
+                <div role="alert" class="alert alert-warning w-md-75 d-inline-block">
+                    Hermes aún está en desarrollo, pero te avisaremos cuando todo esté disponible <br />
+                    <hr />
+                    <a href="/help/">¿Necesitas ayuda?</a>
+                </div>
+            </div>
+            <main class="ms-sm-auto px-md-4">
+                <div>
+                    <h2 class="border-bottom py-2 mb-2">Perfil</h2>
+                </div>
+
+                <ul class="nav nav-pills nav-justified">
+                    <li class="nav-item">
+                        <a
+                            class="nav-link active"
+                            id="basic-tab"
+                            data-bs-toggle="tab"
+                            data-bs-target="#basic"
+                            type="button"
+                            role="tab"
+                            aria-controls="basic"
+                            aria-selected="true"
+                        >
+                            <i class="mx-md-1 bi bi-person-fill"></i> Cuenta
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a
+                            class="nav-link"
+                            id="security-tab"
+                            data-bs-toggle="tab"
+                            data-bs-target="#security"
+                            type="button"
+                            role="tab"
+                            aria-controls="security"
+                            aria-selected="false"
+                            href="#"
+                        >
+                            <i class="mx-md-1 bi bi-shield-lock"></i> Seguridad
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a
+                            class="nav-link"
+                            id="advanced-tab"
+                            data-bs-toggle="tab"
+                            data-bs-target="#advanced"
+                            type="button"
+                            role="tab"
+                            aria-controls="advanced"
+                            aria-selected="false"
+                            href="#"
+                        >
+                            <i class="mx-md-1 bi bi-gear-fill"></i>
+                            Avanzado
+                        </a>
+                    </li>
+                </ul>
+                <div class="tab-content" id="profileContent">
+                    <div class="tab-pane fade show active" id="basic" role="tabpanel" aria-labelledby="basic-tab">
+                        <form id="account-form" class="mt-3" onsubmit="save(this); return false;">
+                            <div class="container px-0 mx-0">
+                                <h3 class="mt-3">Datos de contacto</h3>
+                                <div class="row">
+                                    <div class="col">
+                                        <label for="inputName" class="form-label">Nombre</label>
+                                        <input required type="text" id="inputName" class="form-control" />
+                                    </div>
+                                    <div class="col">
+                                        <label for="inputSurname" class="form-label">Apellidos</label>
+                                        <input required type="text" id="inputSurname" class="form-control" />
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <label for="inputEmail" class="form-label">Correo electrónico</label>
+                                        <input required type="text" id="inputEmail" class="form-control" />
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <h3 class="mt-5">Preferencias</h3>
+                                        <label for="inputCategories" class="form-label fs-6">
+                                            ¿Qué tipo de sitios sueles visitar?
+                                        </label>
+                                        <div class="container mx-0 px-2 w-md-50">
+                                            <div class="row my-3">
+                                                <div class="col col-6 px-1">
+                                                    <div class="dropdown">
+                                                        <button
+                                                            class="btn btn-primary bg blue form-control dropdown-toggle"
+                                                            type="button"
+                                                            id="inputCategoriesWater"
+                                                            data-bs-toggle="dropdown"
+                                                            aria-expanded="false"
+                                                        >
+                                                            <i
+                                                                class="bi bi-life-preserver"
+                                                                style="margin-right: 5px"
+                                                            ></i
+                                                            ><br />
+                                                            Agua y costas
+                                                        </button>
+                                                        <ul
+                                                            class="dropdown-menu"
+                                                            aria-labelledby="inputCategoriesWater"
+                                                            id="dropdownCategoriesWater"
+                                                        >
+                                                            <li class="dropdown-item" onclick="toggleCheckbox(this);">
+                                                                <input
+                                                                    type="checkbox"
+                                                                    class="form-check-input me-1"
+                                                                    style="margin-left: 0.75rem"
+                                                                    id="cat-45"
+                                                                />
+                                                                <label> Bahía </label>
+                                                            </li>
+                                                            <li class="dropdown-item" onclick="toggleCheckbox(this);">
+                                                                <input
+                                                                    type="checkbox"
+                                                                    class="form-check-input me-1"
+                                                                    style="margin-left: 0.75rem"
+                                                                    id="cat-24"
+                                                                />
+                                                                <label> Faro </label>
+                                                            </li>
+                                                            <li class="dropdown-item" onclick="toggleCheckbox(this);">
+                                                                <input
+                                                                    type="checkbox"
+                                                                    class="form-check-input me-1"
+                                                                    style="margin-left: 0.75rem"
+                                                                    id="cat-16"
+                                                                />
+                                                                <label> Lago </label>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <div class="col col-6 px-1">
+                                                    <div class="dropdown">
+                                                        <button
+                                                            class="btn btn-warning bg yellow form-control dropdown-toggle"
+                                                            type="button"
+                                                            id="inputCategoriesAnimals"
+                                                            data-bs-toggle="dropdown"
+                                                            aria-expanded="false"
+                                                        >
+                                                            <i class="fas fa-paw" style="margin-right: 5px"></i
+                                                            ><br />Animales
+                                                        </button>
+                                                        <ul
+                                                            class="dropdown-menu"
+                                                            aria-labelledby="inputCategoriesAnimals"
+                                                            id="dropdownCategoriesAnimals"
+                                                        >
+                                                            <li class="dropdown-item" onclick="toggleCheckbox(this);">
+                                                                <input
+                                                                    type="checkbox"
+                                                                    class="form-check-input me-1"
+                                                                    style="margin-left: 0.75rem"
+                                                                    id="cat-39"
+                                                                />
+                                                                <label> Acuario </label>
+                                                            </li>
+                                                            <li class="dropdown-item" onclick="toggleCheckbox(this);">
+                                                                <input
+                                                                    type="checkbox"
+                                                                    class="form-check-input me-1"
+                                                                    style="margin-left: 0.75rem"
+                                                                    id="cat-35"
+                                                                />
+                                                                <label> Exibición zoologica </label>
+                                                            </li>
+                                                            <li class="dropdown-item" onclick="toggleCheckbox(this);">
+                                                                <input
+                                                                    type="checkbox"
+                                                                    class="form-check-input me-1"
+                                                                    style="margin-left: 0.75rem"
+                                                                    id="cat-10"
+                                                                />
+                                                                <label> Zoológico </label>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row my-3">
+                                                <div class="col col-6 px-1">
+                                                    <div class="dropdown">
+                                                        <button
+                                                            class="btn btn-secondary bg silver form-control dropdown-toggle"
+                                                            type="button"
+                                                            id="inputCategoriesPublicArt"
+                                                            data-bs-toggle="dropdown"
+                                                            aria-expanded="false"
+                                                        >
+                                                            <i class="fas fa-palette"></i><br />
+                                                            Arte público
+                                                        </button>
+                                                        <ul
+                                                            class="dropdown-menu"
+                                                            aria-labelledby="inputCategoriesPublicArt"
+                                                            id="dropdownCategoriesPublicArt"
+                                                        >
+                                                            <li class="dropdown-item" onclick="toggleCheckbox(this);">
+                                                                <input
+                                                                    type="checkbox"
+                                                                    class="form-check-input me-1"
+                                                                    style="margin-left: 0.75rem"
+                                                                    id="cat-18"
+                                                                />
+                                                                <label> Arte callejero </label>
+                                                            </li>
+                                                            <li class="dropdown-item" onclick="toggleCheckbox(this);">
+                                                                <input
+                                                                    type="checkbox"
+                                                                    class="form-check-input me-1"
+                                                                    style="margin-left: 0.75rem"
+                                                                    id="cat-12"
+                                                                />
+                                                                <label> Arte público </label>
+                                                            </li>
+                                                            <li class="dropdown-item" onclick="toggleCheckbox(this);">
+                                                                <input
+                                                                    type="checkbox"
+                                                                    class="form-check-input me-1"
+                                                                    style="margin-left: 0.75rem"
+                                                                    id="cat-4"
+                                                                />
+                                                                <label> Esculturas al aire libre </label>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <div class="col col-6 px-1">
+                                                    <div class="dropdown">
+                                                        <button
+                                                            class="btn btn-danger bg red form-control dropdown-toggle"
+                                                            type="button"
+                                                            id="inputCategoriesArts"
+                                                            data-bs-toggle="dropdown"
+                                                            aria-expanded="false"
+                                                        >
+                                                            <i class="fas fa-theater-masks"></i><br />
+                                                            Artes escénicas
+                                                        </button>
+                                                        <ul
+                                                            class="dropdown-menu"
+                                                            aria-labelledby="inputCategoriesArts"
+                                                            id="dropdownCategoriesArts"
+                                                        >
+                                                            <li class="dropdown-item" onclick="toggleCheckbox(this);">
+                                                                <input
+                                                                    type="checkbox"
+                                                                    class="form-check-input me-1"
+                                                                    style="margin-left: 0.75rem"
+                                                                    id="cat-50"
+                                                                />
+                                                                <label> Anfiteatros </label>
+                                                            </li>
+                                                            <li class="dropdown-item" onclick="toggleCheckbox(this);">
+                                                                <input
+                                                                    type="checkbox"
+                                                                    class="form-check-input me-1"
+                                                                    style="margin-left: 0.75rem"
+                                                                    id="cat-29"
+                                                                />
+                                                                <label> Auditorios </label>
+                                                            </li>
+                                                            <li class="dropdown-item" onclick="toggleCheckbox(this);">
+                                                                <input
+                                                                    type="checkbox"
+                                                                    class="form-check-input me-1"
+                                                                    style="margin-left: 0.75rem"
+                                                                    id="cat-1"
+                                                                />
+                                                                <label> Sala de conciertos </label>
+                                                            </li>
+                                                            <li class="dropdown-item" onclick="toggleCheckbox(this);">
+                                                                <input
+                                                                    type="checkbox"
+                                                                    class="form-check-input me-1"
+                                                                    style="margin-left: 0.75rem"
+                                                                    id="cat-6"
+                                                                />
+                                                                <label> Salón de ópera </label>
+                                                            </li>
+                                                            <li class="dropdown-item" onclick="toggleCheckbox(this);">
+                                                                <input
+                                                                    type="checkbox"
+                                                                    class="form-check-input me-1"
+                                                                    style="margin-left: 0.75rem"
+                                                                    id="cat-51"
+                                                                />
+                                                                <label> Teatros </label>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row my-3">
+                                                <div class="col col-6 px-1">
+                                                    <div class="dropdown">
+                                                        <button
+                                                            class="btn btn-secondary bg purple form-control dropdown-toggle"
+                                                            type="button"
+                                                            id="inputCategoriesSports"
+                                                            data-bs-toggle="dropdown"
+                                                            aria-expanded="false"
+                                                        >
+                                                            <i class="fas fa-futbol"></i><br />
+                                                            Deportes
+                                                        </button>
+                                                        <ul
+                                                            class="dropdown-menu"
+                                                            aria-labelledby="inputCategoriesSports"
+                                                            id="dropdownCategoriesSports"
+                                                        >
+                                                            <li class="dropdown-item" onclick="toggleCheckbox(this);">
+                                                                <input
+                                                                    type="checkbox"
+                                                                    class="form-check-input me-1"
+                                                                    style="margin-left: 0.75rem"
+                                                                    id="cat-17"
+                                                                />
+                                                                <label> Estadios </label>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <div class="col col-6 px-1">
+                                                    <div class="dropdown">
+                                                        <button
+                                                            class="btn btn-secondary bg silver form-control dropdown-toggle"
+                                                            type="button"
+                                                            id="inputCategoriesMonuments"
+                                                            data-bs-toggle="dropdown"
+                                                            aria-expanded="false"
+                                                        >
+                                                            <i class="fas fa-monument"></i><br />
+                                                            Monumentos
+                                                        </button>
+                                                        <ul
+                                                            class="dropdown-menu"
+                                                            aria-labelledby="inputCategoriesMonuments"
+                                                            id="dropdownCategoriesMonuments"
+                                                        >
+                                                            <li class="dropdown-item" onclick="toggleCheckbox(this);">
+                                                                <input
+                                                                    type="checkbox"
+                                                                    class="form-check-input me-1"
+                                                                    style="margin-left: 0.75rem"
+                                                                    id="cat-28"
+                                                                />
+                                                                <label> Castillo </label>
+                                                            </li>
+                                                            <li class="dropdown-item" onclick="toggleCheckbox(this);">
+                                                                <input
+                                                                    type="checkbox"
+                                                                    class="form-check-input me-1"
+                                                                    style="margin-left: 0.75rem"
+                                                                    id="cat-7"
+                                                                />
+                                                                <label> Cueva </label>
+                                                            </li>
+                                                            <li class="dropdown-item" onclick="toggleCheckbox(this);">
+                                                                <input
+                                                                    type="checkbox"
+                                                                    class="form-check-input me-1"
+                                                                    style="margin-left: 0.75rem"
+                                                                    id="cat-13"
+                                                                />
+                                                                <label> Lugares conmemorativos </label>
+                                                            </li>
+                                                            <li class="dropdown-item" onclick="toggleCheckbox(this);">
+                                                                <input
+                                                                    type="checkbox"
+                                                                    class="form-check-input me-1"
+                                                                    style="margin-left: 0.75rem"
+                                                                    id="cat-44"
+                                                                />
+                                                                <label> Lugares históricos </label>
+                                                            </li>
+                                                            <li class="dropdown-item" onclick="toggleCheckbox(this);">
+                                                                <input
+                                                                    type="checkbox"
+                                                                    class="form-check-input me-1"
+                                                                    style="margin-left: 0.75rem"
+                                                                    id="cat-25"
+                                                                />
+                                                                <label> Monumentos </label>
+                                                            </li>
+                                                            <li class="dropdown-item" onclick="toggleCheckbox(this);">
+                                                                <input
+                                                                    type="checkbox"
+                                                                    class="form-check-input me-1"
+                                                                    style="margin-left: 0.75rem"
+                                                                    id="cat-38"
+                                                                />
+                                                                <label> Palacios </label>
+                                                            </li>
+                                                            <li class="dropdown-item" onclick="toggleCheckbox(this);">
+                                                                <input
+                                                                    type="checkbox"
+                                                                    class="form-check-input me-1"
+                                                                    style="margin-left: 0.75rem"
+                                                                    id="cat-48"
+                                                                />
+                                                                <label> Puente </label>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row my-3">
+                                                <div class="col col-6 px-1">
+                                                    <div class="dropdown">
+                                                        <button
+                                                            class="btn btn-dark bg black text-white form-control dropdown-toggle"
+                                                            type="button"
+                                                            id="inputCategoriesGovernment"
+                                                            data-bs-toggle="dropdown"
+                                                            aria-expanded="false"
+                                                        >
+                                                            <i class="fas fa-building"></i><br />
+                                                            Gobierno
+                                                        </button>
+                                                        <ul
+                                                            class="dropdown-menu"
+                                                            aria-labelledby="inputCategoriesGovernment"
+                                                            id="dropdownCategoriesGovernment"
+                                                        >
+                                                            <li class="dropdown-item" onclick="toggleCheckbox(this);">
+                                                                <input
+                                                                    type="checkbox"
+                                                                    class="form-check-input me-1"
+                                                                    style="margin-left: 0.75rem"
+                                                                    id="cat-22"
+                                                                />
+                                                                <label> Ayuntamientos </label>
+                                                            </li>
+                                                            <li class="dropdown-item" onclick="toggleCheckbox(this);">
+                                                                <input
+                                                                    type="checkbox"
+                                                                    class="form-check-input me-1"
+                                                                    style="margin-left: 0.75rem"
+                                                                    id="cat-27"
+                                                                />
+                                                                <label> Capitolio </label>
+                                                            </li>
+                                                            <li class="dropdown-item" onclick="toggleCheckbox(this);">
+                                                                <input
+                                                                    type="checkbox"
+                                                                    class="form-check-input me-1"
+                                                                    style="margin-left: 0.75rem"
+                                                                    id="cat-42"
+                                                                />
+                                                                <label> Juntas municipales </label>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <div class="col col-6 px-1">
+                                                    <div class="dropdown">
+                                                        <button
+                                                            class="btn btn-success bg green form-control dropdown-toggle"
+                                                            type="button"
+                                                            id="inputCategoriesGardens"
+                                                            data-bs-toggle="dropdown"
+                                                            aria-expanded="false"
+                                                        >
+                                                            <i class="bi bi-flower1"></i><br />
+                                                            Jardines
+                                                        </button>
+                                                        <ul
+                                                            class="dropdown-menu"
+                                                            aria-labelledby="inputCategoriesGardens"
+                                                            id="dropdownCategoriesGardens"
+                                                        >
+                                                            <li class="dropdown-item" onclick="toggleCheckbox(this);">
+                                                                <input
+                                                                    type="checkbox"
+                                                                    class="form-check-input me-1"
+                                                                    style="margin-left: 0.75rem"
+                                                                    id="cat-3"
+                                                                />
+                                                                <label> Jardínes botánicos </label>
+                                                            </li>
+                                                            <li class="dropdown-item" onclick="toggleCheckbox(this);">
+                                                                <input
+                                                                    type="checkbox"
+                                                                    class="form-check-input me-1"
+                                                                    style="margin-left: 0.75rem"
+                                                                    id="cat-31"
+                                                                />
+                                                                <label> Jardínes de esculturas </label>
+                                                            </li>
+                                                            <li class="dropdown-item" onclick="toggleCheckbox(this);">
+                                                                <input
+                                                                    type="checkbox"
+                                                                    class="form-check-input me-1"
+                                                                    style="margin-left: 0.75rem"
+                                                                    id="cat-9"
+                                                                />
+                                                                <label> Jardínes públicos </label>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row my-3">
+                                                <div class="col col-6 px-1">
+                                                    <div class="dropdown">
+                                                        <button
+                                                            class="btn btn-danger bg yellow form-control dropdown-toggle"
+                                                            type="button"
+                                                            id="inputCategoriesCult"
+                                                            data-bs-toggle="dropdown"
+                                                            aria-expanded="false"
+                                                        >
+                                                            <i class="fas fa-church"></i><br />
+                                                            Lugares de culto
+                                                        </button>
+                                                        <ul
+                                                            class="dropdown-menu"
+                                                            aria-labelledby="inputCategoriesCult"
+                                                            id="dropdownCategoriesCult"
+                                                        >
+                                                            <li class="dropdown-item" onclick="toggleCheckbox(this);">
+                                                                <input
+                                                                    type="checkbox"
+                                                                    class="form-check-input me-1"
+                                                                    style="margin-left: 0.75rem"
+                                                                    id="cat-21"
+                                                                />
+                                                                <label> Cementerios </label>
+                                                            </li>
+                                                            <li class="dropdown-item" onclick="toggleCheckbox(this);">
+                                                                <input
+                                                                    type="checkbox"
+                                                                    class="form-check-input me-1"
+                                                                    style="margin-left: 0.75rem"
+                                                                    id="cat-41"
+                                                                />
+                                                                <label> Iglesias </label>
+                                                            </li>
+                                                            <li class="dropdown-item" onclick="toggleCheckbox(this);">
+                                                                <input
+                                                                    type="checkbox"
+                                                                    class="form-check-input me-1"
+                                                                    style="margin-left: 0.75rem"
+                                                                    id="cat-2"
+                                                                />
+                                                                <label> Mezquitas </label>
+                                                            </li>
+                                                            <li class="dropdown-item" onclick="toggleCheckbox(this);">
+                                                                <input
+                                                                    type="checkbox"
+                                                                    class="form-check-input me-1"
+                                                                    style="margin-left: 0.75rem"
+                                                                    id="cat-30"
+                                                                />
+                                                                <label> Monasterios </label>
+                                                            </li>
+                                                            <li class="dropdown-item" onclick="toggleCheckbox(this);">
+                                                                <input
+                                                                    type="checkbox"
+                                                                    class="form-check-input me-1"
+                                                                    style="margin-left: 0.75rem"
+                                                                    id="cat-34"
+                                                                />
+                                                                <label> Santuarios </label>
+                                                            </li>
+                                                            <li class="dropdown-item" onclick="toggleCheckbox(this);">
+                                                                <input
+                                                                    type="checkbox"
+                                                                    class="form-check-input me-1"
+                                                                    style="margin-left: 0.75rem"
+                                                                    id="cat-26"
+                                                                />
+                                                                <label> Sinagogas </label>
+                                                            </li>
+                                                            <li class="dropdown-item" onclick="toggleCheckbox(this);">
+                                                                <input
+                                                                    type="checkbox"
+                                                                    class="form-check-input me-1"
+                                                                    style="margin-left: 0.75rem"
+                                                                    id="cat-32"
+                                                                />
+                                                                <label> Templos budistas </label>
+                                                            </li>
+                                                            <li class="dropdown-item" onclick="toggleCheckbox(this);">
+                                                                <input
+                                                                    type="checkbox"
+                                                                    class="form-check-input me-1"
+                                                                    style="margin-left: 0.75rem"
+                                                                    id="cat-47"
+                                                                />
+                                                                <label> Templos Sikh </label>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <div class="col col-6 px-1">
+                                                    <div class="dropdown">
+                                                        <button
+                                                            class="btn btn-danger bg orange form-control dropdown-toggle"
+                                                            type="button"
+                                                            id="inputCategoriesPublic"
+                                                            data-bs-toggle="dropdown"
+                                                            aria-expanded="false"
+                                                        >
+                                                            <i class="fas fa-store"></i><br />
+                                                            Zonas públicas
+                                                        </button>
+                                                        <ul
+                                                            class="dropdown-menu"
+                                                            aria-labelledby="inputCategoriesPublic"
+                                                            id="dropdownCategoriesPublic"
+                                                        >
+                                                            <li class="dropdown-item" onclick="toggleCheckbox(this);">
+                                                                <input
+                                                                    type="checkbox"
+                                                                    class="form-check-input me-1"
+                                                                    style="margin-left: 0.75rem"
+                                                                    id="cat-40"
+                                                                />
+                                                                <label> Fuentes </label>
+                                                            </li>
+                                                            <li class="dropdown-item" onclick="toggleCheckbox(this);">
+                                                                <input
+                                                                    type="checkbox"
+                                                                    class="form-check-input me-1"
+                                                                    style="margin-left: 0.75rem"
+                                                                    id="cat-11"
+                                                                />
+                                                                <label> Mercados </label>
+                                                            </li>
+                                                            <li class="dropdown-item" onclick="toggleCheckbox(this);">
+                                                                <input
+                                                                    type="checkbox"
+                                                                    class="form-check-input me-1"
+                                                                    style="margin-left: 0.75rem"
+                                                                    id="cat-49"
+                                                                />
+                                                                <label> Parque </label>
+                                                            </li>
+                                                            <li class="dropdown-item" onclick="toggleCheckbox(this);">
+                                                                <input
+                                                                    type="checkbox"
+                                                                    class="form-check-input me-1"
+                                                                    style="margin-left: 0.75rem"
+                                                                    id="cat-5"
+                                                                />
+                                                                <label> Plazas peatonales </label>
+                                                            </li>
+                                                            <li class="dropdown-item" onclick="toggleCheckbox(this);">
+                                                                <input
+                                                                    type="checkbox"
+                                                                    class="form-check-input me-1"
+                                                                    style="margin-left: 0.75rem"
+                                                                    id="cat-37"
+                                                                />
+                                                                <label> Plazas públicas </label>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row my-3">
+                                                <div class="col col-6 px-1">
+                                                    <div class="dropdown">
+                                                        <button
+                                                            class="btn btn-success bg lime form-control dropdown-toggle"
+                                                            type="button"
+                                                            id="inputCategoriesLookouts"
+                                                            data-bs-toggle="dropdown"
+                                                            aria-expanded="false"
+                                                        >
+                                                            <i class="bi bi-binoculars"></i><br />
+                                                            Miradores
+                                                        </button>
+                                                        <ul
+                                                            class="dropdown-menu"
+                                                            aria-labelledby="inputCategoriesLookouts"
+                                                            id="dropdownCategoriesLookouts"
+                                                        >
+                                                            <li class="dropdown-item" onclick="toggleCheckbox(this);">
+                                                                <input
+                                                                    type="checkbox"
+                                                                    class="form-check-input me-1"
+                                                                    style="margin-left: 0.75rem"
+                                                                    id="cat-19"
+                                                                />
+                                                                <label> Miradores elevados </label>
+                                                            </li>
+                                                            <li class="dropdown-item" onclick="toggleCheckbox(this);">
+                                                                <input
+                                                                    type="checkbox"
+                                                                    class="form-check-input me-1"
+                                                                    style="margin-left: 0.75rem"
+                                                                    id="cat-15"
+                                                                />
+                                                                <label> Miradores </label>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <div class="col col-6 px-1">
+                                                    <div class="dropdown">
+                                                        <button
+                                                            class="btn btn-dark bg navy form-control dropdown-toggle"
+                                                            type="button"
+                                                            id="inputCategoriesMuseums"
+                                                            data-bs-toggle="dropdown"
+                                                            aria-expanded="false"
+                                                        >
+                                                            <i class="fas fa-landmark"></i><br />
+                                                            Museos
+                                                        </button>
+                                                        <ul
+                                                            class="dropdown-menu"
+                                                            aria-labelledby="inputCategoriesMuseums"
+                                                            id="dropdownCategoriesMuseums"
+                                                        >
+                                                            <li class="dropdown-item" onclick="toggleCheckbox(this);">
+                                                                <input
+                                                                    type="checkbox"
+                                                                    class="form-check-input me-1"
+                                                                    style="margin-left: 0.75rem"
+                                                                    id="cat-23"
+                                                                />
+                                                                <label> Galerías de arte </label>
+                                                            </li>
+                                                            <li class="dropdown-item" onclick="toggleCheckbox(this);">
+                                                                <input
+                                                                    type="checkbox"
+                                                                    class="form-check-input me-1"
+                                                                    style="margin-left: 0.75rem"
+                                                                    id="cat-14"
+                                                                />
+                                                                <label> Museos de arte </label>
+                                                            </li>
+                                                            <li class="dropdown-item" onclick="toggleCheckbox(this);">
+                                                                <input
+                                                                    type="checkbox"
+                                                                    class="form-check-input me-1"
+                                                                    style="margin-left: 0.75rem"
+                                                                    id="cat-36"
+                                                                />
+                                                                <label> Museos de ciencia </label>
+                                                            </li>
+                                                            <li class="dropdown-item" onclick="toggleCheckbox(this);">
+                                                                <input
+                                                                    type="checkbox"
+                                                                    class="form-check-input me-1"
+                                                                    style="margin-left: 0.75rem"
+                                                                    id="cat-43"
+                                                                />
+                                                                <label> Museos de historia </label>
+                                                            </li>
+                                                            <li class="dropdown-item" onclick="toggleCheckbox(this);">
+                                                                <input
+                                                                    type="checkbox"
+                                                                    class="form-check-input me-1"
+                                                                    style="margin-left: 0.75rem"
+                                                                    id="cat-33"
+                                                                />
+                                                                <label> Museos eróticos </label>
+                                                            </li>
+                                                            <li class="dropdown-item" onclick="toggleCheckbox(this);">
+                                                                <input
+                                                                    type="checkbox"
+                                                                    class="form-check-input me-1"
+                                                                    style="margin-left: 0.75rem"
+                                                                    id="cat-20"
+                                                                />
+                                                                <label> Planetario </label>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <p id="categoriesSelect" style="margin-top: -5px" class="fs-6 mb-3 text-dark">
+                                            Selecciona al menos 3 categorías
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="w-100">
+                                <button
+                                    id="inputSaveProfile"
+                                    type="submit"
+                                    class="btn btn-success"
+                                    original-data="Guardar cambios"
+                                >
+                                    Guardar cambios
+                                </button>
+                            </div>
+                        </form>
+                        <div class="mt-3">
+                            <h3 class="mt-5">Cerrar sesión</h3>
+                            <a href="/api/auth/logout" onclick="localStorage.clear()" class="btn btn-danger">Cerrar sesión</a>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="security" role="tabpanel" aria-labelledby="security-tab">
+                        <form class="security-form" class="mt-5" onsubmit="change(this); return false;">
+                            <div class="container px-0 mx-0 mt-3">
+                                <h3 class="mt-3">Cambiar contraseña</h3>
+                                <div class="row">
+                                    <div class="col">
+                                        <label for="inputPassword1" class="form-label">Nueva contraseña</label>
+                                        <input type="password" id="inputPassword1" class="form-control" required />
+                                        <p class="w-100 text-muted">
+                                            Al cambiar la contraseña, se cerrará la sesión en todos los sitios,
+                                            exceptuando la sesión actual
+                                        </p>
+                                    </div>
+                                    <div class="col">
+                                        <label for="inputPassword2" class="form-label">Repetir contraseña</label>
+                                        <input
+                                            type="password"
+                                            id="inputPassword2"
+                                            class="form-control"
+                                            onkeyup="validate(this);"
+                                            required
+                                        />
+                                        <div class="text-danger d-none" id="inputInvalid">
+                                            <i class="bi bi-exclamation-circle"></i> Las contraseñas no coinciden
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-3 w-100">
+                                <button
+                                    type="submit"
+                                    class="btn btn-success"
+                                    id="inputPasswordChange"
+                                    disabled
+                                    original-data="Cambiar contraseña"
+                                >
+                                    Cambiar contraseña
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="tab-pane fade" id="advanced" role="tabpanel" aria-labelledby="advanced-tab">
+                        <h3 class="mt-3">Descargar mis datos</h3>
+                        <div class="mb-2">
+                            <button
+                                type="button"
+                                class="btn btn-secondary"
+                                onclick="downloadData(this);"
+                                original-data="Descargar mis datos"
+                            >
+                                Descargar mis datos
+                            </button>
+                        </div>
+                        <p class="w-100 text-muted mb-5">
+                            Esto descargará todos los datos que has introducido en la plataforma en formato JSON.
+                        </p>
+                        <h3 class="mt-3 text-danger">Eliminar cuenta</h3>
+                        <div class="mb-2">
+                            <button
+                                type="button"
+                                class="btn btn-danger"
+                                data-bs-toggle="modal"
+                                data-bs-target="#deleteConfirm"
+                            >
+                                Eliminar mi cuenta
+                            </button>
+                        </div>
+                        <p class="w-100 text-muted">
+                            <span class="text-danger">¡Atención! </span> Esto eliminará tu cuenta, incluyendo las
+                            puntuaciones y planes creados. Esta acción no es reversible.<br />
+                            Una vez eliminada la cuenta, ya no podrás acceder y necesitarás crear una cuenta nueva.
+                        </p>
+                    </div>
+                </div>
+            </main>
+        </div>
+
+        <!-- Footer -->
+        <footer class="mt-auto pt-5 text-center mb-md-5">
+            <p>
+                Creado por
+                <a href="https://galisteo.me">Álvaro Galisteo</a><br />
+                <a href="/attributions/">Atribuciones</a> -
+                <a href="/help/">Ayuda</a> - 
+                <a href="/terms/">Terminos y condiciones</a> - 
+                <a href="/privacy/">Política de privacidad</a>
+            </p>
+        </footer>
+
+        <!-- JS -->
+        <script src="/js/bootstrap.bundle.min.js"></script>
+        <script src="/js/common.js"></script>
+        <script src="/js/profile.js"></script>
+        <script src="/js/fontawesome.min.js"></script>
+        <script src="/js/fa-solid.min.js"></script>
+        <script
+            async
+            defer
+            data-website-id="0f73de68-9610-4a9c-a7a8-ab61ab30208a"
+            src="https://u.fcld.ml/umami.js"
+        ></script>
+    </body>
+</html>

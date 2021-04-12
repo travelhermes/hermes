@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="es" class="h-100">
+    <head>
+        <meta charset="utf-8" />
+        <link rel="shortcut icon" type="image/png" href="/assets/favicon.png" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta
+            name="description"
+            content="Hermes es un sistema recomendador y planificador turístico, para facilitarte la tarea más tediosa de todo viaje: planificarlo"
+        />
+        <meta name="author" content="Álvaro Galisteo" />
+        <title>Iniciar sesión - Hermes</title>
+
+        <!-- CSS -->
+        <link href="/css/bootstrap.min.css" rel="stylesheet" />
+        <link href="/css/bootstrap-icons.css" rel="stylesheet" />
+        <link href="/css/signin.css" rel="stylesheet" />
+    </head>
+    <body class="d-flex h-100 text-center text-white bg-dark">
+        <div
+            class="modal fade text-start text-dark"
+            id="recoverModal"
+            tabindex="-1"
+            aria-labelledby="recoverModalLabel"
+            aria-hidden="true"
+            style="text-shadow: none"
+        >
+            <div class="modal-dialog modal-dialog-centered">
+                <form class="modal-content" onsubmit="recover(this); return false;">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="recoverModalLabel">Recuperar contraseña</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>
+                            Introduce tu correo electrónico a continuación. Si la cuenta existe, recibirás un correo
+                            electrónico en tu bandeja de entrada
+                        </p>
+                        <input type="email" id="inputEmailRecover" placeholder="Correo electrónico" required />
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary" id="inputSubmitRecover">
+                            Enviar enlace de recuperación
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
+            <main class="mb-auto mt-auto">
+                <img class="mt-4" src="/assets/logo_light_256.png" alt="" width="128" height="128" />
+
+                <form class="form-signin" onsubmit="return signin(this);">
+                    <div class="mb-1">
+                        ¿No tienes cuenta?
+                        <a href="/signup/" class="text-white">Únete</a>
+                    </div>
+                    <div class="mb-3">
+                        <a href="/help/" target="_blank" class="text-white"
+                            ><i class="bi bi-question-circle mx-1"></i>¿Necesitas ayuda?</a
+                        >
+                    </div>
+                    <div
+                        class="alert alert-danger d-none"
+                        role="alert"
+                        id="invalidCredentials"
+                        style="text-shadow: none"
+                    >
+                        Contraseña o usuario incorrectos
+                    </div>
+                    <div class="alert alert-danger d-none" role="alert" id="cooldown" style="text-shadow: none">
+                        Se han producido demasiados intentos de inicio de sesión incorrectos. Inténtelo de nuevo más
+                        tarde.
+                    </div>
+                    <div class="join">
+                        <label for="inputEmail" class="visually-hidden"> Correo electrónico </label>
+                        <input
+                            type="email"
+                            id="inputEmail"
+                            class="form-control"
+                            placeholder="Correo electrónico"
+                            required
+                            autofocus
+                        />
+                        <label for="inputPassword" class="visually-hidden"> Contraseña </label>
+                        <input
+                            type="password"
+                            id="inputPassword"
+                            class="form-control"
+                            placeholder="Contraseña"
+                            required
+                        />
+                    </div>
+                    <button
+                        class="w-100 btn btn-lg btn-primary"
+                        type="submit"
+                        id="inputSubmit"
+                        original-data="Iniciar sesión"
+                    >
+                        Iniciar sesión
+                    </button>
+                    <div class="checkbox mt-3">
+                        <label>
+                            <input type="checkbox" id="inputRemember" />
+                            Recordarme
+                        </label>
+                    </div>
+                    <div class="mt-2">
+                        <a href="#recoverModal" data-bs-toggle="modal" class="text-white">
+                            He olvidado mi contraseña
+                        </a>
+                    </div>
+                </form>
+            </main>
+
+            <!-- Footer -->
+            <footer class="mt-auto pt-5 text-white-50">
+                <p>
+                    Creado por
+                    <a href="https://galisteo.me" class="text-white">Álvaro Galisteo</a><br />
+                    <a href="/attributions/" class="text-white">Atribuciones</a> -
+
+                    <a href="/help/" class="text-white">Ayuda</a> - 
+
+                    <a href="/terms/" class="text-white">Terminos y condiciones</a> - 
+
+                    <a href="/privacy/" class="text-white">Política de privacidad</a>
+                </p>
+            </footer>
+        </div>
+
+        <script src="/js/bootstrap.bundle.min.js"></script>
+        <script src="/js/common.js"></script>
+        <script src="/js/signin.js"></script>
+        <script
+            async
+            defer
+            data-website-id="0f73de68-9610-4a9c-a7a8-ab61ab30208a"
+            src="https://u.fcld.ml/umami.js"
+        ></script>
+    </body>
+</html>

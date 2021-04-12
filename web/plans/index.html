@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="utf-8" />
+        <link rel="shortcut icon" type="image/png" href="/assets/favicon.png" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta
+            name="description"
+            content="Hermes es un sistema recomendador y planificador turístico, para facilitarte la tarea más tediosa de todo viaje: planificarlo"
+        />
+        <meta name="author" content="Álvaro Galisteo" />
+        <title>Planes - Hermes</title>
+
+        <!-- CSS -->
+        <link href="/css/bootstrap.min.css" rel="stylesheet" />
+        <link href="/css/bootstrap-icons.css" rel="stylesheet" />
+        <link href="/css/common.css" rel="stylesheet" />
+        <link href="/css/plans.css" rel="stylesheet" />
+    </head>
+    <body class="d-flex flex-column min-vh-100">
+        <div
+            class="modal fade"
+            id="loader"
+            data-bs-backdrop="static"
+            data-bs-keyboard="false"
+            tabindex="-1"
+            aria-hidden="true"
+        >
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content text-center py-5">
+                    <div class="spinner-border mx-auto" role="status">
+                        <span class="visually-hidden">Cargando...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal" id="deleteConfirm" tabindex="-1" aria-labelledby="deleteConfirmLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteConfirmLabel">Eliminar ruta</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p class="fs-4">¿Estás seguro de querer eliminar el plan <span id="planDeleteName"></span>?</p>
+                        <p>Esto eliminará todas las rutas y las modificaciones que hayas realizado sobre ellas</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button
+                            type="button"
+                            class="btn btn-danger"
+                            original-data="Sí, estoy seguro"
+                            onclick="deletePlan(this);"
+                        >
+                            Sí, estoy seguro
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
+            <a class="navbar-brand col-md-4 col-lg-3 me-0 px-3" href="/dashboard/">
+                <img class="logo" src="/assets/logo_light_256.png" alt="" width="28" height="28" />
+                Hermes
+            </a>
+            <div class="w-100"></div>
+            <div class="nav navbar-nav navbar-secondary px-3 text-secondary">
+                <div class="text-nowrap">
+                    <a href="/dashboard/">
+                        <i
+                            class="bi bi-compass"
+                            style="font-size: 1.75rem"
+                            data-bs-toggle="tooltip"
+                            data-bs-placement="bottom"
+                            data-bs-original-title="Recomendaciones"
+                            title="Recomendaciones"
+                        ></i>
+                    </a>
+                    <a href="/plans/" class="active">
+                        <i
+                            class="bi bi-journals"
+                            style="font-size: 1.75rem"
+                            data-bs-toggle="tooltip"
+                            data-bs-placement="bottom"
+                            data-bs-original-title="Planes"
+                            title="Planes"
+                        ></i>
+                    </a>
+                    <a href="/ratings/">
+                        <i
+                            class="bi bi-star-fill"
+                            style="font-size: 1.75rem"
+                            data-bs-toggle="tooltip"
+                            data-bs-placement="bottom"
+                            data-bs-original-title="Puntuaciones"
+                            title="Puntuaciones"
+                        ></i>
+                    </a>
+                    <a href="/profile/">
+                        <i
+                            class="bi bi-person-square"
+                            style="font-size: 1.75rem"
+                            data-bs-toggle="tooltip"
+                            data-bs-placement="bottom"
+                            data-bs-original-title="Perfil"
+                            title="Perfil"
+                        ></i>
+                    </a>
+                    <a href="/help/">
+                        <i
+                            class="bi bi-question-circle"
+                            style="font-size: 1.75rem"
+                            data-bs-toggle="tooltip"
+                            data-bs-placement="bottom"
+                            data-bs-original-title="Ayuda"
+                            title="Ayuda"
+                        ></i>
+                    </a>
+                </div>
+            </div>
+        </header>
+
+        <div class="container-fluid main w-md-75 mt-3">
+            <div class="text-center">
+                <div role="alert" class="alert alert-warning w-md-75 d-inline-block">
+                    Hermes aún está en desarrollo, pero te avisaremos cuando todo esté disponible <br />
+                    <hr />
+                    <a href="/help/">¿Necesitas ayuda?</a>
+                </div>
+            </div>
+            <main class="ms-sm-auto px-md-4">
+                <div class="border-bottom py-2 mb-2">
+                    <h2>Planes activos</h2>
+                </div>
+                <div id="activePlans">
+                    <div class="text-center mt-2">
+                        <div class="alert alert-primary w-md-75 d-inline-block" role="alert">
+                            Sin planes activos
+                            <div class="w-100 text-center mt-2">
+                                <a class="btn btn-primary" href="/dashboard/">
+                                    <i class="mx-md-1 bi bi-plus-circle-fill"></i>
+                                    Crear un nuevo plan
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="border-bottom py-2 mx-0 mt-5">
+                    <h2>Planes antiguos</h2>
+                </div>
+                <div id="pastPlans">
+                    <div class="text-center mt-2">
+                        <div class="alert alert-primary w-md-75 d-inline-block" role="alert">Sin planes pasados</div>
+                    </div>
+                </div>
+            </main>
+        </div>
+
+        <!-- Footer -->
+        <footer class="mt-auto pt-5 text-center mb-md-5">
+            <p>
+                Creado por
+                <a href="https://galisteo.me">Álvaro Galisteo</a><br />
+                <a href="/attributions/">Atribuciones</a> -
+                <a href="/help/">Ayuda</a> - 
+                <a href="/terms/">Terminos y condiciones</a> - 
+                <a href="/privacy/">Política de privacidad</a>
+            </p>
+        </footer>
+
+        <!--
+            Templates
+        -->
+        <!-- Plan card -->
+        <template id="templateCard">
+            <div class="card my-2">
+                <div class="card-header mx-0 px-4">
+                    <h3 class="card-title my-0">Nombre del plan</h3>
+                    <div class="text-muted">
+                        <span class="days d-block d-md-inline">10 días</span>
+                        <span class="mx-1 d-none d-md-inline"> | </span>
+                        <span class="d-block d-md-inline">
+                            <span class="start-date">01/01/2020</span>
+                            <i class="mx-md-1 bi bi-arrow-right"></i> <span class="end-date">01/01/2020</span>
+                        </span>
+                    </div>
+                </div>
+                <div class="card-body container mx-0 px-4">
+                    <h6 class="description mb-3">Descripción</h6>
+                    <h6 class="state mb-3 ms-1"></h6>
+                    <div class="btn-group" role="group" aria-label="Acciones">
+                        <a class="btn btn-outline-success route">
+                            <i class="mx-md-1 bi bi-compass"></i>
+                            <span class="d-none d-lg-inline"> Ver plan</span>
+                        </a>
+                        <!--<a class="btn btn-outline-primary repeat">
+                            <i class="mx-md-1 bi bi-arrow-repeat"></i>
+                            <span class="d-none d-lg-inline"> Repetir </span>
+                        </a>-->
+                        <a
+                            class="btn btn-outline-danger delete"
+                            data-bs-dismiss="modal"
+                            data-bs-toggle="modal"
+                            data-bs-target="#deleteConfirm"
+                        >
+                            <i class="mx-md-1 bi bi-trash-fill"></i>
+                            <span class="d-none d-lg-inline"> Eliminar </span>
+                        </a>
+                    </div>
+                    <!-- TODO: If platform has multiple cities, add location here -->
+                </div>
+            </div>
+        </template>
+
+        <template id="templatePlanning">
+            <div
+                class="d-inline-block"
+                tabindex="0"
+                data-bs-toggle="tooltip"
+                title="Hermes está terminando de planificando tu ruta. Esto puede tardar hasta 5 minutos."
+            >
+                <div class="spinner-border spinner-border-sm me-1" role="status"></div>
+                Planificando
+            </div>
+        </template>
+        <template id="templateActive">
+            <div
+                class="d-inline-block"
+                tabindex="0"
+                data-bs-toggle="tooltip"
+                title="¡Tu ruta está activa! Esto significa que estas realizandola o está pendiente de realizar."
+            >
+                <i class="bi bi-compass me-1"></i>Activo
+            </div>
+        </template>
+        <template id="templateDone">
+            <div class="d-inline-block" tabindex="0" data-bs-toggle="tooltip" title="Esta ruta ya ha sido completada.">
+                <i class="bi bi-check2-circle me-1"></i>Completado
+            </div>
+        </template>
+        <template id="templateTimedout">
+            <div
+                class="d-inline-block text-danger"
+                tabindex="0"
+                data-bs-toggle="tooltip"
+                title="Hermes no ha podido encontrar una ruta. Es posible que hayas añadido demasiados sitios o que hayas establecido poco tiempo. Prueba a eliminar la ruta y crearla de nuevo reduciendo la cantidad de sitios o aumentando la duración del día/plan."
+            >
+                <i class="bi bi-exclamation-circle me-1"></i>Ruta no encontrada
+            </div>
+        </template>
+        <template id="templateInternalError">
+            <div
+                class="d-inline-block text-danger"
+                tabindex="0"
+                data-bs-toggle="tooltip"
+                title="Se ha producido un error interno mientras se planficaba tu ruta. Por favor, elimina la ruta y créala de nuevo más tarde. Si el error persiste, contacta con nosotros."
+            >
+                <i class="bi bi-x-circle me-1"></i>Error interno
+            </div>
+        </template>
+
+        <script src="/js/bootstrap.bundle.min.js"></script>
+        <script src="/js/common.js"></script>
+        <script src="/js/plans.js"></script>
+        <script
+            async
+            defer
+            data-website-id="0f73de68-9610-4a9c-a7a8-ab61ab30208a"
+            src="https://u.fcld.ml/umami.js"
+        ></script>
+    </body>
+</html>

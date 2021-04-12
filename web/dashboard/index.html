@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="utf-8" />
+        <link rel="shortcut icon" type="image/png" href="/assets/favicon.png" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta
+            name="description"
+            content="Hermes es un sistema recomendador y planificador turístico, para facilitarte la tarea más tediosa de todo viaje: planificarlo"
+        />
+        <meta name="author" content="Álvaro Galisteo" />
+        <title>Recomendaciones - Hermes</title>
+
+        <!-- CSS -->
+        <link href="/css/bootstrap.min.css" rel="stylesheet" />
+        <link href="/css/bootstrap-icons.css" rel="stylesheet" />
+        <link href="/css/common.css" rel="stylesheet" />
+        <link href="/css/dashboard.css" rel="stylesheet" />
+        <link
+            rel="stylesheet"
+            href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+            integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+            crossorigin=""
+        />
+    </head>
+    <body>
+        <!-- Clear plan modal -->
+        <div
+            class="modal fade"
+            id="clearPlanModal"
+            tabindex="-1"
+            aria-labelledby="clearPlanModalLabel"
+            aria-hidden="true"
+        >
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="clearPlanModalLabel">Vaciar plan</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                    </div>
+                    <div class="modal-body">
+                        ¿Desea vaciar el plan actual? Esto eliminará todas las selecciones realizadas.
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        <button type="button" class="btn btn-danger" onclick="clearPlan();" data-bs-dismiss="modal">
+                            Vaciar plan
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Create plan modal -->
+        <div
+            class="modal fade"
+            id="createPlanModal"
+            tabindex="-1"
+            aria-labelledby="createPlanModalLabel"
+            aria-hidden="true"
+        >
+            <div class="modal-dialog modal-dialog-centered">
+                <form class="modal-content" onsubmit="createPlan(); return false;">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="createPlanModalLabel">Crear plan</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body px-0">
+                        <ul class="nav nav-tabs nav-fill" id="createPlanTabs" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button
+                                    class="nav-link active"
+                                    id="info-tab"
+                                    data-bs-toggle="tab"
+                                    data-bs-target="#info"
+                                    type="button"
+                                    role="tab"
+                                    aria-controls="info"
+                                    aria-selected="true"
+                                    onclick="getDayHeuristic()"
+                                >
+                                    1. Información
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button
+                                    class="nav-link"
+                                    id="times-tab"
+                                    data-bs-toggle="tab"
+                                    data-bs-target="#times"
+                                    type="button"
+                                    role="tab"
+                                    aria-controls="times"
+                                    aria-selected="true"
+                                    onclick="getDayHeuristic()"
+                                >
+                                    2. Horas
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button
+                                    class="nav-link"
+                                    id="start-tab"
+                                    data-bs-toggle="tab"
+                                    data-bs-target="#start"
+                                    type="button"
+                                    role="tab"
+                                    aria-controls="start"
+                                    aria-selected="false"
+                                    onclick="setTimeout(function(){startMap.invalidateSize();},500);getDayHeuristic()"
+                                >
+                                    3. Lugar de inicio
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button
+                                    class="nav-link"
+                                    id="days-tab"
+                                    data-bs-toggle="tab"
+                                    data-bs-target="#days"
+                                    type="button"
+                                    role="tab"
+                                    aria-controls="days"
+                                    aria-selected="false"
+                                    onclick="getDayHeuristic()"
+                                >
+                                    4. Días
+                                </button>
+                            </li>
+                        </ul>
+
+                        <div class="tab-content py-2" id="createPlanTabsContent">
+                            <div
+                                class="tab-pane px-4 fade container show active"
+                                id="info"
+                                role="tabpanel"
+                                aria-labelledby="info-tab"
+                            >
+                                <label for="planName" class="form-label fs-5 mt-1">Nombre del plan</label>
+                                <input type="text" class="form-control" id="planName" required onkeyup="checkInfo();" />
+                                <div class="text-danger d-none mt-1" id="planNameValidation">
+                                    Por favor, introduce un nombre
+                                </div>
+
+                                <label for="planDescription" class="form-label fs-5 mt-2">Descripción del plan</label>
+                                <textarea class="form-control" id="planDescription"></textarea>
+
+                                <div class="text-center mt-3">
+                                    <button
+                                        class="btn btn-small btn-primary"
+                                        type="button"
+                                        id="infoNextButton"
+                                        disabled
+                                        onclick="document.querySelector('#times-tab').click();"
+                                    >
+                                        Siguiente<i class="bi bi-arrow-right-short ms-1"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div
+                                class="tab-pane px-4 fade container"
+                                id="times"
+                                role="tabpanel"
+                                aria-labelledby="times-tab"
+                            >
+                                <div class="fs-5 mt-2">¿Cuanto quieres que dure el día?</div>
+                                <div class="row mt-2">
+                                    <div class="col col-6">
+                                        <label for="timeStart" class="form-label">Hora de inicio</label>
+                                        <div>
+                                            <input
+                                                type="time"
+                                                class="form-control"
+                                                id="timeStart"
+                                                onchange="checkTimes(this);"
+                                                required
+                                            />
+                                        </div>
+                                    </div>
+                                    <div class="col col-6">
+                                        <label for="timeEnd" class="form-label">Hora de fin</label>
+                                        <div>
+                                            <input
+                                                type="time"
+                                                class="form-control"
+                                                id="timeEnd"
+                                                onchange="checkTimes(this);"
+                                                required
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="text-danger d-none mt-1" id="timeValidation">
+                                    La hora de inicio debe ocurrir antes de la hora de fin.
+                                </div>
+                                <div class="my-1 text-muted">
+                                    <b>Nota:</b> Una vez establecida la duración del día, no podrás cambiarla más adelante.
+                                </div>
+                                <p class="text-muted mt-2">
+                                    Si deseas añadir descansos (por ejemplo, para comer), podrás añadirlos posteriormente al editar el plan generado.
+                                </p>
+                                <div class="text-center mt-3">
+                                    <button
+                                        class="btn btn-small btn-primary"
+                                        type="button"
+                                        id="timesNextButton"
+                                        disabled
+                                        onclick="document.querySelector('#start-tab').click();"
+                                    >
+                                        Siguiente<i class="bi bi-arrow-right-short ms-1"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div
+                                class="tab-pane fade container px-0"
+                                id="start"
+                                role="tabpanel"
+                                aria-labelledby="start-tab"
+                            >
+                                <div class="fs-5 mt-1 px-4">¿Donde te vas a alojar?</div>
+                                <div class="my-1 px-4 text-muted">
+                                    Selecciona en el mapa el lugar de inicio y fin de cada día
+                                </div>
+                                <div id="startMap"></div>
+                                <div class="text-center mt-3">
+                                    <button
+                                        class="btn btn-small btn-primary"
+                                        type="button"
+                                        id="startNextButton"
+                                        disabled
+                                        onclick="document.querySelector('#days-tab').click();"
+                                    >
+                                        Siguiente<i class="bi bi-arrow-right-short ms-1"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div
+                                class="tab-pane px-4 fade container"
+                                id="days"
+                                role="tabpanel"
+                                aria-labelledby="days-tab"
+                            >
+                                <div class="fs-5 mt-1">¿Qué días quieres realizar el plan?</div>
+                                <div class="my-1 text-muted">
+                                    A partir de los lugares seleccionados, para poder generar un plan, debes seleccionar
+                                    una duración mínima de
+                                    <b class="text-dark ms-1" id="recommendedDayLength"><div class="spinner-border spinner-border-sm" role="status"></div></b>.
+                                </div>
+                                <div class="my-1 text-muted">
+                                    Si no estás satisfecho con la duración mínima, elimina lugares del plan o reduce la
+                                    duración del descanso.
+                                </div>
+                                <div class="row mt-2">
+                                    <div class="col col-6">
+                                        <label for="daysStart" class="form-label">Día de inicio</label>
+                                        <input
+                                            type="date"
+                                            class="form-control"
+                                            id="daysStart"
+                                            required
+                                            onchange="checkDays();"
+                                        />
+                                    </div>
+                                    <div class="col col-6">
+                                        <label for="daysEnd" class="form-label">Día de fin</label>
+                                        <input
+                                            type="date"
+                                            class="form-control"
+                                            id="daysEnd"
+                                            required
+                                            onchange="checkDays();"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="text-danger d-none mt-1" id="daysValidation">
+                                    La fecha de inicio debe ocurrir antes de la fecha de fin.
+                                </div>
+                                <div class="text-danger d-none mt-1" id="daysValidationLength">
+                                    La cantidad de días seleccionados debe ser mayor o igual a
+                                    <span class="text-dark" id="recommendedDayLengthValidate">5 días</span>.
+                                </div>
+                                <div class="my-1 text-muted">
+                                    <b>Nota:</b> Una vez establecida la duración del plan, no podrás cambiarla más adelante, aunque podrás adelantar o atrasar la fecha de inicio al editar el plan.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        <button type="submit" class="btn btn-primary" disabled id="createPlanButton">Crear plan</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
+            <a class="navbar-brand col-md-4 col-lg-3 me-0 px-3" href="/dashboard/">
+                <img class="logo" src="/assets/logo_light_256.png" alt="" width="28" height="28" />
+                Hermes
+            </a>
+            <button
+                class="navbar-toggler position-absolute d-md-none collapsed py-2 px-3"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#sidebarMenu"
+                aria-controls="sidebarMenu"
+                aria-expanded="false"
+                aria-label="Toggle navigation"
+                style="margin-top: 2px !important"
+            >
+                <i class="mx-md-1 bi bi-geo-alt-fill"></i>
+            </button>
+            <div class="dropdown w-100">
+                <input
+                    class="form-control form-control-dark w-100 dropdown-toggle"
+                    type="text"
+                    placeholder="Buscar lugares"
+                    aria-label="Buscar lugares"
+                    id="searchInput"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                    onkeyup="searchPlaces(this);"
+                />
+                <ul class="dropdown-menu w-100" aria-labelledby="searchInput" id="searchDropdown">
+                    <div
+                        class="px-3 py-1 text-center"
+                        id="searchPlaceholder"
+                        original-data="<i>Introduce un nombre de lugar para buscar</i>"
+                    >
+                        <i>Introduce un nombre de lugar para buscar</i>
+                    </div>
+                    <div id="searchItems"></div>
+                </ul>
+            </div>
+
+            <div class="nav navbar-nav navbar-secondary px-3 text-secondary">
+                <div class="text-nowrap">
+                    <a href="/dashboard/" class="active">
+                        <i
+                            class="bi bi-compass"
+                            style="font-size: 1.75rem"
+                            data-bs-toggle="tooltip"
+                            data-bs-placement="bottom"
+                            data-bs-original-title="Recomendaciones"
+                            title="Recomendaciones"
+                        ></i>
+                    </a>
+                    <a href="/plans/">
+                        <i
+                            class="bi bi-journals"
+                            style="font-size: 1.75rem"
+                            data-bs-toggle="tooltip"
+                            data-bs-placement="bottom"
+                            data-bs-original-title="Planes"
+                            title="Planes"
+                        ></i>
+                    </a>
+                    <a href="/ratings/">
+                        <i
+                            class="bi bi-star-fill"
+                            style="font-size: 1.75rem"
+                            data-bs-toggle="tooltip"
+                            data-bs-placement="bottom"
+                            data-bs-original-title="Puntuaciones"
+                            title="Puntuaciones"
+                        ></i>
+                    </a>
+                    <a href="/profile/">
+                        <i
+                            class="bi bi-person-square"
+                            style="font-size: 1.75rem"
+                            data-bs-toggle="tooltip"
+                            data-bs-placement="bottom"
+                            data-bs-original-title="Perfil"
+                            title="Perfil"
+                        ></i>
+                    </a>
+                    <a href="/help/">
+                        <i
+                            class="bi bi-question-circle"
+                            style="font-size: 1.75rem"
+                            data-bs-toggle="tooltip"
+                            data-bs-placement="bottom"
+                            data-bs-original-title="Ayuda"
+                            title="Ayuda"
+                        ></i>
+                    </a>
+                </div>
+            </div>
+        </header>
+
+        <div class="container-fluid">
+            <div class="row">
+                <nav id="sidebarMenu" class="col-md-4 col-lg-3 d-md-block bg-light sidebar collapse">
+                    <div class="sidebar-sticky pt-3 px-3">
+                        <div class="row mx-0 border-bottom py-2">
+                            <div class="col-10">
+                                <h2 class="d-inline me-1">Explorar</h2>
+                                (<span id="placeCount">0</span> lugares)
+                            </div>
+                            <div class="col-2 text-end">
+                                <a
+                                    href="#"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#clearPlanModal"
+                                    class="fs-4 my-auto text-danger d-none"
+                                    data-bs-toggle="tooltip"
+                                    data-bs-placement="bottom"
+                                    data-bs-original-title="Vaciar plan"
+                                    title="Vaciar plan"
+                                    id="clearPlanPrompter"
+                                >
+                                    <i class="bi bi-calendar2-x"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div id="places">
+                            <div class="text-center mt-3">
+                                <div role="status" class="spinner-border">
+                                    <span class="visually-hidden">Cargando...</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="sidebar-bottom px-3">
+                            <button
+                                id="planButton"
+                                class="w-100 btn btn-lg btn-success"
+                                disabled
+                                data-bs-toggle="modal"
+                                data-bs-target="#createPlanModal"
+                                data-bs-toggle="tooltip"
+                                data-bs-placement="top"
+                                data-bs-original-title="Selecciona al menos 3 lugares antes de planificar"
+                                title="Selecciona al menos 3 lugares antes de planificar"
+                                onclick="getDayHeuristic()"
+                            >
+                                Planificar
+                                <div class="text-white" style="font-size: 0.8rem !important">
+                                    <span id="selectedCount">0</span> lugares seleccionados
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+                </nav>
+
+                <main class="col-md-8 ms-sm-auto col-lg-9 px-md-4">
+                    <div id="map"></div>
+                </main>
+            </div>
+        </div>
+
+        <!--
+            Templates
+        -->
+        <!-- Sidebar Card -->
+        <template id="templateCard">
+            <div class="card place-card" id="" onclick="selectPlaceByElement(this);">
+                <button
+                    class="btn btn-sm btn-outline-danger position-absolute end-0 me-3 mt-3 remove d-none"
+                    onclick="removeFromPlan(this);"
+                >
+                    <i class="bi bi-calendar2-x"></i>
+                </button>
+                <div class="card-body">
+                    <h4 class="card-title mb-0 w-75"></h4>
+                    <div class="card-categories text-muted mb-2"></div>
+                    <div class="card-text"></div>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <div class="d-inline-block time"><i class="mx-md-1 bi bi-clock-fill text-muted"></i></div>
+                        <div class="d-inline-block rating"><i class="mx-md-1 bi bi-star-fill text-warning"></i></div>
+                        <div class="d-inline-block prediction">
+                            <i class="mx-md-1 bi bi-hand-thumbs-up-fill text-success"></i>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </template>
+
+        <!-- Popup image carousel -->
+        <template id="templatePopupCarousel">
+            <div id="" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    <button class="carousel-control-prev" type="button" data-bs-target="" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Anterior imagen</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Siguiente imagen</span>
+                    </button>
+                </div>
+            </div>
+        </template>
+
+        <!-- Popup carousel item -->
+        <template id="templatePopupCarouselItem">
+            <div class="carousel-item">
+                <img src="/assets/default_image.png" class="d-block w-100" />
+            </div>
+        </template>
+
+        <!-- Popup content -->
+        <template id="templatePopupContent">
+            <div class="leaflet-custom-content">
+                <h4 class="mb-2 mt-2 title"></h4>
+                <p class="fs-6 my-0 mb-3">
+                    <span class="address"><i class="mx-md-1 bi bi-geo-fill text-danger"></i></span>
+                    <span class="d-block"><a class="wikipedia" target="_blank" href="#">Wikipedia</a></span>
+                </p>
+                <p class="fs-6 mt-3 contact-pl">
+                    <span class="phone d-block"
+                        ><i class="mx-md-1 bi bi-telephone-fill text-success"></i> <a target="_blank" href="#"></a
+                    ></span>
+                    <span class="url d-block"
+                        ><i class="mx-md-1 bi bi-link-45deg text-secondary"></i>
+                        <a target="_blank" href="#">Página web</a></span
+                    >
+                </p>
+                <div class="fs-6 my-3 text-center contact-sn">
+                    <div class="twitter d-inline-block mx-2">
+                        <i class="mx-md-1 bi bi-twitter text-primary"></i><br /><a target="_blank" href="#">Twitter</a>
+                    </div>
+                    <div class="instagram d-inline-block mx-2">
+                        <i class="mx-md-1 bi bi-instagram text-danger"></i><br /><a target="_blank" href="#"
+                            >Instagram</a
+                        >
+                    </div>
+                    <div class="facebook d-inline-block mx-2">
+                        <i class="mx-md-1 bi bi-facebook text-primary"></i><br /><a target="_blank" href="#"
+                            >Facebook</a
+                        >
+                    </div>
+                </div>
+                <div class="fs-6 my-3 text-center actions">
+                    <button class="w-100 btn btn-primary add-to-plan" onclick="addToPlan(this);">Añadir al plan</button>
+                    <button class="w-100 btn btn-danger remove-from-plan d-none" onclick="removeFromPlan(this);">
+                        Eliminar del plan
+                    </button>
+                </div>
+            </div>
+        </template>
+
+        <!-- Search item template -->
+        <template id="templateSearchItem">
+            <li>
+                <a class="dropdown-item text-wrap" href="#" onclick="displaySearchResult(this);">
+                    <b class="title"></b>
+                    <div class="text-muted d-inline ms-1 categories"></div>
+                    <div class="description"></div>
+                </a>
+            </li>
+        </template>
+
+        <!-- JS -->
+        <script src="/js/bootstrap.bundle.min.js"></script>
+        <script src="/js/common.js"></script>
+        <script
+            src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+            integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+            crossorigin=""
+        ></script>
+        <script src="/js/leaflet-icons.js"></script>
+        <script src="/js/dashboard.js"></script>
+        <script
+            async
+            defer
+            data-website-id="0f73de68-9610-4a9c-a7a8-ab61ab30208a"
+            src="https://u.fcld.ml/umami.js"
+        ></script>
+    </body>
+</html>
