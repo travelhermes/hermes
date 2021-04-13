@@ -1,7 +1,6 @@
 /*jshint esversion: 8 */
 /* Map tiles server endpoint */
-const TILESERVER_ENDPOINT = 'https://ts-hermes.galisteo.me';
-//const TILESERVER_ENDPOINT = '<your TILESERVER_ENDPOINT here>';
+const TILESERVER_ENDPOINT = '<your TILESERVER_ENDPOINT here>';
 /* API endpoints
  * https://alvaro.galisteo.me/hermes/api/ */
 const ENDPOINTS = {
