@@ -211,12 +211,16 @@ function selectPlaceById(id) {
 
 /**
  * Given a sidebar card, select the place and show its corresponding popup
- * @param  {HTMLElement} place Sidebar card element
+ * @param  {HTMLElement} place    Sidebar card element
+ * @param  {Boolean}     toggler  Toggles sidebar on mobile when called
  */
-function selectPlaceByElement(place) {
+function selectPlaceByElement(place, toggler = true) {
     var id = parseInt(place.getAttribute('id').replace('placeCard', ''));
     getElementByKey(places, 'id', id).marker.openPopup();
     selectPlaceById(id);
+    if(window.innerWidth < 768 && toggler) {
+        document.querySelector('#navbar-toggler').click();
+    }
 }
 
 /*
@@ -281,7 +285,7 @@ function displaySearchResult(element) {
     const placeId = parseInt(element.getAttribute('placeId'));
 
     if (getElementByKey(places, 'id', placeId)) {
-        selectPlaceByElement(document.querySelector('#placeCard' + placeId));
+        selectPlaceByElement(document.querySelector('#placeCard' + placeId), false);
     } else {
         var place = getElementByKey(searchResults, 'id', placeId);
         var popup = L.popup();

@@ -146,9 +146,9 @@ body {
         margin-bottom: 3.5rem !important;
     }
 
-    .leaflet-popup-content-wrapper {
-        transform: scale(0.75);
-    }
+    /*.leaflet-popup-content-wrapper {
+        transform: scale(0.75) translateY(17%);
+    }*/
 }
 
 .leaflet-popup-content-wrapper {
