@@ -108,7 +108,7 @@ async function main() {
                 osmId: places[i].osmRel,
                 name: places[i].name,
                 description: description,
-                timeSpent: timeSpent,
+                timeSpent: timeSpent * 60,
                 lat: places[i].lat,
                 lon: places[i].lon,
                 address: places[i].address,

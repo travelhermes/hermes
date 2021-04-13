@@ -207,8 +207,22 @@
             <div class="h5 text-muted mx-2">
                 <span id="days" class="mx-2"></span> |
                 <div class="mx-2 d-inline-block">
-                    <input type="date" class="form-control d-inline-block edit-mode-disable" disabled id="start-date" style="width: 150px" onchange="updateDates(this);">
-                    <i class="mx-md-1 bi bi-arrow-right"></i> <input type="date" class="form-control d-inline-block" disabled id="end-date" style="width: 150px">
+                    <input
+                        type="date"
+                        class="form-control d-inline-block edit-mode-disable"
+                        disabled
+                        id="start-date"
+                        style="width: 150px"
+                        onchange="updateDates(this);"
+                    />
+                    <i class="mx-md-1 bi bi-arrow-right"></i>
+                    <input
+                        type="date"
+                        class="form-control d-inline-block"
+                        disabled
+                        id="end-date"
+                        style="width: 150px"
+                    />
                 </div>
             </div>
             <input
@@ -297,9 +311,8 @@
             <p>
                 Creado por
                 <a href="https://galisteo.me">Álvaro Galisteo</a><br />
-                <a href="/attributions/">Atribuciones</a> -
-                <a href="/help/">Ayuda</a> - 
-                <a href="/terms/">Terminos y condiciones</a> - 
+                <a href="/attributions/">Atribuciones</a> - <a href="/help/">Ayuda</a> -
+                <a href="/terms/">Terminos y condiciones</a> -
                 <a href="/privacy/">Política de privacidad</a>
             </p>
         </footer>
@@ -330,7 +343,16 @@
                                 <h5 class="card-title my-0 title"></h5>
                                 <div class="d-inline fs-6">
                                     <i class="mx-md-1 bi bi-clock-history text-primary"></i>
-                                    <span class="time"></span>
+                                    <input
+                                        type="number"
+                                        class="time form-control d-inline-block edit-mode-disable"
+                                        style="width: 80px"
+                                        disabled
+                                        min="15"
+                                        step="1"
+                                        onchange="updateCustomTime(this)"
+                                    />
+                                    minutos
                                 </div>
                                 <p class="card-text description my-2"></p>
                                 <div class="btn-group edit-mode-hide" role="group" aria-label="Acciones">
@@ -458,7 +480,7 @@
                                         class="time form-control d-inline-block edit-mode-disable"
                                         style="width: 80px"
                                         disabled
-                                        min="0"
+                                        min="15"
                                         step="1"
                                         onchange="updateCustomTime(this)"
                                     />
@@ -523,7 +545,7 @@
                                         class="time form-control d-inline-block edit-mode-disable"
                                         style="width: 80px"
                                         disabled
-                                        min="0"
+                                        min="15"
                                         step="1"
                                         onchange="updateCustomTime(this)"
                                     />
@@ -602,7 +624,7 @@
                                         class="time form-control d-inline-block edit-mode-disable"
                                         style="width: 80px"
                                         disabled
-                                        min="0"
+                                        min="15"
                                         step="1"
                                         onchange="updateCustomTime(this)"
                                     />

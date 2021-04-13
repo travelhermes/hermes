@@ -217,7 +217,7 @@ function createProblem(planId, places, days, start, dayStart, dayEnd, quicker = 
             }
 
             placeHours.push(
-                `(= (visit-duration place${place.id}) ${quicker ? (place.timeSpent * 60) / 1.2 : place.timeSpent * 60})`
+                `(= (visit-duration place${place.id}) ${quicker ? (place.timeSpent) / 1.2 : place.timeSpent})`
             );
             placeHours.push(`(unvisited place${place.id})`);
 
@@ -403,7 +403,7 @@ function parseSolution(planId, output, places, start, dayStart, quicker = false)
                     if (items[j].aditional.waitId == step.id) {
                         items[j].day = currentDay;
                         items[j].order = order;
-                        items[j].timeSpent = step.timeSpent / 60;
+                        items[j].timeSpent = step.timeSpent;
                         items[j].startTime = getTimeString(currentTime);
                         currentTime += step.timeSpent;
                         items[j].endTime = getTimeString(currentTime);
@@ -519,8 +519,8 @@ function parseSolution(planId, output, places, start, dayStart, quicker = false)
                         // Update place
                         items[j].startTime = getTimeString(currentTime);
                         currentTime += quicker
-                            ? (items[j].aditional.place.timeSpent * 60) / 1.2
-                            : items[j].aditional.place.timeSpent * 60;
+                            ? (items[j].aditional.place.timeSpent) / 1.2
+                            : items[j].aditional.place.timeSpent;
                         items[j].endTime = getTimeString(currentTime);
 
                         break;
@@ -591,7 +591,7 @@ exports.plan = async function (plan, places, days, start, dayStart, dayEnd, quic
     try {
         problem = await createProblem(plan.id, places, days, start, dayStart, dayEnd, quicker);
     } catch (error) {
-        ApplicationLogger.logBase(LogLevel.ERROR, plan.UserId, null, 'planner/plan', null, error);
+        ApplicationLogger.logBase(LogLevel.ERROR, plan.UserId, null, 'planner/plan/creator', null, error);
         plan.status = -1;
         plan.save();
         return;
@@ -601,7 +601,7 @@ exports.plan = async function (plan, places, days, start, dayStart, dayEnd, quic
     try {
         fs.writeFileSync(path, problem);
     } catch (error) {
-        ApplicationLogger.logBase(LogLevel.ERROR, plan.UserId, null, 'planner/plan', null, error);
+        ApplicationLogger.logBase(LogLevel.ERROR, plan.UserId, null, 'planner/plan/writer', null, error);
         plan.status = -1;
         plan.save();
         return;
@@ -615,26 +615,26 @@ exports.plan = async function (plan, places, days, start, dayStart, dayEnd, quic
     try {
         output = await proc.runWithTimeout(300);
     } catch (error) {
-        if (err.code == -1) {
+        if (error.code == -1) {
             // Timed out. Default to no cost optimization
             args = ['-o', __dirname + '/domain.pddl', '-f', path];
             proc = new Process(__dirname + '/ff', args);
             try {
                 output = await proc.runWithTimeout(300);
-            } catch (err) {
-                if (err.code == -1) {
+            } catch (error) {
+                if (error.code == -1) {
                     // Timed out
                     plan.status = 2;
                     plan.save();
                 } else {
-                    ApplicationLogger.logBase(LogLevel.ERROR, plan.UserId, null, 'planner/plan', null, error);
+                    ApplicationLogger.logBase(LogLevel.ERROR, plan.UserId, null, 'planner/plan/planner/simple', null, error);
                 }
                 return;
             }
         } else {
             plan.status = -1;
             plan.save();
-            ApplicationLogger.logBase(LogLevel.ERROR, plan.UserId, null, 'planner/plan', null, error);
+            ApplicationLogger.logBase(LogLevel.ERROR, plan.UserId, null, 'planner/plan/planner', null, error);
             return;
         }
     }
@@ -643,12 +643,12 @@ exports.plan = async function (plan, places, days, start, dayStart, dayEnd, quic
     try {
         items = await parseSolution(plan.id, output, places, start, dayStart, quicker);
     } catch (error) {
-        if (err.code == 1) {
+        if (error.status == 1) {
             // Empty solution
             plan.status = 3;
             plan.save();
         } else {
-            ApplicationLogger.logBase(LogLevel.ERROR, plan.UserId, null, 'planner/plan', null, error);
+            ApplicationLogger.logBase(LogLevel.ERROR, plan.UserId, null, 'planner/plan/parser', null, error);
         }
         return;
     }
@@ -656,7 +656,7 @@ exports.plan = async function (plan, places, days, start, dayStart, dayEnd, quic
     try {
         await db.PlanItem.bulkCreate(items);
     } catch (error) {
-        ApplicationLogger.logBase(LogLevel.ERROR, plan.UserId, null, 'planner/plan', null, error);
+        ApplicationLogger.logBase(LogLevel.ERROR, plan.UserId, null, 'planner/plan/db', null, error);
         plan.status = -1;
         plan.save();
         return;
@@ -665,7 +665,7 @@ exports.plan = async function (plan, places, days, start, dayStart, dayEnd, quic
     try {
         fs.rmSync(path);
     } catch (error) {
-        ApplicationLogger.logBase(LogLevel.ERROR, plan.UserId, null, 'planner/plan', null, error);
+        ApplicationLogger.logBase(LogLevel.ERROR, plan.UserId, null, 'planner/plan/cleanup', null, error);
     }
 
     plan.status = 0;

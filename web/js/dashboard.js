@@ -184,7 +184,7 @@ function renderPlaces(places) {
         }
 
         card.querySelector('.time').innerHTML +=
-            ' ' + (place.timeSpent ? minutesToHoursMinutes(place.timeSpent * 60) : '?');
+            ' ' + (place.timeSpent ? minutesToHoursMinutes(place.timeSpent) : '?');
         card.querySelector('.rating').innerHTML += ' ' + place.rating.toFixed(1);
         card.querySelector('.prediction').innerHTML += ' ' + (place.probability * 100).toFixed(0) + '%';
 
@@ -327,7 +327,7 @@ function addPlace(placeId, recommended = true) {
                 }
 
                 card.querySelector('.time').innerHTML +=
-                    ' ' + (place.timeSpent ? minutesToHoursMinutes(place.timeSpent * 60) : '?');
+                    ' ' + (place.timeSpent ? minutesToHoursMinutes(place.timeSpent) : '?');
                 card.querySelector('.rating').innerHTML += ' ' + place.rating.toFixed(1);
                 card.querySelector('.prediction').remove();
 

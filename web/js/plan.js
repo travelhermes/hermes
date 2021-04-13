@@ -99,7 +99,7 @@ function renderPlace(item) {
 
     card.querySelector('.time-start').innerHTML = item.startTime;
     card.querySelector('.title').innerHTML = item.placeName;
-    card.querySelector('.time').innerHTML = plural(item.timeSpent, 'minuto');
+    card.querySelector('.time').value = item.timeSpent;
     card.querySelector('.description').innerHTML = item.placeDescription;
     card.querySelector('.time-end').innerHTML = item.endTime;
     card.querySelector('.maps').href = item.gmapsUrl;
@@ -339,7 +339,7 @@ function parsePlan(data, items) {
 
         const item = items[i];
 
-        item.timeSpent = Math.ceil(item.timeSpent * 60);
+        item.timeSpent = item.timeSpent;
         days[currentDay].route.push(item);
 
         if (item.travelNext == -1) {
@@ -591,7 +591,7 @@ function insertPlace(button) {
         description: '',
         startTime: null,
         endTime: null,
-        timeSpent: Math.ceil(place.timeSpent * 60),
+        timeSpent: place.timeSpent,
         travelNext: null,
         type: 1,
         gmapsUrl: place.gmapsUrl,
@@ -706,10 +706,11 @@ function savePlan(button) {
     for (var i = 0; i < dates.length; i++) {
         var route = plan.days[i].route;
         for (var j = 0; j < route.length; j++) {
+            console.log( route[j].timeSpent);
             request.items.push({
                 order: j,
                 day: i,
-                timeSpent: route[j].type == 1 ? 0 : route[j].timeSpent / 60,
+                timeSpent: route[j].timeSpent,
                 type: route[j].type,
                 description: route[j].description,
                 PlaceId: route[j].placeId,

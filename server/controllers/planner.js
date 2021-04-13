@@ -463,7 +463,7 @@ class PlannerController {
                         startTime: item.startTime,
                         endTime: item.endTime,
                         type: item.type,
-                        timeSpent: item.Place ? item.Place.timeSpent : item.timeSpent,
+                        timeSpent: item.timeSpent,
                         travelNext: item.travelNext,
                         travelMode: item.travelMode,
                         description: item.description,
@@ -551,7 +551,8 @@ class PlannerController {
                 typeof request.body.items[i].day != 'number' ||
                 !request.body.items[i].type ||
                 typeof request.body.items[i].type != 'number' ||
-                typeof request.body.items[i].timeSpent != 'number'
+                typeof request.body.items[i].timeSpent != 'number' ||
+                (request.body.items[i].type != 2 && request.body.items[i].timeSpent < 15)
             ) {
                 reply.status(400).send();
                 return;
@@ -623,18 +624,6 @@ class PlannerController {
             var prev = request.body.items[i - 1] ? request.body.items[i - 1] : null;
             var next = request.body.items[i + 1] ? request.body.items[i + 1] : null;
 
-            if (next && next.type == 1) {
-                next = await db.Place.findOne({
-                    where: {
-                        id: next.PlaceId,
-                    },
-                });
-                if (!next) {
-                    reply.status(400).send();
-                    return;
-                }
-            }
-
             if (prev && prev.type == 1) {
                 prev = await db.Place.findOne({
                     where: {
@@ -645,6 +634,20 @@ class PlannerController {
                     reply.status(400).send();
                     return;
                 }
+                prev.timeSpent = request.body.items[i - 1].timeSpent;
+            }
+
+            if (next && next.type == 1) {
+                next = await db.Place.findOne({
+                    where: {
+                        id: next.PlaceId,
+                    },
+                });
+                if (!next) {
+                    reply.status(400).send();
+                    return;
+                }
+                next.timeSpent = request.body.items[i + 1].timeSpent;
             }
 
             if (item.type == 2) {
@@ -687,15 +690,15 @@ class PlannerController {
                     order: currentOrder,
                     day: currentDay,
                     startTime: getTimeString(currentTime),
-                    endTime: getTimeString(currentTime + place.timeSpent * 60),
-                    timeSpent: place.timeSpent,
+                    endTime: getTimeString(currentTime + item.timeSpent),
+                    timeSpent: item.timeSpent,
                     type: 1,
                     travelNext: next && request.body.items[i + 1].day == item.day ? dist[1] : -1,
                     travelMode: dist[2],
                     description: item.description,
                 });
 
-                currentTime = currentTime + place.timeSpent * 60 + dist[1];
+                currentTime = currentTime + item.timeSpent + dist[1];
             } else if (item.type == 2) {
                 let dist = [0, 0, 'walking'];
                 if (next) {
@@ -741,7 +744,7 @@ class PlannerController {
                     order: currentOrder,
                     day: currentDay,
                     startTime: getTimeString(currentTime),
-                    endTime: getTimeString(currentTime + item.timeSpent * 60),
+                    endTime: getTimeString(currentTime + item.timeSpent),
                     timeSpent: item.timeSpent,
                     type: item.type,
                     travelNext: next && request.body.items[i + 1].day == item.day ? dist[1] : -1,
@@ -749,7 +752,7 @@ class PlannerController {
                     description: item.description,
                 });
 
-                currentTime = currentTime + item.timeSpent * 60 + dist[1];
+                currentTime = currentTime + item.timeSpent + dist[1];
             }
 
             currentOrder++;
@@ -827,7 +830,7 @@ class PlannerController {
         var timeTravel = 0;
         var dist;
         for (var i = 0; i < places.length; i++) {
-            timeSpent += places[i].timeSpent * 60;
+            timeSpent += places[i].timeSpent;
             for (var j = i + 1; j < places.length; j++) {
                 try {
                     dist = await getDistance(places[i], places[j]);
