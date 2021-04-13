@@ -185,7 +185,7 @@ function renderPlaces(places) {
 
         card.querySelector('.time').innerHTML +=
             ' ' + (place.timeSpent ? minutesToHoursMinutes(place.timeSpent * 60) : '?');
-        card.querySelector('.rating').innerHTML += ' ' + place.rating;
+        card.querySelector('.rating').innerHTML += ' ' + place.rating.toFixed(1);
         card.querySelector('.prediction').innerHTML += ' ' + (place.probability * 100).toFixed(0) + '%';
 
         list.appendChild(card);
@@ -328,7 +328,7 @@ function addPlace(placeId, recommended = true) {
 
                 card.querySelector('.time').innerHTML +=
                     ' ' + (place.timeSpent ? minutesToHoursMinutes(place.timeSpent * 60) : '?');
-                card.querySelector('.rating').innerHTML += ' ' + place.rating;
+                card.querySelector('.rating').innerHTML += ' ' + place.rating.toFixed(1);
                 card.querySelector('.prediction').remove();
 
                 document.querySelector('#places').appendChild(card);

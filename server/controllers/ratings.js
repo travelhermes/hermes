@@ -288,6 +288,12 @@ class RatingsController {
                                 [Op.notIn]: rated,
                             },
                         },
+                        include: [
+                            {
+                                model: db.Category,
+                                attributes: ['name'],
+                            },
+                        ],
                     })
                 ).map((item) => {
                     return {
@@ -297,6 +303,9 @@ class RatingsController {
                         wikipedia: item.wikipedia,
                         placeUrl: item.placeUrl,
                         images: item.images,
+                        categories: item.Categories.map((category) => {
+                            return category.name;
+                        }),
                     };
                 }),
             });

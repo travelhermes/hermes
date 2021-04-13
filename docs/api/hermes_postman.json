@@ -853,6 +853,70 @@
 					]
 				},
 				{
+					"name": "Logout all sessions",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://hermes.galisteo.me/api/auth/logoutSessions",
+							"protocol": "https",
+							"host": [
+								"hermes",
+								"galisteo",
+								"me"
+							],
+							"path": [
+								"api",
+								"auth",
+								"logoutSessions"
+							]
+						},
+						"description": "Logs out all sessions except the requesting one."
+					},
+					"response": [
+						{
+							"name": "Successful logout",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://hermes.galisteo.me/api/auth/logout",
+									"protocol": "https",
+									"host": [
+										"hermes",
+										"galisteo",
+										"me"
+									],
+									"path": [
+										"api",
+										"auth",
+										"logout"
+									]
+								}
+							},
+							"status": "Moved Permanently",
+							"code": 301,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "Set-Cookie",
+									"value": "hermesSession=; Path=/; Expires=Sun, 11 Apr 2021 00:00:00 GMT;",
+									"description": "",
+									"type": "text"
+								},
+								{
+									"key": "Location",
+									"value": "/signin/",
+									"description": "",
+									"type": "text"
+								}
+							],
+							"cookie": [],
+							"body": null
+						}
+					]
+				},
+				{
 					"name": "Change password",
 					"request": {
 						"method": "PUT",
@@ -1282,14 +1346,6 @@
 										"name": "Content-Type",
 										"value": "application/json",
 										"type": "text"
-									},
-									{
-										"key": "User-Agent",
-										"value": "Mozilla/5.0 (X11; Fedora; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.114 Safari/537.36"
-									},
-									{
-										"key": "Accept",
-										"value": "*/*"
 									}
 								],
 								"body": {

@@ -273,6 +273,18 @@ paths:
                 type: string
                 example: "hermesSession=; Path=/; Expires=Sun, 11 Apr 2021 00:00:00 GMT;"
           content: {}
+  /api/auth/logoutSessions:
+    get:
+      security:
+        - hermesSession: []
+      tags:
+        - Auth
+      summary: Logout all sessions
+      description: Logs out all sessions except the requesting one.
+      operationId: logoutAllSessions
+      responses:
+        "200":
+          description: ""
   /api/auth/password/change:
     put:
       security: []

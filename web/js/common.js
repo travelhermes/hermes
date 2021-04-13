@@ -7,6 +7,7 @@ const ENDPOINTS = {
     signin: '/api/auth/signin',
     signup: '/api/auth/signup',
     check: '/api/auth/check',
+    logoutAll: '/api/auth/logoutSessions',
 
     accountInfo: '/api/account/info',
     accountUpdate: '/api/account/update',

@@ -95,6 +95,22 @@ async function change(form) {
 }
 
 /**
+ * Sends a request to close all sessions
+ * @param  {HTMLElement} button Button that triggered the action
+ */
+function closeAllSessions(button) {
+    setLoadButton(button);
+    get(ENDPOINTS.logoutAll)
+        .then(() => {
+            setDoneButton(button);
+        })
+        .catch((err) => {
+            throwError(err);
+            unsetLoadButton(button);
+        });
+}
+
+/**
  * Sends a request to delete the account
  * @param  {HTMLElement} button Button that triggered the action
  */

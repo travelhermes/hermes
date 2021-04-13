@@ -165,6 +165,7 @@ class AuthController {
         fastify.post('/api/auth/signin', this.signin);
         fastify.post('/api/auth/signup', this.signup);
         fastify.get('/api/auth/logout', this.logout);
+        fastify.get('/api/auth/logoutSessions', this.logoutSessions);
 
         // Password changes
         fastify.post('/api/auth/password/request', this.request);
@@ -481,6 +482,34 @@ class AuthController {
     }
 
     /**
+     * REQUIRES SESSION!
+     * Logs out all sessions except the current one.
+     * @param  {Request} request HTTP Request
+     * @param  {Reply}   reply   HTTP Reply
+     */
+    async logoutSessions(request, reply) {
+        const user = await Session.getSessionUser(request);
+
+        // If user does not exists, return not allowed
+        if (!user) {
+            reply.status(403).send();
+            return;
+        }
+
+        // Remove all sessions except this one
+        await db.Session.destroy({
+            where: {
+                [Op.not]: {
+                    key: request.unsignCookie(request.cookies.hermesSession).value,
+                },
+                UserId: user.id,
+            },
+        });
+
+        reply.status(200).send();
+    }
+
+    /**
      * Requests a password change
      * @param  {Request} request HTTP request
      * @param  {Reply}   reply   HTTP reply
@@ -680,8 +709,12 @@ class AuthController {
             _comparePassword(request.body.password, user.password)
                 .then(async (value) => {
                     if (value) {
-                        // First, delete session, then delete user from database
-                        await Session.destroySession(request);
+                        // First, delete sessions, then delete user from database
+                        await db.Session.destroy({
+                            where: {
+                                UserId: user.id
+                            },
+                        });
                         await db.User.destroy({
                             where: {
                                 id: user.id,
