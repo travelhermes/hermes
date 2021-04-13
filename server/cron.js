@@ -124,16 +124,10 @@ async function main() {
     // Clean deleted user accounts
     console.log(`[${new Date().toLocaleString()}] (cron.js) - Cleaning deleted accounts`);
     try {
-        const users = await db.User.findAll({
-            where: {
-                deletedAt: {
-                    [Op.not]: null,
-                },
-            },
-        });
+        const users = await db.User.findAll({});
         for (let i = 0; i < users.length; i++) {
-            // 15 days
-            if (432000 < (new Date() - users[i].deletedAt) / 1000) {
+            // 5 days
+            if (users[i].deletedAt != null && 432000 < (new Date() - users[i].deletedAt) / 1000) {
                 db.User.destroy({
                     where: {
                         id: users[i].id,
