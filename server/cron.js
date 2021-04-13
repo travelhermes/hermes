@@ -171,10 +171,57 @@ async function main() {
                     [Op.lt]: new Date(),
                 },
             },
+            include: [
+                {
+                    model: db.User,
+                },
+                {
+                    model: db.PlanItem,
+                    include: [
+                        {
+                            model: db.Place,
+                            include: [
+                                {
+                                    model: db.Category,
+                                },
+                            ],
+                        },
+                    ],
+                },
+            ],
         });
+        // Update every plan
         for (var i = 0; i < plans.length; i++) {
             plans[i].status = 4;
-            plans[i].save();
+            await plans[i].save();
+
+            // Traverse every plan item
+            for (var j = 0; j < plans[i].PlanItems.length; j++) {
+                const place = plans[i].PlanItems[j].Place;
+                if (!place) {
+                    continue;
+                }
+                // Finding all corresponding userViews and incrementing them
+                (
+                    await db.UserView.findAll({
+                        where: {
+                            UserId: plans[i].User.id,
+                            CategoryId: {
+                                [Op.in]: place.Categories.map((category) => {
+                                    return category.id;
+                                }),
+                            },
+                        },
+                    })
+                ).forEach(async (userView) => {
+                    // Increment each view by one
+                    userView.views += 1;
+                    plans[i].User.views += 1;
+                    await userView.save();
+                });
+            }
+            await plans[i].User.save();
+
             count++;
         }
         ApplicationLogger.logBase(LogLevel.INFO, null, null, 'cronjob/plans', null, 'Updated ' + count + ' plans');
