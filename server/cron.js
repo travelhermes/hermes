@@ -193,7 +193,7 @@ async function main() {
     console.log(`[${new Date().toLocaleString()}] (cron.js) - Sending plan reminder emails`);
     try {
         let count = 0;
-        const plans = db.Plan.findAll({
+        const plans = await db.Plan.findAll({
             where: {
                 status: 0,
             },
@@ -243,7 +243,7 @@ async function main() {
     console.log(`[${new Date().toLocaleString()}] (cron.js) - Sending rating reminder emails`);
     try {
         let count = 0;
-        const plans = db.Plan.findAll({
+        const plans = await db.Plan.findAll({
             where: {
                 startDate: {
                     [Op.gt]: today,
