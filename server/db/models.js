@@ -40,14 +40,14 @@ const log = {
         allowNull: true,
     },
 };
-const AccessLog = sequelize.define('AccessLog', log, { paranoid: true });
-const ApplicationLog = sequelize.define('ApplicationLog', log, { paranoid: true });
+const AccessLog = sequelize.define('AccessLog', log);
+const ApplicationLog = sequelize.define('ApplicationLog', log);
 
 const User = sequelize.define(
     'User',
     {
         id: {
-            type: DataTypes.BIGINT,
+            type: DataTypes.DOUBLE,
             autoIncrement: true,
             allowNull: false,
             unique: true,
@@ -92,7 +92,7 @@ const User = sequelize.define(
             allowNull: true,
         },
         views: {
-            type: DataTypes.BIGINT,
+            type: DataTypes.INTEGER,
             allowNull: false,
             defaultValue: 0,
         },
@@ -104,7 +104,7 @@ const Session = sequelize.define(
     'Session',
     {
         UserId: {
-            type: DataTypes.BIGINT,
+            type: DataTypes.DOUBLE,
             allowNull: false,
             primaryKey: true,
         },
@@ -143,14 +143,14 @@ const Login = sequelize.define(
     'Login',
     {
         id: {
-            type: DataTypes.BIGINT,
+            type: DataTypes.DOUBLE,
             autoIncrement: true,
             allowNull: false,
             unique: true,
             primaryKey: true,
         },
         UserId: {
-            type: DataTypes.BIGINT,
+            type: DataTypes.DOUBLE,
             allowNull: false,
         },
         ip: {
@@ -177,7 +177,7 @@ const Place = sequelize.define(
     'Place',
     {
         id: {
-            type: DataTypes.BIGINT,
+            type: DataTypes.DOUBLE,
             autoIncrement: true,
             allowNull: false,
             unique: true,
@@ -306,14 +306,14 @@ const Hour = sequelize.define(
     'Hour',
     {
         id: {
-            type: DataTypes.BIGINT,
+            type: DataTypes.DOUBLE,
             autoIncrement: true,
             allowNull: false,
             unique: true,
             primaryKey: true,
         },
         PlaceId: {
-            type: DataTypes.BIGINT,
+            type: DataTypes.DOUBLE,
             allowNull: false,
         },
         day: {
@@ -353,14 +353,14 @@ const PopularTime = sequelize.define(
     'PopularTime',
     {
         id: {
-            type: DataTypes.BIGINT,
+            type: DataTypes.DOUBLE,
             autoIncrement: true,
             allowNull: false,
             unique: true,
             primaryKey: true,
         },
         PlaceId: {
-            type: DataTypes.BIGINT,
+            type: DataTypes.DOUBLE,
             allowNull: false,
         },
         day: {
@@ -392,7 +392,7 @@ const Category = sequelize.define(
     'Category',
     {
         id: {
-            type: DataTypes.BIGINT,
+            type: DataTypes.DOUBLE,
             autoIncrement: true,
             allowNull: false,
             unique: true,
@@ -412,12 +412,12 @@ const Category = sequelize.define(
 
 const Rating = sequelize.define('Rating', {
     UserId: {
-        type: DataTypes.BIGINT,
+        type: DataTypes.DOUBLE,
         allowNull: false,
         primaryKey: true,
     },
     PlaceId: {
-        type: DataTypes.BIGINT,
+        type: DataTypes.DOUBLE,
         allowNull: false,
         primaryKey: true,
     },
@@ -435,12 +435,12 @@ Rating.belongsTo(Place);
 
 const Recommendation = sequelize.define('Recommendation', {
     UserId: {
-        type: DataTypes.BIGINT,
+        type: DataTypes.DOUBLE,
         allowNull: false,
         primaryKey: true,
     },
     PlaceId: {
-        type: DataTypes.BIGINT,
+        type: DataTypes.DOUBLE,
         allowNull: false,
         primaryKey: true,
     },
@@ -462,17 +462,17 @@ Recommendation.belongsTo(Place);
 
 const UserView = sequelize.define('UserView', {
     UserId: {
-        type: DataTypes.BIGINT,
+        type: DataTypes.DOUBLE,
         allowNull: false,
         primaryKey: true,
     },
     CategoryId: {
-        type: DataTypes.BIGINT,
+        type: DataTypes.DOUBLE,
         allowNull: false,
         primaryKey: true,
     },
     views: {
-        type: DataTypes.BIGINT,
+        type: DataTypes.INTEGER,
         allowNull: false,
         defaultValue: 0,
     },
@@ -488,7 +488,7 @@ const Plan = sequelize.define(
     'Plan',
     {
         id: {
-            type: DataTypes.BIGINT,
+            type: DataTypes.DOUBLE,
             autoIncrement: true,
             allowNull: false,
             unique: true,
@@ -551,14 +551,14 @@ const PlanItem = sequelize.define(
     'PlanItem',
     {
         id: {
-            type: DataTypes.BIGINT,
+            type: DataTypes.DOUBLE,
             autoIncrement: true,
             allowNull: false,
             unique: true,
             primaryKey: true,
         },
         PlanId: {
-            type: DataTypes.BIGINT,
+            type: DataTypes.DOUBLE,
             allowNull: false,
             primaryKey: true,
         },
@@ -626,12 +626,12 @@ PlanItem.belongsTo(Place);
  */
 const Distance = sequelize.define('Distance', {
     PlaceId1: {
-        type: DataTypes.BIGINT,
+        type: DataTypes.DOUBLE,
         allowNull: false,
         primaryKey: true,
     },
     PlaceId2: {
-        type: DataTypes.BIGINT,
+        type: DataTypes.DOUBLE,
         allowNull: false,
         primaryKey: true,
     },
@@ -656,12 +656,12 @@ Place.hasMany(Distance, { foreignKey: { name: 'PlaceId2', allowNull: false } });
 
 const Neighbor = sequelize.define('Neighbor', {
     UserId1: {
-        type: DataTypes.BIGINT,
+        type: DataTypes.DOUBLE,
         allowNull: false,
         primaryKey: true,
     },
     UserId2: {
-        type: DataTypes.BIGINT,
+        type: DataTypes.DOUBLE,
         allowNull: false,
         primaryKey: true,
     },
