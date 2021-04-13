@@ -35,12 +35,12 @@
             </div>
         </div>
 
-        <div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="searchModalLabel" aria-hidden="true">
+        <div class="modal fade" id="searchModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="searchModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-dialog-scrollabl">
                 <form class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="searchModalLabel">Añadir puntuación</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar" onclick="window.location.reload(false);"></button>
                     </div>
                     <div class="modal-body">
                         <p>Introduce un criterio y puntua los lugares que más se adapten a tu búsqueda</p>
