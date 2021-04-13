@@ -1,7 +1,8 @@
 /*jshint esversion: 8 */
 /* Map tiles server endpoint */
-const TILESERVER_ENDPOINT = '<your TILESERVER_ENDPOINT here>';
-/* API endpoints 
+const TILESERVER_ENDPOINT = 'https://ts-hermes.galisteo.me';
+//const TILESERVER_ENDPOINT = '<your TILESERVER_ENDPOINT here>';
+/* API endpoints
  * https://alvaro.galisteo.me/hermes/api/ */
 const ENDPOINTS = {
     signin: '/api/auth/signin',
@@ -277,7 +278,7 @@ function sha256(ascii) {
  */
 function setLoadButton(button) {
     //button.setAttribute('original-data', button.innerHTML);
-    button.innerHTML = '<span class="spinner-border spinner-border-sm mx-5" role="status" aria-hidden="true"></span>';
+    button.innerHTML = '<span class="spinner-border spinner-border-sm mx-3" role="status" aria-hidden="true"></span>';
     button.disabled = true;
 }
 
@@ -286,7 +287,7 @@ function setLoadButton(button) {
  * @param {HTMLElement} button
  */
 function setDoneButton(button) {
-    button.innerHTML = '<i class="bi bi-check2 mx-5"></i>';
+    button.innerHTML = '<i class="bi bi-check2 mx-3"></i>';
     setTimeout(function () {
         unsetLoadButton(button);
     }, 1500);
@@ -323,7 +324,7 @@ function toggleCheckbox(element) {
 }
 
 /**
- * Convert minutes to `H h M min` format 
+ * Convert minutes to `H h M min` format
  * @param  {number} time Time in minutes
  * @return {string}
  */
@@ -442,4 +443,51 @@ function getDates(startDate, stopDate) {
         currentDate = currentDate.addDays(1);
     }
     return dateArray;
+}
+
+/**
+ * Checks if element is in view
+ * https://codepen.io/jr-cologne/pen/zdYdmx
+ * @param  {HTMLElement} element Element to check
+ * @return {boolean}
+ */
+function inView(element) {
+    var windowHeight = window.innerHeight;
+    var scrollY = window.scrollY || window.pageYOffset;
+    var scrollPosition = scrollY + windowHeight;
+    var elementPosition = element.getBoundingClientRect().top + scrollY + 200;
+
+    console.log(scrollPosition, elementPosition);
+
+    return scrollPosition > elementPosition;
+}
+
+// https://gist.github.com/ryancatalani/6091e50bf756088bf9bf5de2017b32e6
+function drawCurve(start, end, map) {
+    var latlngs = [];
+
+    var offsetX = end[1] - start[1],
+        offsetY = end[0] - start[0];
+
+    var r = Math.sqrt(Math.pow(offsetX, 2) + Math.pow(offsetY, 2)),
+        theta = Math.atan2(offsetY, offsetX);
+
+    var thetaOffset = 3.14 / 10;
+
+    var r2 = r / 2 / Math.cos(thetaOffset),
+        theta2 = theta + thetaOffset;
+
+    var midpointX = r2 * Math.cos(theta2) + start[1],
+        midpointY = r2 * Math.sin(theta2) + start[0];
+
+    var midpointLatLng = [midpointY, midpointX];
+
+    latlngs.push(start, midpointLatLng, end);
+
+    var pathOptions = {
+        color: '#0d6efd',
+        weight: 4,
+    };
+
+    return L.curve(['M', start, 'Q', midpointLatLng, end], pathOptions).addTo(map);
 }

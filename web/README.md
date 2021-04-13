@@ -12,6 +12,7 @@ El _frontend_ esta diseñado usando las siguientes dependencias:
 - Bootstrap Icons
 - FontAwesome
 - Leaflet
+- [Leaflet Curve](https://github.com/elfalem/Leaflet.curve)
 - hCaptcha
 
 Para mantener las librerías consistentes, estas se añaden a la plataforma sin utilizar servicios externos (como por ejemplo, unpkg), a excepción de Leaflet y hCaptcha.

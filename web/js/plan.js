@@ -4,6 +4,7 @@ var statusModal;
 var statusInterval;
 const urlParams = new URLSearchParams(window.location.search);
 const id = parseInt(urlParams.get('id'));
+var map;
 
 var plan;
 var originalPlan;
@@ -14,6 +15,149 @@ var currentDay = 0;
 
 var searchPlaces = [];
 
+var layers = [];
+
+/*
+ * Map things
+ */
+/**
+ * Create and display map.
+ * @param  {Array<number>} start Starting point of the route
+ */
+function setupMap(start) {
+    map = L.map('map', { zoomControl: false }).setView(start, 17);
+    // Main map
+    L.control
+        .zoom({
+            position: 'bottomright',
+        })
+        .addTo(map);
+
+    L.tileLayer(TILESERVER_ENDPOINT + '/{z}/{x}/{y}.png', {
+        minZoom: 12,
+        maxZoom: 17,
+        attribution:
+            '&copy; <a href="https://maptiler.com/copyright">MapTiler</a> | &copy; <a href="http://osm.org/copyright">OpenStreetMap contributors</a> ♥ <a class="text-success" href="https://donate.openstreetmap.org">Donar a OSM</a>',
+    }).addTo(map);
+}
+
+/**
+ * Create the content of a marker popup
+ * @param  {Place}  place Place to generate content
+ * @return {string}       innerHTML of popup
+ */
+function createMarkerContent(place) {
+    const address = [place.address, place.postalCode, place.city, place.state, place.country];
+
+    // Create marker popup
+    const content = getTemplate('templatePopupContent');
+    content.querySelector('.title').innerHTML = place.name;
+    content.querySelector('.address').innerHTML += address.join(', ');
+
+    if (place.wikipedia) {
+        content.querySelector('.wikipedia').href = 'https://wikipedia.org/wiki/' + place.wikipedia;
+    } else {
+        content.querySelector('.wikipedia').remove();
+    }
+
+    if (!place.phone && !place.placeUrl) {
+        content.querySelector('.contact-pl').remove();
+    } else {
+        if (place.phone) {
+            content.querySelector('.phone a').innerHTML = place.phone;
+            content.querySelector('.phone a').href = 'tel:' + place.phone.replace(' ', '');
+        } else {
+            content.querySelector('.phone').remove();
+        }
+
+        if (place.placeUrl) {
+            content.querySelector('.url a').href = place.placeUrl;
+        } else {
+            content.querySelector('.url').remove();
+        }
+    }
+
+    if (!place.twitter && !place.facebook && !place.instagram) {
+        content.querySelector('.contact-sn').remove();
+    } else {
+        if (place.twitter) {
+            content.querySelector('.twitter a').href = 'https://twitter.com/' + place.twitter;
+        } else {
+            content.querySelector('.twitter').remove();
+        }
+
+        if (place.instagram) {
+            content.querySelector('.instagram a').href = 'https://instagram.com/' + place.instagram;
+        } else {
+            content.querySelector('.instagram').remove();
+        }
+
+        if (place.facebook) {
+            content.querySelector('.facebook a').href = 'https://facebook.com/' + place.facebook;
+        } else {
+            content.querySelector('.facebook').remove();
+        }
+    }
+
+    return content.firstElementChild.outerHTML;
+}
+
+/**
+ * Render markers and lines between markers in the map
+ * @param  {object} plan Plan to render coordinates from
+ * @param  {number} day  Day to render
+ */
+function renderPoints(plan, day) {
+    var coords = [];
+    for (let i = 0; i < layers.length; i++) {
+        map.removeLayer(layers[i]);
+    }
+    for (let i = 0; i < plan.days[day].route.length; i++) {
+        if (plan.days[day].route[i].lat && plan.days[day].route[i].lon) {
+            if (plan.days[day].route[i].type == 1) {
+                plan.days[day].route[i].place.name = plan.days[day].route[i].name;
+                plan.days[day].route[i].place.description = plan.days[day].route[i].description;
+            }
+            coords.push({
+                place: plan.days[day].route[i].type == 1 ? plan.days[day].route[i].place : null,
+                coords: [plan.days[day].route[i].lat, plan.days[day].route[i].lon],
+            });
+        }
+    }
+
+    var getMarkerContent = function (item) {
+        if (item.place) {
+            return createMarkerContent(item.place);
+        } else {
+            return getTemplate('templatePopupStart').firstElementChild.outerHTML;
+        }
+    };
+
+    layers.push(L.marker(coords[0].coords).addTo(map).bindPopup(getMarkerContent(coords[0])));
+    for (var i = 0; i < coords.length - 1; i++) {
+        layers.push(drawCurve(coords[i].coords, coords[i + 1].coords, map));
+        layers.push(
+            L.marker(coords[i + 1].coords)
+                .addTo(map)
+                .bindPopup(getMarkerContent(coords[i + 1]))
+        );
+    }
+    // Assumes first item is start, which should be as plan is sorted
+}
+
+/*
+ * Render functions
+ */
+/**
+ * Change the name that apears in the header. If name is longer that 22 characters, name is truncated
+ * @param  {string} name Name to set
+ */
+function renderHeaderName(name) {
+    if(name.length > 22) {
+        name = name.substring(0, 22) + '...';
+    }
+    document.querySelector('#headerName').innerHTML = name;
+}
 /**
  * Get the element that shows the corresponding status.
  * @param  {number} state Plan status
@@ -87,6 +231,7 @@ function renderPlanInfo(plan) {
     document.querySelector('#description').value = plan.description;
     document.querySelector('#status').innerHTML = '';
     document.querySelector('#status').appendChild(resolveState(plan.status));
+    renderHeaderName(plan.name);
 }
 
 /**
@@ -98,24 +243,40 @@ function renderPlace(item) {
     const card = getTemplate('templateCardPlace');
 
     card.querySelector('.time-start').innerHTML = item.startTime;
-    card.querySelector('.title').innerHTML = item.placeName;
+    card.querySelector('.title').innerHTML = item.name;
     card.querySelector('.time').value = item.timeSpent;
-    card.querySelector('.description').innerHTML = item.placeDescription;
+    card.querySelector('.description').innerHTML = item.description;
     card.querySelector('.time-end').innerHTML = item.endTime;
-    card.querySelector('.maps').href = item.gmapsUrl;
-    card.querySelector('.notes').value = item.description;
-    if (item.placeWikipedia) {
-        card.querySelector('.wiki').href = 'https://es.wikipedia.org/wiki/' + item.placeWikipedia;
+    card.querySelector('.maps').href = item.place.gmapsUrl;
+    card.querySelector('.notes').value = item.notes;
+    if (item.place.wikipedia) {
+        card.querySelector('.wiki').href = 'https://es.wikipedia.org/wiki/' + item.place.wikipedia;
     } else {
         card.querySelector('.wiki').remove();
     }
-    if (item.placeUrl) {
-        card.querySelector('.link').href = item.placeUrl;
+    if (item.place.placeUrl) {
+        card.querySelector('.link').href = item.place.placeUrl;
     } else {
         card.querySelector('.link').remove();
     }
-    if (item.placeImages > 0) {
-        card.querySelector('.img').style.background = "url('/assets/places/" + item.placeId + "/0.jpg')";
+    if (item.place.twitter) {
+        card.querySelector('.twitter').href = 'https://twitter.com/' + item.place.twitter;
+    } else {
+        card.querySelector('.twitter').remove();
+    }
+    if (item.place.instagram) {
+        card.querySelector('.instagram').href = 'https://instagram.com/' + item.place.instagram;
+    } else {
+        card.querySelector('.instagram').remove();
+    }
+    if (item.place.facebook) {
+        card.querySelector('.facebook').href = 'https://facebook.com/' + item.place.facebook;
+    } else {
+        card.querySelector('.facebook').remove();
+    }
+
+    if (item.place.images > 0) {
+        card.querySelector('.img').style.background = "url('/assets/places/" + item.place.id + "/0.jpg')";
         card.querySelector('.img').style.backgroundRepeat = 'no-repeat';
         card.querySelector('.img').style.backgroundSize = 'cover';
         card.querySelector('.img').style.backgroundPosition = 'center';
@@ -159,7 +320,7 @@ function renderRest(item) {
     card.querySelector('.time-start').innerHTML = item.startTime;
     card.querySelector('.time').value = item.timeSpent;
     card.querySelector('.time-end').innerHTML = item.endTime;
-    card.querySelector('.notes').value = item.description;
+    card.querySelector('.notes').value = item.notes;
     return card;
 }
 
@@ -173,7 +334,7 @@ function renderCustom(item) {
     card.querySelector('.time-start').innerHTML = item.startTime;
     card.querySelector('.time').value = item.timeSpent;
     card.querySelector('.time-end').innerHTML = item.endTime;
-    card.querySelector('.notes').value = item.description;
+    card.querySelector('.notes').value = item.notes;
     return card;
 }
 
@@ -240,6 +401,22 @@ function renderPlan(plan, day) {
             document.querySelector('#planning').appendChild(travel);
         }
     }
+
+    // Render places in map
+    renderPoints(plan, day);
+}
+
+/**
+ * Show header text if main plan is in view
+ */
+function showHeader() {
+    if (inView(document.querySelector('#mainPlan'))) {
+        document.querySelector('#headerInfo').classList.remove('d-none');
+        document.querySelector('#goToTop').classList.remove('d-none');
+    } else {
+        document.querySelector('#headerInfo').classList.add('d-none');
+        document.querySelector('#goToTop').classList.add('d-none');
+    }
 }
 
 /**
@@ -281,40 +458,40 @@ function startIntervalStatus() {
  * @return {{name: string, description: string}} Name and description of the item
  */
 function getNameDescription(item) {
-    var placeName;
-    var placeDescription;
+    var name;
+    var description;
 
     switch (item.type) {
         case 1:
-            placeName = item.placeName;
-            placeDescription = item.placeDescription;
+            name = item.place.name;
+            description = item.place.description;
             break;
         case 2:
-            placeName = 'Inicio';
-            placeDescription = 'Este es tu punto de inicio.';
+            name = 'Inicio';
+            description = 'Este es tu punto de inicio.';
             break;
         case 3:
-            placeName = 'Esperar';
-            placeDescription =
+            name = 'Esperar';
+            description =
                 'El siguiente lugar a visitar aún no ha abierto, por lo que tendrás que esperar hasta que abra.';
             break;
         case 4:
-            placeName = 'Descanso';
-            placeDescription = 'Este es el período de descanso que has definido al crear el plan';
+            name = 'Descanso';
+            description = 'Este es el período de descanso que has definido al crear el plan';
             break;
         case 5:
-            placeName = 'Personalizado';
-            placeDescription = '';
+            name = 'Personalizado';
+            description = '';
             break;
         default:
-            placeName = 'Sin asignar';
-            placeDescription = '';
+            name = 'Sin asignar';
+            description = '';
             break;
     }
 
     return {
-        name: placeName,
-        description: placeDescription,
+        name: name,
+        description: description,
     };
 }
 
@@ -354,8 +531,8 @@ function parsePlan(data, items) {
                 dayText: getFormattedDate(dates[i]),
                 route: [
                     {
-                        placeName: 'Inicio',
-                        placeDescription: 'Este es tu punto de inicio.',
+                        name: 'Inicio',
+                        description: 'Este es tu punto de inicio.',
                         startTime: getTimeString(data.dayStart),
                         endTime: getTimeString(data.dayStart),
                         timeSpent: 0,
@@ -385,7 +562,7 @@ function parsePlan(data, items) {
 
 /**
  * Loads a plan, parsing its data and rendering it into the page body.
- * @param  {object}  data  Result data returned by server 
+ * @param  {object}  data  Result data returned by server
  * @param  {Boolean} parse If true, data is parsed
  */
 function loadPlan(data, parse = true) {
@@ -584,19 +761,32 @@ function insertPlace(button) {
     var place = getElementByKey(searchPlaces, 'id', id);
     plan.days[currentDay].route.splice(index + 1, 0, {
         id: -1,
-        placeId: place.id,
-        placeName: place.name,
-        placeDescription: place.description,
-        placeImages: place.images,
-        description: '',
+        place: {
+            address: place.address,
+            city: place.city,
+            country: place.country,
+            facebook: place.facebook,
+            gmapsUrl: place.gmapsUrl,
+            id: place.id,
+            images: place.images,
+            instagram: place.instagram,
+            phone: place.phone,
+            placeUrl: place.placeUrl,
+            postalCode: place.postalCode,
+            state: place.state,
+            twitter: place.twitter,
+            wikipedia: place.wikipedia,
+        },
+        name: place.name,
+        description: place.description,
+        notes: '',
         startTime: null,
         endTime: null,
         timeSpent: place.timeSpent,
         travelNext: null,
         type: 1,
-        gmapsUrl: place.gmapsUrl,
-        placeWikipedia: place.wikipedia,
-        placeUrl: place.placeUrl,
+        lat: place.lat,
+        lon: place.lon,
     });
     document.querySelector('#searchItems').innerHTML = '';
     document.querySelector('#searchModal').setAttribute('insertIndex', -1);
@@ -613,19 +803,17 @@ function insertItem(type, index) {
     var nameDescription = getNameDescription({ type: type });
     plan.days[currentDay].route.splice(index + 1, 0, {
         id: -1,
-        placeId: null,
-        placeName: nameDescription.name,
-        placeDescription: nameDescription.description,
-        placeImages: 0,
-        description: '',
+        place: null,
+        name: nameDescription.name,
+        description: nameDescription.description,
+        notes: '',
         startTime: null,
         endTime: null,
         timeSpent: 0,
         travelNext: null,
         type: type,
-        gmapsUrl: null,
-        placeWikipedia: null,
-        placeUrl: null,
+        lat: place.lat,
+        lon: place.lon,
     });
     renderPlan(plan, currentDay);
     editMode(document.querySelector('#planning'));
@@ -675,7 +863,7 @@ function removeItem(button) {
  */
 function updateNotes(textarea) {
     var index = parseInt(textarea.closest('.item').getAttribute('routeIndex'));
-    plan.days[currentDay].route[index].description = textarea.value;
+    plan.days[currentDay].route[index].notes = textarea.value;
 }
 
 /**
@@ -706,14 +894,14 @@ function savePlan(button) {
     for (var i = 0; i < dates.length; i++) {
         var route = plan.days[i].route;
         for (var j = 0; j < route.length; j++) {
-            console.log( route[j].timeSpent);
+            console.log(route[j].timeSpent);
             request.items.push({
                 order: j,
                 day: i,
                 timeSpent: route[j].timeSpent,
                 type: route[j].type,
-                description: route[j].description,
-                PlaceId: route[j].placeId,
+                notes: route[j].notes,
+                PlaceId: route[j].place ? route[j].place.id : null,
             });
         }
     }
@@ -747,6 +935,8 @@ async function main() {
         focus: true,
     });
 
+    document.addEventListener('scroll', showHeader);
+
     document.querySelector('#loader').addEventListener('shown.bs.modal', async function (event) {
         post(ENDPOINTS.plannerGet, { id: id })
             .then((res) => {
@@ -773,6 +963,7 @@ async function main() {
                     statusModal.show();
                 } else {
                     statusModal.hide();
+                    setupMap([res.plan.startLat, res.plan.startLon]);
                     loadPlan(res);
                 }
             })

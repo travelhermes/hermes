@@ -451,13 +451,26 @@ class PlannerController {
                 items: plan.PlanItems.map((item) => {
                     return {
                         id: item.id,
-                        placeId: item.Place ? item.Place.id : null,
-                        placeName: item.Place ? item.Place.name : null,
-                        placeDescription: item.Place ? item.Place.description : null,
-                        placeMaps: item.Place ? item.Place.gmapsUrl : null,
-                        placeImages: item.Place ? item.Place.images : null,
-                        placeWikipedia: item.Place ? item.Place.wikipedia : null,
-                        placeUrl: item.Place ? item.Place.placeUrl : null,
+                        name: item.Place ? item.Place.name : null,
+                        description: item.Place ? item.Place.description : null,
+                        place: item.Place ? {
+                            address: item.Place.address,
+                            city: item.Place.city,
+                            country: item.Place.country,
+                            facebook: item.Place.facebook,
+                            gmapsUrl: item.Place.gmapsUrl,
+                            id: item.Place.id,
+                            images: item.Place.images,
+                            instagram: item.Place.instagram,
+                            phone: item.Place.phone,
+                            placeUrl: item.Place.placeUrl,
+                            postalCode: item.Place.postalCode,
+                            state: item.Place.state,
+                            twitter: item.Place.twitter,
+                            wikipedia: item.Place.wikipedia,
+                        } : null,
+                        lat: item.type == 2 ? plan.startLat : (item.Place ? item.Place.lat : null),
+                        lon: item.type == 2 ? plan.startLon : (item.Place ? item.Place.lon : null),
                         order: item.order,
                         day: item.day,
                         startTime: item.startTime,
@@ -466,7 +479,7 @@ class PlannerController {
                         timeSpent: item.timeSpent,
                         travelNext: item.travelNext,
                         travelMode: item.travelMode,
-                        description: item.description,
+                        notes: item.description,
                     };
                 }),
             });
@@ -695,7 +708,7 @@ class PlannerController {
                     type: 1,
                     travelNext: next && request.body.items[i + 1].day == item.day ? dist[1] : -1,
                     travelMode: dist[2],
-                    description: item.description,
+                    description: item.notes,
                 });
 
                 currentTime = currentTime + item.timeSpent + dist[1];
@@ -722,7 +735,7 @@ class PlannerController {
                     type: 2,
                     travelNext: next && request.body.items[i + 1].day == item.day ? dist[1] : -1,
                     travelMode: dist[2],
-                    description: item.description,
+                    description: item.notes,
                 });
 
                 currentTime = currentTime + dist[1];
@@ -749,7 +762,7 @@ class PlannerController {
                     type: item.type,
                     travelNext: next && request.body.items[i + 1].day == item.day ? dist[1] : -1,
                     travelMode: dist[2],
-                    description: item.description,
+                    description: item.notes,
                 });
 
                 currentTime = currentTime + item.timeSpent + dist[1];
