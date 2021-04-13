@@ -1,6 +1,6 @@
 /* jshint esversion: 8 */
 
-var loader;
+var loader = null;
 var plans;
 var statusInterval = null;
 
@@ -74,6 +74,7 @@ function renderPlans(plansArray, container) {
  */
 function startIntervalStatus() {
     statusInterval = setInterval(async function () {
+        var count = 0;
         for (let i = 0; i < plans.active.length; i++) {
             if (plans.active[i].status != 1) {
                 continue;
@@ -86,6 +87,7 @@ function startIntervalStatus() {
                     .querySelector('#plan' + plans.active[i].id)
                     .querySelector('.state')
                     .appendChild(resolveState(status));
+                    count++;
             } catch (err) {
                 throwError(err);
                 break;
@@ -103,10 +105,16 @@ function startIntervalStatus() {
                     .querySelector('#plan' + plans.past[i].id)
                     .querySelector('.state')
                     .appendChild(resolveState(status));
+                    count++;
             } catch (err) {
                 throwError(err);
                 break;
             }
+        }
+
+        if(count == 0) {
+            console.info("Stopped interval");
+            clearInterval(statusInterval);
         }
     }, 5000);
 }
@@ -122,7 +130,19 @@ function deletePlan(button) {
         .then((res) => {
             button.closest('.modal').querySelector('.btn-close').click();
             unsetLoadButton(button);
-            main();
+            document.querySelector('#plan' + id).remove();
+            for (let i = 0; i < plans.active.length; i++) {
+                if (plans.active[i].id == id) {
+                    plans.active.splice(i, 1);
+                    return;
+                }
+            }
+            for (let i = 0; i < plans.past.length; i++) {
+                if (plans.past[i].id == id) {
+                    plans.past.splice(i, 1);
+                    return;
+                }
+            }
         })
         .catch((err) => {
             throwError(err);
@@ -131,11 +151,13 @@ function deletePlan(button) {
 }
 
 async function main() {
-    loader = new bootstrap.Modal(document.querySelector('#loader'), {
-        backdrop: 'static',
-        keyboard: false,
-        focus: true,
-    });
+    if(loader == null) {
+        loader = new bootstrap.Modal(document.querySelector('#loader'), {
+            backdrop: 'static',
+            keyboard: false,
+            focus: true,
+        });
+    }
     loader.show();
     document.querySelector('#loader').addEventListener('shown.bs.modal', async function (event) {
         get(ENDPOINTS.plannerList)
