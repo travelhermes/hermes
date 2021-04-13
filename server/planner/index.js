@@ -593,7 +593,7 @@ exports.plan = async function (plan, places, days, start, dayStart, dayEnd, quic
     } catch (error) {
         ApplicationLogger.logBase(LogLevel.ERROR, plan.UserId, null, 'planner/plan/creator', null, error);
         plan.status = -1;
-        plan.save();
+        await plan.save();
         return;
     }
 
@@ -603,7 +603,7 @@ exports.plan = async function (plan, places, days, start, dayStart, dayEnd, quic
     } catch (error) {
         ApplicationLogger.logBase(LogLevel.ERROR, plan.UserId, null, 'planner/plan/writer', null, error);
         plan.status = -1;
-        plan.save();
+        await plan.save();
         return;
     }
 
@@ -625,7 +625,7 @@ exports.plan = async function (plan, places, days, start, dayStart, dayEnd, quic
                 if (error.code == -1) {
                     // Timed out
                     plan.status = 2;
-                    plan.save();
+                    await plan.save();
                 } else {
                     ApplicationLogger.logBase(LogLevel.ERROR, plan.UserId, null, 'planner/plan/planner/simple', null, error);
                 }
@@ -633,7 +633,7 @@ exports.plan = async function (plan, places, days, start, dayStart, dayEnd, quic
             }
         } else {
             plan.status = -1;
-            plan.save();
+            await plan.save();
             ApplicationLogger.logBase(LogLevel.ERROR, plan.UserId, null, 'planner/plan/planner', null, error);
             return;
         }
@@ -646,7 +646,7 @@ exports.plan = async function (plan, places, days, start, dayStart, dayEnd, quic
         if (error.status == 1) {
             // Empty solution
             plan.status = 3;
-            plan.save();
+            await plan.save();
         } else {
             ApplicationLogger.logBase(LogLevel.ERROR, plan.UserId, null, 'planner/plan/parser', null, error);
         }
@@ -658,7 +658,7 @@ exports.plan = async function (plan, places, days, start, dayStart, dayEnd, quic
     } catch (error) {
         ApplicationLogger.logBase(LogLevel.ERROR, plan.UserId, null, 'planner/plan/db', null, error);
         plan.status = -1;
-        plan.save();
+        await plan.save();
         return;
     }
 
@@ -669,5 +669,5 @@ exports.plan = async function (plan, places, days, start, dayStart, dayEnd, quic
     }
 
     plan.status = 0;
-    plan.save();
+    await plan.save();
 };

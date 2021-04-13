@@ -238,7 +238,7 @@ exports.generateCFRecommendations = async function (user) {
     }
 
     user.lastRecommended = new Date();
-    user.save();
+    await user.save();
 };
 
 /**
@@ -350,5 +350,5 @@ exports.generateCBRecommendations = async function (user) {
     }
 
     user.lastRecommended = new Date();
-    user.save();
+    await user.save();
 };

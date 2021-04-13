@@ -325,7 +325,7 @@ class AuthController {
                             // Reset user attempts
                             user.attempts = 0;
                             user.lastAttempt = new Date();
-                            user.save();
+                            await user.save();
 
                             // Send new login message if IP hasn't been seen previously
                             if (!prevLogin) {

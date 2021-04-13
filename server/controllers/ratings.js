@@ -163,17 +163,17 @@ class RatingsController {
                         },
                     },
                 })
-            ).forEach((userView) => {
+            ).forEach(async (userView) => {
                 // Increment each view by one
                 userView.views += 1;
                 user.views += 1;
-                userView.save();
+                await userView.save();
             });
             await user.save();
 
             place.rating = (place.rating * place.count + request.body.rating) / (place.count + 1);
             place.count += 1;
-            place.save();
+            await place.save();
 
             reply.status(200).send();
         } else {
@@ -229,10 +229,10 @@ class RatingsController {
             if (rating) {
                 for (var i = 0; i < place.Categories.length; i++) {
                     place.Categories[i].UserViews[0].decrement('views');
-                    place.Categories[i].UserViews[0].save();
+                    await place.Categories[i].UserViews[0].save();
                 }
                 user.views = user.views - place.Categories.length;
-                user.save();
+                await user.save();
 
                 if (place.count > 1) {
                     place.rating = (place.rating * place.count - rating.rating) / (place.count - 1);
@@ -241,7 +241,7 @@ class RatingsController {
                     place.rating = 0;
                     place.count = 0;
                 }
-                place.save();
+                await place.save();
 
                 rating.destroy();
 
