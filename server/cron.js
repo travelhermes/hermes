@@ -104,12 +104,22 @@ async function main() {
     // Clean old sessions
     console.log(`[${new Date().toLocaleString()}] (cron.js) - Cleaning old sessions`);
     try {
+        let count = 0;
         const sessions = await db.Session.findAll();
         for (let i = 0; i < sessions.length; i++) {
             if (sessions[i].maxAge < (new Date() - sessions[i].createdAt) / 1000) {
                 sessions[i].destroy();
+                count++;
             }
         }
+        ApplicationLogger.logBase(
+            LogLevel.INFO,
+            null,
+            null,
+            'cronjob/sessions',
+            null,
+            'Cleaned ' + count + ' sessions'
+        );
     } catch (err) {
         ApplicationLogger.logBase(
             LogLevel.FATAL,
@@ -124,6 +134,7 @@ async function main() {
     // Clean deleted user accounts
     console.log(`[${new Date().toLocaleString()}] (cron.js) - Cleaning deleted accounts`);
     try {
+        let count = 0;
         const users = await db.User.findAll({});
         for (let i = 0; i < users.length; i++) {
             // 5 days
@@ -134,8 +145,10 @@ async function main() {
                     },
                     force: true,
                 });
+                count++;
             }
         }
+        ApplicationLogger.logBase(LogLevel.INFO, null, null, 'cronjob/user', null, 'Deleted ' + count + ' users');
     } catch (err) {
         ApplicationLogger.logBase(
             LogLevel.FATAL,
@@ -150,6 +163,7 @@ async function main() {
     // Update active plans
     console.log(`[${new Date().toLocaleString()}] (cron.js) - Finishing active plans`);
     try {
+        let count = 0;
         const plans = await db.Plan.findAll({
             where: {
                 status: 0,
@@ -161,7 +175,9 @@ async function main() {
         for (var i = 0; i < plans.length; i++) {
             plans[i].status = 4;
             plans[i].save();
+            count++;
         }
+        ApplicationLogger.logBase(LogLevel.INFO, null, null, 'cronjob/plans', null, 'Updated ' + count + ' plans');
     } catch (err) {
         ApplicationLogger.logBase(
             LogLevel.FATAL,
@@ -176,6 +192,7 @@ async function main() {
     // Send plan reminder emails
     console.log(`[${new Date().toLocaleString()}] (cron.js) - Sending plan reminder emails`);
     try {
+        let count = 0;
         const plans = db.Plan.findAll({
             where: {
                 status: 0,
@@ -200,9 +217,17 @@ async function main() {
                 id: plans[i].id,
             });
             mailServer.send();
-            console.log(`[${new Date().toLocaleString()}] (cron.js) - Sent plan reminder email ${i}/${res.length}`);
             sleep(1000);
+            count++;
         }
+        ApplicationLogger.logBase(
+            LogLevel.INFO,
+            null,
+            null,
+            'cronjob/reminder/plan',
+            null,
+            'Sent ' + count + ' plan reminder emails'
+        );
     } catch (err) {
         ApplicationLogger.logBase(
             LogLevel.FATAL,
@@ -217,6 +242,7 @@ async function main() {
     // Send rating reminder emails
     console.log(`[${new Date().toLocaleString()}] (cron.js) - Sending rating reminder emails`);
     try {
+        let count = 0;
         const plans = db.Plan.findAll({
             where: {
                 startDate: {
@@ -236,10 +262,17 @@ async function main() {
                 name: plans[i].User.name,
             });
             mailServer.send();
-            console.log(`[${new Date().toLocaleString()}] (cron.js) - Sent rating reminder email ${i}/${plans.length}`);
-
             sleep(1000);
+            count++;
         }
+        ApplicationLogger.logBase(
+            LogLevel.INFO,
+            null,
+            null,
+            'cronjob/reminder/ratings',
+            null,
+            'Sent ' + count + ' rating reminder emails'
+        );
     } catch (err) {
         ApplicationLogger.logBase(
             LogLevel.FATAL,
@@ -260,6 +293,7 @@ async function main() {
     });
 
     // Split users in n = cpus subarrays and process in parallel
+    const countUsers = users.length;
     const parts = splitArray(users, cpus);
     const promises = [];
     for (let i = 0; i < parts.length; i++) {
@@ -271,8 +305,13 @@ async function main() {
     console.log(`[${new Date().toLocaleString()}] (cron.js) - Finding neighbors and creating recommendations`);
     Promise.all(promises)
         .then(() => {
-            console.log(
-                `[${new Date().toLocaleString()}] (cron.js) - Finished finding neighbors and creating recommendations`
+            ApplicationLogger.logBase(
+                LogLevel.INFO,
+                null,
+                null,
+                'cronjob/recommender',
+                null,
+                'Created recommendations for ' + countUsers + ' users'
             );
         })
         .catch((err) => {
