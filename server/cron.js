@@ -102,162 +102,160 @@ async function main() {
     console.log('Tomorrow', tomorrow);
 
     // Clean old sessions
-    db.Session.findAll()
-        .then((res) => {
-            console.log(`[${new Date().toLocaleString()}] (cron.js) - Cleaning old sessions`);
-            for (var i = 0; i < res.length; i++) {
-                if (res[i].maxAge < (new Date() - res[i].createdAt) / 1000) {
-                    res[i].destroy();
-                }
+    console.log(`[${new Date().toLocaleString()}] (cron.js) - Cleaning old sessions`);
+    try {
+        const sessions = await db.Session.findAll();
+        for (let i = 0; i < sessions.length; i++) {
+            if (sessions[i].maxAge < (new Date() - sessions[i].createdAt) / 1000) {
+                sessions[i].destroy();
             }
-        })
-        .catch((err) => {
-            ApplicationLogger.logBase(
-                LogLevel.FATAL,
-                null,
-                null,
-                'cronjob/sessions',
-                null,
-                'Errored @ ' + new Date() + ': ' + err
-            );
-        });
+        }
+    } catch (err) {
+        ApplicationLogger.logBase(
+            LogLevel.FATAL,
+            null,
+            null,
+            'cronjob/sessions',
+            null,
+            'Errored @ ' + new Date() + ': ' + err
+        );
+    }
 
     // Clean deleted user accounts
-    db.User.findAll()
-        .then((res) => {
-            console.log(`[${new Date().toLocaleString()}] (cron.js) - Cleaning deleted accounts`);
-            for (var i = 0; i < res.length; i++) {
-                // 15 days
-                if (1296000 < (new Date() - res[i].deletedAt) / 1000) {
-                    db.User.destroy({
-                        where: {
-                            id: res[i].id,
-                        },
-                        force: true,
-                    });
-                }
-            }
-        })
-        .catch((err) => {
-            ApplicationLogger.logBase(
-                LogLevel.FATAL,
-                null,
-                null,
-                'cronjob/user',
-                null,
-                'Errored @ ' + new Date() + ': ' + err
-            );
+    console.log(`[${new Date().toLocaleString()}] (cron.js) - Cleaning deleted accounts`);
+    try {
+        const users = await db.User.findAll({
+            where: {
+                deletedAt: {
+                    [Op.not]: null,
+                },
+            },
         });
+        for (let i = 0; i < users.length; i++) {
+            // 15 days
+            if (432000 < (new Date() - users[i].deletedAt) / 1000) {
+                db.User.destroy({
+                    where: {
+                        id: users[i].id,
+                    },
+                    force: true,
+                });
+            }
+        }
+    } catch (err) {
+        ApplicationLogger.logBase(
+            LogLevel.FATAL,
+            null,
+            null,
+            'cronjob/user',
+            null,
+            'Errored @ ' + new Date() + ': ' + err
+        );
+    }
 
     // Update active plans
-    db.Plan.findAll({
-        where: {
-            status: 0,
-            endDate: {
-                [Op.lt]: new Date(),
+    console.log(`[${new Date().toLocaleString()}] (cron.js) - Finishing active plans`);
+    try {
+        const plans = await db.Plan.findAll({
+            where: {
+                status: 0,
+                endDate: {
+                    [Op.lt]: new Date(),
+                },
             },
-        },
-    })
-        .then((res) => {
-            console.log(`[${new Date().toLocaleString()}] (cron.js) - Finishing active plans`);
-            for (var i = 0; i < res.length; i++) {
-                res[i].status = 4;
-                res[i].save();
-            }
-        })
-        .catch((err) => {
-            ApplicationLogger.logBase(
-                LogLevel.FATAL,
-                null,
-                null,
-                'cronjob/plans',
-                null,
-                'Errored @ ' + new Date() + ': ' + err
-            );
         });
+        for (var i = 0; i < plans.length; i++) {
+            plans[i].status = 4;
+            plans[i].save();
+        }
+    } catch (err) {
+        ApplicationLogger.logBase(
+            LogLevel.FATAL,
+            null,
+            null,
+            'cronjob/plans',
+            null,
+            'Errored @ ' + new Date() + ': ' + err
+        );
+    }
 
     // Send plan reminder emails
-    db.Plan.findAll({
-        where: {
-            status: 0,
-        },
-        include: [
-            {
-                model: db.User,
+    console.log(`[${new Date().toLocaleString()}] (cron.js) - Sending plan reminder emails`);
+    try {
+        const plans = db.Plan.findAll({
+            where: {
+                status: 0,
             },
-        ],
-    })
-        .then((res) => {
-            console.log(`[${new Date().toLocaleString()}] (cron.js) - Sending plan reminder emails`);
-            for (var i = 0; i < res.length; i++) {
-                if (res[i].startDate.toDateString() != tomorrow.toDateString()) {
-                    continue;
-                }
-                mailServer.add(res[i].User.email, MailType.startPlan, {
-                    name: res[i].User.name,
-                    planName: res[i].name,
-                    planDescription: res[i].description,
-                    length: daysBetween(res[i].startDate, res[i].endDate) + 1,
-                    startDate: getFormattedDate(res[i].startDate, false, '/'),
-                    endDate: getFormattedDate(res[i].endDate, false, '/'),
-                    id: res[i].id,
-                });
-                mailServer.send();
-                console.log(`[${new Date().toLocaleString()}] (cron.js) - Sent plan reminder email ${i}/${res.length}`);
-                sleep(1000);
+            include: [
+                {
+                    model: db.User,
+                },
+            ],
+        });
+        for (let i = 0; i < plans.length; i++) {
+            if (plans[i].startDate.toDateString() != tomorrow.toDateString()) {
+                continue;
             }
-        })
-        .catch((err) => {
-            ApplicationLogger.logBase(
-                LogLevel.FATAL,
-                null,
-                null,
-                'cronjob/reminder/plan',
-                null,
-                'Errored @ ' + new Date() + ': ' + err
-            );
+            mailServer.add(plans[i].User.email, MailType.startPlan, {
+                name: plans[i].User.name,
+                planName: plans[i].name,
+                planDescription: plans[i].description,
+                length: daysBetween(plans[i].startDate, plans[i].endDate) + 1,
+                startDate: getFormattedDate(plans[i].startDate, false, '/'),
+                endDate: getFormattedDate(plans[i].endDate, false, '/'),
+                id: plans[i].id,
+            });
+            mailServer.send();
+            console.log(`[${new Date().toLocaleString()}] (cron.js) - Sent plan reminder email ${i}/${res.length}`);
+            sleep(1000);
+        }
+    } catch (err) {
+        ApplicationLogger.logBase(
+            LogLevel.FATAL,
+            null,
+            null,
+            'cronjob/reminder/plan',
+            null,
+            'Errored @ ' + new Date() + ': ' + err
+        );
+    }
+
+    // Send rating reminder emails
+    console.log(`[${new Date().toLocaleString()}] (cron.js) - Sending rating reminder emails`);
+    try {
+        const plans = db.Plan.findAll({
+            where: {
+                startDate: {
+                    [Op.gt]: today,
+                    [Op.lte]: today,
+                },
+            },
+            include: [
+                {
+                    model: db.User,
+                },
+            ],
         });
 
-    // Send plan reminder emails
-    db.Plan.findAll({
-        where: {
-            startDate: {
-                [Op.gt]: today,
-                [Op.lte]: today,
-            },
-        },
-        include: [
-            {
-                model: db.User,
-            },
-        ],
-    })
-        .then((res) => {
-            console.log(`[${new Date().toLocaleString()}] (cron.js) - Sending rating reminder emails`);
+        for (let i = 0; i < plans.length; i++) {
+            mailServer.add(plans[i].User.email, MailType.rateVisited, {
+                name: plans[i].User.name,
+            });
+            mailServer.send();
+            console.log(`[${new Date().toLocaleString()}] (cron.js) - Sent rating reminder email ${i}/${plans.length}`);
 
-            for (var i = 0; i < res.length; i++) {
-                mailServer.add(res[i].User.email, MailType.rateVisited, {
-                    name: res[i].User.name,
-                });
-                mailServer.send();
-                console.log(
-                    `[${new Date().toLocaleString()}] (cron.js) - Sent rating reminder email ${i}/${res.length}`
-                );
-
-                sleep(1000);
-            }
-        })
-        .catch((err) => {
-            ApplicationLogger.logBase(
-                LogLevel.FATAL,
-                null,
-                null,
-                'cronjob/reminder/ratings',
-                null,
-                'Errored @ ' + new Date() + ': ' + err
-            );
-            log(LogLevel.FATAL, 'cronjob/reminder/ratings', 'Errored @ ' + new Date() + ': ' + err);
-        });
+            sleep(1000);
+        }
+    } catch (err) {
+        ApplicationLogger.logBase(
+            LogLevel.FATAL,
+            null,
+            null,
+            'cronjob/reminder/ratings',
+            null,
+            'Errored @ ' + new Date() + ': ' + err
+        );
+    }
 
     // Find neighbors again and regenerate recommendations
     console.log(`[${new Date().toLocaleString()}] (cron.js) - Finding users that need new neighbors`);
