@@ -108,6 +108,8 @@ function http(url, method, body) {
                 } else {
                     resolve({});
                 }
+            } else if (xhr.status == 301){
+                window.location = '/signin/' + btoa(window.location.pathname);
             } else {
                 reject({
                     status: xhr.status,

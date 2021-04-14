@@ -276,4 +276,4 @@ async function main() {
     loadPlaces();
 }
 
-main();
+window.onload = () => { main(); };
