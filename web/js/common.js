@@ -458,8 +458,6 @@ function inView(element) {
     var scrollPosition = scrollY + windowHeight;
     var elementPosition = element.getBoundingClientRect().top + scrollY + 200;
 
-    console.log(scrollPosition, elementPosition);
-
     return scrollPosition > elementPosition;
 }
 
