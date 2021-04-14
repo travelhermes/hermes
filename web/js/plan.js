@@ -249,6 +249,12 @@ function renderPlace(item) {
     card.querySelector('.time-end').innerHTML = item.endTime;
     card.querySelector('.maps').href = item.place.gmapsUrl;
     card.querySelector('.notes').value = item.notes;
+    if (item.place.phone) {
+        card.querySelector('.phone').innerHTML = item.place.phone;
+        card.querySelector('.phone').href = 'tel:' + item.place.phone.replace(' ', '');
+    } else {
+        card.querySelector('.phone').remove();
+    }
     if (item.place.wikipedia) {
         card.querySelector('.wiki').href = 'https://es.wikipedia.org/wiki/' + item.place.wikipedia;
     } else {
