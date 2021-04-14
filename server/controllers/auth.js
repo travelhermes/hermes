@@ -135,6 +135,7 @@ class AuthMiddleware {
 
             // Redirect otherwise
             var redirect = Buffer.from(request.url, 'utf-8').toString('base64');
+            reply.header('Cache-Control', 'no-store');
             reply.status(301).redirect('/signin/?redirect=' + redirect);
             //reply.status(301).redirect('/signin/');
             return;
