@@ -83,10 +83,19 @@ if (cluster.isMaster) {
             AccessLogger.fatal(request, reply, payload.toString());
         }
 
-        if (request.url.includes('/api')) {
-            reply.header('Cache-Control' ,'no-store');
+        if (
+            request.url.includes('/assets') ||
+            request.url.includes('/css') ||
+            request.url.includes('/help') ||
+            request.url.includes('/js') ||
+            request.url.includes('/privacy') ||
+            request.url.includes('/recover') ||
+            request.url.includes('/terms') ||
+            request.url == '/'
+        ) {
+            reply.header('Cache-Control', 'max-age=172800');
         } else {
-            reply.header('Cache-Control' ,'max-age=172800');
+            reply.header('Cache-Control', 'no-store');
         }
 
         console.log(
@@ -104,7 +113,7 @@ if (cluster.isMaster) {
 
     // Declare Security Headers, cookies and rate limiting
     fastify.register(fastifyHelmet, {
-        contentSecurityPolicy: false
+        contentSecurityPolicy: false,
         // {
         //     directives: {
         //         "default-src": ["'self'"],
