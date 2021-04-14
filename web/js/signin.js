@@ -1,6 +1,7 @@
 /* jshint esversion: 8 */
 const urlParams = new URLSearchParams(window.location.search);
-const redirect = urlParams.get('redirect');
+//const redirect = urlParams.get('redirect');
+const redirect = null;
 
 const recoverModal = new bootstrap.Modal(document.querySelector('#recoverModal'));
 
