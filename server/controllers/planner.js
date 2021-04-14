@@ -373,7 +373,7 @@ class PlannerController {
                 where: {
                     UserId: user.id,
                     endDate: {
-                        [Op.lt]: new Date(),
+                        [Op.lt]: (new Date()).addDays(-1),
                     },
                 },
                 order: [['startDate', 'ASC']],
