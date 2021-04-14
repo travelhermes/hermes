@@ -348,46 +348,46 @@ class PlannerController {
             return;
         }
 
-        var active = (
-            await db.Plan.findAll({
-                where: {
-                    UserId: user.id,
-                    endDate: {
-                        [Op.gte]: new Date(),
-                    },
-                },
-                order: [['startDate', 'ASC']],
-            })
-        ).map((plan) => {
-            return {
-                id: plan.id,
-                name: plan.name,
-                description: plan.description,
-                startDate: plan.startDate,
-                endDate: plan.endDate,
-                status: plan.status,
-            };
+        var plans = await db.Plan.findAll({
+            where: {
+                UserId: user.id,
+            },
+            order: [['startDate', 'ASC']],
         });
-        var past = (
-            await db.Plan.findAll({
-                where: {
-                    UserId: user.id,
-                    endDate: {
-                        [Op.lt]: (new Date()).addDays(-1),
-                    },
-                },
-                order: [['startDate', 'ASC']],
-            })
-        ).map((plan) => {
-            return {
-                id: plan.id,
-                name: plan.name,
-                description: plan.description,
-                startDate: plan.startDate,
-                endDate: plan.endDate,
-                status: plan.status,
-            };
-        });
+
+        var active = [];
+        var past = [];
+
+        const today = new Date();
+        for (var i = 0; i < plans.length; i++) {
+            var endDate = new Date(
+                plans[i].endDate.getFullYear(),
+                plans[i].endDate.getMonth(),
+                plans[i].endDate.getDate(),
+                23,
+                59,
+                59
+            );
+            if (endDate < today) {
+                past.push({
+                    id: plans[i].id,
+                    name: plans[i].name,
+                    description: plans[i].description,
+                    startDate: plans[i].startDate,
+                    endDate: plans[i].endDate,
+                    status: plans[i].status,
+                });
+            } else {
+                active.push({
+                    id: plans[i].id,
+                    name: plans[i].name,
+                    description: plans[i].description,
+                    startDate: plans[i].startDate,
+                    endDate: plans[i].endDate,
+                    status: plans[i].status,
+                });
+            }
+        }
 
         reply.status(200).send({ active: active, past: past });
     }
@@ -453,24 +453,26 @@ class PlannerController {
                         id: item.id,
                         name: item.Place ? item.Place.name : null,
                         description: item.Place ? item.Place.description : null,
-                        place: item.Place ? {
-                            address: item.Place.address,
-                            city: item.Place.city,
-                            country: item.Place.country,
-                            facebook: item.Place.facebook,
-                            gmapsUrl: item.Place.gmapsUrl,
-                            id: item.Place.id,
-                            images: item.Place.images,
-                            instagram: item.Place.instagram,
-                            phone: item.Place.phone,
-                            placeUrl: item.Place.placeUrl,
-                            postalCode: item.Place.postalCode,
-                            state: item.Place.state,
-                            twitter: item.Place.twitter,
-                            wikipedia: item.Place.wikipedia,
-                        } : null,
-                        lat: item.type == 2 ? plan.startLat : (item.Place ? item.Place.lat : null),
-                        lon: item.type == 2 ? plan.startLon : (item.Place ? item.Place.lon : null),
+                        place: item.Place
+                            ? {
+                                  address: item.Place.address,
+                                  city: item.Place.city,
+                                  country: item.Place.country,
+                                  facebook: item.Place.facebook,
+                                  gmapsUrl: item.Place.gmapsUrl,
+                                  id: item.Place.id,
+                                  images: item.Place.images,
+                                  instagram: item.Place.instagram,
+                                  phone: item.Place.phone,
+                                  placeUrl: item.Place.placeUrl,
+                                  postalCode: item.Place.postalCode,
+                                  state: item.Place.state,
+                                  twitter: item.Place.twitter,
+                                  wikipedia: item.Place.wikipedia,
+                              }
+                            : null,
+                        lat: item.type == 2 ? plan.startLat : item.Place ? item.Place.lat : null,
+                        lon: item.type == 2 ? plan.startLon : item.Place ? item.Place.lon : null,
                         order: item.order,
                         day: item.day,
                         startTime: item.startTime,
