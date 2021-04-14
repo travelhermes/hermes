@@ -108,13 +108,13 @@ function http(url, method, body) {
                         resolve(JSON.parse(xhr.response));
                     } catch(err) {
                         console.log(err);
-                        window.location = '/signin/?redirect=' + btoa(window.location.pathname);
+                        window.location = '/signin/?redirect=' + btoa(window.location.href.replace(window.location.origin, ''));
                     }
                 } else {
                     resolve({});
                 }
             } else if (xhr.status == 301){
-                window.location = '/signin/?redirect=' + btoa(window.location.pathname);
+                window.location = '/signin/?redirect=' + btoa(window.location.href.replace(window.location.origin, ''));
             } else {
                 reject({
                     status: xhr.status,
