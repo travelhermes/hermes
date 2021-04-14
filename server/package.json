@@ -1,6 +1,6 @@
 {
     "name": "hermes",
-    "version": "0.0.1",
+    "version": "1.0.2",
     "description": "Hermes: Sistema recomendador y planificador de puntos de interés",
     "main": "index.js",
     "repository": {

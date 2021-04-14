@@ -1,6 +1,6 @@
 [package]
 name = "hermes-rust"
-version = "1.0.0"
+version = "1.0.2"
 authors = ["Álvaro Galisteo (https://alvaro.galisteo.me)"]
 license = "GPL-3.0"
 build = "build.rs"
