@@ -383,14 +383,8 @@ paths:
               remember: true
       responses:
         "200":
-          description: ""
-        "301":
           description: Successful login
           headers:
-            Location:
-              schema:
-                type: string
-                example: /dashboard/
             Set-Cookie:
               schema:
                 type: string

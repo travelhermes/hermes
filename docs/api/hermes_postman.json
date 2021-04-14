@@ -682,8 +682,8 @@
 									]
 								}
 							},
-							"status": "Moved Permanently",
-							"code": 301,
+							"status": "OK",
+							"code": 200,
 							"_postman_previewlanguage": "html",
 							"header": [
 								{
