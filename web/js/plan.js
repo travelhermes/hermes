@@ -908,7 +908,7 @@ function savePlan(button) {
 
     put(ENDPOINTS.plannerUpdate, request)
         .then((res) => {
-            window.location.reload(true);
+            window.location.reload();
         })
         .catch((err) => {
             throwError(err);
