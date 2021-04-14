@@ -14,6 +14,7 @@ const { Session } = require('./session.js');
 
 const publicPaths = [
     { type: 'contains', value: '/assets', cache: true },
+    { type: 'contains', value: '/attributions', cache: true },
     { type: 'contains', value: '/css', cache: true },
     { type: 'contains', value: '/help', cache: true },
     { type: 'contains', value: '/help/signin', cache: true },
