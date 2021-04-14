@@ -389,6 +389,11 @@ class PlannerController {
             }
         }
 
+        // Sort descending, recently finished first
+        past = past.sort((a, b) => {
+            return new Date(b.endDate) - new Date(a.endDate);
+        });
+
         reply.status(200).send({ active: active, past: past });
     }
 
