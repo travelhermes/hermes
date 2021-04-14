@@ -108,7 +108,7 @@ function http(url, method, body) {
                         resolve(JSON.parse(xhr.response));
                     } catch(err) {
                         console.log(err);
-                        window.location = '/signin/' + btoa(window.location.pathname);
+                        window.location = '/signin/';
                     }
                 } else {
                     resolve({});
