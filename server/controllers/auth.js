@@ -21,8 +21,8 @@ const publicPaths = [
     { type: 'contains', value: '/js', cache: true },
     { type: 'contains', value: '/privacy', cache: true },
     { type: 'contains', value: '/recover', cache: true },
-    { type: 'contains', value: '/signin', cache: false },
-    { type: 'contains', value: '/signup', cache: false },
+    { type: 'contains', value: '/signin', cache: true },
+    { type: 'contains', value: '/signup', cache: true },
     { type: 'contains', value: '/terms', cache: true },
     { type: 'equals', value: '/', cache: true },
     { type: 'equals', value: '/api/auth/check', cache: false },
@@ -111,7 +111,7 @@ class AuthMiddleware {
                     case 'contains': {
                         if (request.url.includes(publicPaths[i].value)) {
                             if (publicPaths[i].cache) {
-                                reply.header('Cache-Control', 'max-age=172800');
+                                reply.header('Cache-Control', 'max-age=86400');
                             } else {
                                 reply.header('Cache-Control', 'no-store');
                             }
@@ -122,7 +122,7 @@ class AuthMiddleware {
                     case 'equals': {
                         if (request.url == publicPaths[i].value) {
                             if (publicPaths[i].cache) {
-                                reply.header('Cache-Control', 'max-age=172800');
+                                reply.header('Cache-Control', 'max-age=86400');
                             } else {
                                 reply.header('Cache-Control', 'no-store');
                             }
@@ -140,7 +140,12 @@ class AuthMiddleware {
             //reply.status(301).redirect('/signin/');
             return;
         } else {
-            //reply.header('Cache-Control', 'no-store');
+            if(request.url.includes('/api')) {
+                reply.header('Cache-Control', 'no-store');
+            } else {
+                reply.header('Cache-Control', 'max-age=86400');
+            }
+
             if (
                 !request.url.includes('/help') &&
                 (request.url.includes('/signin') || request.url.includes('/signup'))
