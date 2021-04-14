@@ -122,9 +122,9 @@ class AuthMiddleware {
             }
 
             // Redirect otherwise
-            //var redirect = Buffer.from(request.url, 'utf-8').toString('base64');
-            //reply.status(301).redirect('/signin/?redirect=' + redirect);
-            reply.status(301).redirect('/signin/');
+            var redirect = Buffer.from(request.url, 'utf-8').toString('base64');
+            reply.status(301).redirect('/signin/?redirect=' + redirect);
+            //reply.status(301).redirect('/signin/');
             return;
         } else {
             if (
