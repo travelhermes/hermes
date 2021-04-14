@@ -138,11 +138,11 @@ body {
 }
 
 @media (max-width: 768px) {
-    .leaflet-control-zoom {
+    #map .leaflet-control-zoom {
         margin-bottom: 3.5rem !important;
     }
 
-    .leaflet-control-attribution {
+    #map .leaflet-control-attribution {
         margin-bottom: 3.5rem !important;
     }
 
