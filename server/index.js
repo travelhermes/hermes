@@ -65,6 +65,7 @@ if (cluster.isMaster) {
     fastify.addHook('onRequest', (request, reply, done) => {
         request.realIp = request.ip;
         request.startTime = new Date();
+        request.worker = cluster.worker.id;
         if (request.headers['cf-connecting-ip']) {
             request.realIp = request.headers['cf-connecting-ip'];
         }
@@ -76,11 +77,12 @@ if (cluster.isMaster) {
         reply.header('X-Worker', cluster.worker.id);
 
         if (reply.statusCode < 400) {
-            AccessLogger.info(request, reply, '');
+            AccessLogger.info(request, reply);
         } else if (reply.statusCode < 500) {
-            AccessLogger.warning(request, reply, '');
+            AccessLogger.warning(request, reply);
         } else {
-            AccessLogger.fatal(request, reply, payload.toString());
+            AccessLogger.fatal(request, reply);
+            ApplicationLogger.fatal(request, reply, { msg: payload });
         }
 
         console.log(
@@ -91,14 +93,18 @@ if (cluster.isMaster) {
     });
 
     fastify.setErrorHandler(async (error, request, reply) => {
-        const logId = await ApplicationLogger.fatal(request, reply, error);
+        const logId = await ApplicationLogger.fatal(request, reply, {
+            code: error.code,
+            error: error.message,
+            stack: error.stack,
+        });
         reply.status(500).send({ error: 'Internal Server Error', statusCode: 500, logId: logId });
         return;
     });
 
     // Declare Security Headers, cookies and rate limiting
     fastify.register(fastifyHelmet, {
-        contentSecurityPolicy: false
+        contentSecurityPolicy: false,
         // {
         //     directives: {
         //         "default-src": ["'self'"],

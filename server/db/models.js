@@ -15,6 +15,14 @@ const log = {
         unique: true,
         primaryKey: true,
     },
+    hostname: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    worker: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+    },
     level: {
         type: DataTypes.INTEGER,
         allowNull: false,

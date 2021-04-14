@@ -23,11 +23,7 @@ class AccessLogger {
      * @param  {Reply}    reply   HTTP reply.
      * @param  {string}   message (Optional) Message to log.
      */
-    static async log(level, request, reply, message) {
-        if (typeof message == 'object') {
-            message = JSON.stringify(message);
-        }
-        
+    static async log(level, request, reply) {
         const userId = await Session.getSessionUserId(request);
         const ip = request.realIp;
         const location = request.url;
@@ -35,11 +31,18 @@ class AccessLogger {
 
         db.AccessLog.create({
             level: level,
+            hostname: process.env.SERVER || '',
+            worker: request.worker,
             userId: userId,
             ip: ip,
             location: location,
             status: status,
-            message: message.toString(),
+            message: JSON.stringify({
+                'user-agent': request.headers['user-agent'],
+                accept: request.headers.accept,
+                'accept-encoding': request.headers['accept-encoding'],
+                connection: request.headers.connection,
+            }),
         });
     }
 
@@ -47,50 +50,45 @@ class AccessLogger {
      * Log a new DEBUG event.
      * @param  {Request}  request HTTP Request
      * @param  {Reply}    reply   HTTP reply.
-     * @param  {string}   message (Optional) Message to log.
      */
-    static debug(request, reply, message) {
-        this.log(LogLevel.INFO, request, reply, message);
+    static debug(request, reply) {
+        this.log(LogLevel.INFO, request, reply);
     }
 
     /**
      * Log a new INFO event.
      * @param  {Request}  request HTTP Request
      * @param  {Reply}    reply   HTTP reply.
-     * @param  {string}   message (Optional) Message to log.
      */
-    static info(request, reply, message) {
-        this.log(LogLevel.INFO, request, reply, message);
+    static info(request, reply) {
+        this.log(LogLevel.INFO, request, reply);
     }
 
     /**
      * Log a new WARNING event.
      * @param  {Request}  request HTTP Request
      * @param  {Reply}    reply   HTTP reply.
-     * @param  {string}   message (Optional) Message to log.
      */
-    static warning(request, reply, message) {
-        this.log(LogLevel.INFO, request, reply, message);
+    static warning(request, reply) {
+        this.log(LogLevel.INFO, request, reply);
     }
 
     /**
      * Log a new ERROR event.
      * @param  {Request}  request HTTP Request
      * @param  {Reply}    reply   HTTP reply.
-     * @param  {string}   message (Optional) Message to log.
      */
-    static error(request, reply, message) {
-        this.log(LogLevel.INFO, request, reply, message);
+    static error(request, reply) {
+        this.log(LogLevel.INFO, request, reply);
     }
 
     /**
      * Log a new FATAL event.
      * @param  {Request}  request HTTP Request
      * @param  {Reply}    reply   HTTP reply.
-     * @param  {string}   message (Optional) Message to log.
      */
-    static fatal(request, reply, message) {
-        this.log(LogLevel.INFO, request, reply, message);
+    static fatal(request, reply) {
+        this.log(LogLevel.INFO, request, reply);
     }
 }
 
@@ -103,6 +101,7 @@ class ApplicationLogger {
     /**
      * Log a new event
      * @param  {LogLevel}        level    Log level: DEBUG, INFO, WARNING, ERROR or FATAL.
+     * @param  {number}          worker   Process worker ID
      * @param  {number | null}   userId   User ID
      * @param  {string | null}   ip       IP address
      * @param  {string | null}   location Location of the event
@@ -110,18 +109,18 @@ class ApplicationLogger {
      * @param  {string | null}   message  Message to log.
      * @return {Promise<number>}          Returns the assigned event ID.
      */
-    static logBase(level, userId, ip, location, status, message) {
+    static logBase(level, worker, userId, ip, location, status, message) {
         return new Promise(async (resolve) => {
-            if (typeof message == 'object') {
-                message = JSON.stringify(message);
-            }
+            message = { msg: message };
             db.ApplicationLog.create({
                 level: level,
+                hostname: process.env.SERVER || '',
+                worker: worker || 0,
                 userId: userId,
                 ip: ip,
                 location: location,
                 status: status,
-                message: message.toString(),
+                message: JSON.stringify(message),
             })
                 .then((res) => {
                     resolve(res.id);
@@ -130,7 +129,7 @@ class ApplicationLogger {
                     console.log(
                         `[${new Date().toLocaleString()}] (Log) FATAL - ${location}: Error creating Log entry: ${JSON.stringify(
                             err
-                        )}. Original: ${message}`
+                        )}. Original: ${JSON.stringify(message)}`
                     );
                     resolve(null);
                 });
@@ -143,7 +142,7 @@ class ApplicationLogger {
         const location = request.url;
         const status = reply.statusCode;
 
-        return this.logBase(level, userId, ip, location, status, message);
+        return this.logBase(level, request.worker, userId, ip, location, status, message);
     }
 
     /**

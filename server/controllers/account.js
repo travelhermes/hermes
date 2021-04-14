@@ -120,6 +120,7 @@ class AccountController {
                 currentEmail: currentEmail,
                 newEmail: request.body.user.email,
             });
+            ApplicationLogger.warning(request, reply, 'Email changed');
         }
     }
 

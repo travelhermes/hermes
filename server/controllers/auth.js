@@ -141,7 +141,7 @@ class AuthMiddleware {
             //reply.status(301).redirect('/signin/');
             return;
         } else {
-            if(request.url.includes('/api')) {
+            if (request.url.includes('/api')) {
                 reply.header('Cache-Control', 'no-store');
             } else {
                 reply.header('Cache-Control', 'max-age=86400');
@@ -300,7 +300,15 @@ class AuthController {
             // 15min cooldown if more than 5 login attempts have been made
             const timePassed = new Date() - user.lastAttempt;
             if (user.attempts > 5 && timePassed < 900000) {
-                ApplicationLogger.warning(request, reply, 'Cooldown');
+                ApplicationLogger.logBase(
+                    LogLevel.WARNING,
+                    request.worker,
+                    user.id,
+                    request.realIp,
+                    request.url,
+                    429,
+                    'Cooldown'
+                );
                 reply.status(429).send();
                 return;
             }
@@ -356,12 +364,32 @@ class AuthController {
                                     address: request.realIp,
                                 });
                             }
+
+                            ApplicationLogger.logBase(
+                                LogLevel.WARNING,
+                                request.worker,
+                                user.id,
+                                request.realIp,
+                                request.url,
+                                200,
+                                'Successful login'
+                            );
                         } else {
                             // Add 1 to signin attempts
                             await user.increment('attempts');
                             user.lastAttempt = new Date();
                             await user.save();
                             reply.status(401).send();
+
+                            ApplicationLogger.logBase(
+                                LogLevel.WARNING,
+                                request.worker,
+                                user.id,
+                                request.realIp,
+                                request.url,
+                                401,
+                                'Unsuccesful login'
+                            );
                         }
                     }, waitTime);
                 })
@@ -371,6 +399,15 @@ class AuthController {
                 });
         } else {
             reply.status(404).send();
+            ApplicationLogger.logBase(
+                LogLevel.WARNING,
+                request.worker,
+                null,
+                request.realIp,
+                request.url,
+                404,
+                'User not found'
+            );
         }
     }
 
@@ -409,6 +446,15 @@ class AuthController {
         // If user exists, return not allowed
         if (user) {
             reply.status(403).send();
+            ApplicationLogger.logBase(
+                LogLevel.WARNING,
+                request.worker,
+                user.id,
+                request.realIp,
+                request.url,
+                403,
+                'User exists'
+            );
             return;
         }
 
@@ -475,6 +521,16 @@ class AuthController {
                 mailServer.add(request.body.email, MailType.newAccount, {
                     name: request.body.name,
                 });
+
+                ApplicationLogger.logBase(
+                    LogLevel.WARNING,
+                    request.worker,
+                    user.id,
+                    request.realIp,
+                    request.url,
+                    200,
+                    'Successful signup'
+                );
             })
             .catch(async (err) => {
                 try {
@@ -500,6 +556,7 @@ class AuthController {
     async logout(request, reply) {
         await Session.destroySession(request);
         reply.clearCookie('hermesSession', { path: '/' }).status(301).redirect('/signin/');
+        ApplicationLogger.warning(request, reply, 'Logout');
     }
 
     /**
@@ -528,6 +585,7 @@ class AuthController {
         });
 
         reply.status(200).send();
+        ApplicationLogger.warning(request, reply, 'Logout');
     }
 
     /**
@@ -565,6 +623,15 @@ class AuthController {
             });
         }
         reply.status(200).send();
+        ApplicationLogger.logBase(
+            LogLevel.WARNING,
+            request.worker,
+            user.id,
+            request.realIp,
+            request.url,
+            user ? 200 : 403,
+            'Requested reset'
+        );
     }
 
     /**
@@ -627,7 +694,8 @@ class AuthController {
                     reply.status(200).send();
 
                     ApplicationLogger.logBase(
-                        LogLevel.INFO,
+                        LogLevel.WARNING,
+                        request.worker,
                         user.id,
                         request.realIp,
                         request.url,
@@ -641,11 +709,28 @@ class AuthController {
                     });
                 })
                 .catch(async (error) => {
-                    const logId = await ApplicationLogger.fatal(request, reply, error);
+                    const logId = await ApplicationLogger.logBase(
+                        LogLevel.FATAL,
+                        request.worker,
+                        user.id,
+                        request.realIp,
+                        request.url,
+                        500,
+                        error
+                    );
                     reply.status(500).send({ error: 'Internal Server Error', statusCode: 500, logId: logId });
                 });
         } else {
             reply.status(403).send();
+            ApplicationLogger.logBase(
+                LogLevel.WARNING,
+                request.worker,
+                user.id,
+                request.realIp,
+                request.url,
+                403,
+                'Unauthorized attempt to change password'
+            );
         }
     }
 
@@ -704,6 +789,7 @@ class AuthController {
                 });
         } else {
             reply.status(403).send();
+            ApplicationLogger.warning(request, reply, 'Unauthorized attempt to change password');
         }
     }
 
@@ -760,6 +846,7 @@ class AuthController {
                 });
         } else {
             reply.status(403).send();
+            ApplicationLogger.warning(request, reply, 'Unauthorized attempt to delete user');
         }
     }
 }
