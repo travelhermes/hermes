@@ -554,9 +554,9 @@ class AuthController {
      * @param  {Reply}   reply   HTTP Reply
      */
     async logout(request, reply) {
+        await ApplicationLogger.warning(request, reply, 'Logout');
         await Session.destroySession(request);
         reply.clearCookie('hermesSession', { path: '/' }).status(301).redirect('/signin/');
-        ApplicationLogger.warning(request, reply, 'Logout');
     }
 
     /**
