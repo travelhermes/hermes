@@ -140,7 +140,7 @@ class AuthMiddleware {
             //reply.status(301).redirect('/signin/');
             return;
         } else {
-            reply.header('Cache-Control', 'no-store');
+            //reply.header('Cache-Control', 'no-store');
             if (
                 !request.url.includes('/help') &&
                 (request.url.includes('/signin') || request.url.includes('/signup'))
