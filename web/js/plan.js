@@ -587,7 +587,8 @@ function loadPlan(data, parse = true) {
     }
 
     if (dates[dates.length - 1].addDays(1) < new Date()) {
-        document.querySelector('#editButton').disabled = true;
+        document.querySelectorAll('#editButtonHeader').disabled = true;
+        document.querySelectorAll('#editButton').disabled = true;
     }
 
     renderPlan(plan, currentDay);
