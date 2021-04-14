@@ -83,12 +83,6 @@ if (cluster.isMaster) {
             AccessLogger.fatal(request, reply, payload.toString());
         }
 
-        if (request.url.includes('/api') || request.url.includes('/signin') || request.url.includes('/signup')) {
-            reply.header('Cache-Control' ,'no-store');
-        } else {
-            reply.header('Cache-Control' ,'max-age=172800');
-        }
-
         console.log(
             `[Worker ${cluster.worker.id}] [${new Date().toLocaleString()}] ${
                 new Date() - request.startTime

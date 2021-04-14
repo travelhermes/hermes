@@ -108,13 +108,13 @@ function http(url, method, body) {
                         resolve(JSON.parse(xhr.response));
                     } catch(err) {
                         console.log(err);
-                        window.location = '/signin/';
+                        window.location = '/signin/?redirect=' + btoa(window.location.pathname);
                     }
                 } else {
                     resolve({});
                 }
             } else if (xhr.status == 301){
-                window.location = '/signin/' + btoa(window.location.pathname);
+                window.location = '/signin/?redirect=' + btoa(window.location.pathname);
             } else {
                 reject({
                     status: xhr.status,

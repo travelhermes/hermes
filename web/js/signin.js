@@ -19,7 +19,8 @@ function signin(form) {
     })
         .then(() => {
             console.log('Ok');
-            if (redirect) {
+            if (redirect != null) {
+                console.log('Redirecting...');
                 window.location = atob(redirect);
             } else {
                 window.location = '/dashboard/';

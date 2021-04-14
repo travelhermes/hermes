@@ -13,21 +13,23 @@ const { sanitize } = require('../utils/text.js');
 const { Session } = require('./session.js');
 
 const publicPaths = [
-    { type: 'contains', value: '/assets' },
-    { type: 'contains', value: '/css' },
-    { type: 'contains', value: '/help' },
-    { type: 'contains', value: '/js' },
-    { type: 'contains', value: '/privacy' },
-    { type: 'contains', value: '/recover' },
-    { type: 'contains', value: '/signin' },
-    { type: 'contains', value: '/signup' },
-    { type: 'contains', value: '/terms' },
-    { type: 'equals', value: '/' },
-    { type: 'equals', value: '/api/auth/check' },
-    { type: 'equals', value: '/api/auth/password/change' },
-    { type: 'equals', value: '/api/auth/password/request' },
-    { type: 'equals', value: '/api/places/random' },
-    { type: 'equals', value: '/favicon.ico' },
+    { type: 'contains', value: '/assets', cache: true },
+    { type: 'contains', value: '/css', cache: true },
+    { type: 'contains', value: '/help', cache: true },
+    { type: 'contains', value: '/help/signin', cache: true },
+    { type: 'contains', value: '/help/signup', cache: true },
+    { type: 'contains', value: '/js', cache: true },
+    { type: 'contains', value: '/privacy', cache: true },
+    { type: 'contains', value: '/recover', cache: true },
+    { type: 'contains', value: '/signin', cache: false },
+    { type: 'contains', value: '/signup', cache: false },
+    { type: 'contains', value: '/terms', cache: true },
+    { type: 'equals', value: '/', cache: true },
+    { type: 'equals', value: '/api/auth/check', cache: false },
+    { type: 'equals', value: '/api/auth/password/change', cache: false },
+    { type: 'equals', value: '/api/auth/password/request', cache: false },
+    { type: 'equals', value: '/api/places/random', cache: false },
+    { type: 'equals', value: '/favicon.ico', cache: true },
 ];
 
 //
@@ -108,12 +110,22 @@ class AuthMiddleware {
                 switch (publicPaths[i].type) {
                     case 'contains': {
                         if (request.url.includes(publicPaths[i].value)) {
+                            if (publicPaths[i].cache) {
+                                reply.header('Cache-Control', 'max-age=172800');
+                            } else {
+                                reply.header('Cache-Control', 'no-store');
+                            }
                             return;
                         }
                         break;
                     }
                     case 'equals': {
                         if (request.url == publicPaths[i].value) {
+                            if (publicPaths[i].cache) {
+                                reply.header('Cache-Control', 'max-age=172800');
+                            } else {
+                                reply.header('Cache-Control', 'no-store');
+                            }
                             return;
                         }
                         break;
@@ -127,6 +139,7 @@ class AuthMiddleware {
             //reply.status(301).redirect('/signin/');
             return;
         } else {
+            reply.header('Cache-Control', 'no-store');
             if (
                 !request.url.includes('/help') &&
                 (request.url.includes('/signin') || request.url.includes('/signup'))
@@ -713,7 +726,7 @@ class AuthController {
                         // First, delete sessions, then delete user from database
                         await db.Session.destroy({
                             where: {
-                                UserId: user.id
+                                UserId: user.id,
                             },
                         });
                         await db.User.destroy({
