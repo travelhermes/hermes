@@ -1,4 +1,5 @@
 /* jshint esversion: 8 */
+const cluster = require('cluster');
 const CONFIG = require('../config.json');
 const { ApplicationLogger, LogLevel } = require('../logger/logger.js');
 const nodemailer = require('nodemailer');
@@ -71,10 +72,10 @@ class MailServer {
             const message = this.messages.shift();
             this._send(message)
                 .then((info) => {
-                    ApplicationLogger.logBase(LogLevel.INFO, null, null, 'mail/send', null, info);
+                    ApplicationLogger.logBase(LogLevel.INFO, cluster.worker.id, null, null, 'mail/send', null, info);
                 })
                 .catch((error) => {
-                    ApplicationLogger.logBase(LogLevel.FATAL, null, null, 'mail/send', null, error);
+                    ApplicationLogger.logBase(LogLevel.FATAL, cluster.worker.id, null, null, 'mail/send', null, error);
                     this.messages.push(message);
                 });
         }
@@ -111,7 +112,7 @@ class MailServer {
         try {
             body = pug.renderFile(__dirname + '/' + Object.keys(MailType)[messageType] + '.pug', dictionary);
         } catch (error) {
-            ApplicationLogger.logBase(LogLevel.FATAL, null, null, 'mail/add', null, error);
+            ApplicationLogger.logBase(LogLevel.FATAL, cluster.worker.id, null, null, 'mail/add', null, error);
             return;
         }
 

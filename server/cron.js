@@ -114,6 +114,7 @@ async function main() {
         }
         ApplicationLogger.logBase(
             LogLevel.INFO,
+            0,
             null,
             null,
             'cronjob/sessions',
@@ -123,6 +124,7 @@ async function main() {
     } catch (err) {
         ApplicationLogger.logBase(
             LogLevel.FATAL,
+            0,
             null,
             null,
             'cronjob/sessions',
@@ -148,10 +150,11 @@ async function main() {
                 count++;
             }
         }
-        ApplicationLogger.logBase(LogLevel.INFO, null, null, 'cronjob/user', null, 'Deleted ' + count + ' users');
+        ApplicationLogger.logBase(LogLevel.INFO, 0, null, null, 'cronjob/user', null, 'Deleted ' + count + ' users');
     } catch (err) {
         ApplicationLogger.logBase(
             LogLevel.FATAL,
+            0,
             null,
             null,
             'cronjob/user',
@@ -224,10 +227,11 @@ async function main() {
 
             count++;
         }
-        ApplicationLogger.logBase(LogLevel.INFO, null, null, 'cronjob/plans', null, 'Updated ' + count + ' plans');
+        ApplicationLogger.logBase(LogLevel.INFO, 0, null, null, 'cronjob/plans', null, 'Updated ' + count + ' plans');
     } catch (err) {
         ApplicationLogger.logBase(
             LogLevel.FATAL,
+            0,
             null,
             null,
             'cronjob/plans',
@@ -254,7 +258,7 @@ async function main() {
             if (plans[i].startDate.toDateString() != tomorrow.toDateString()) {
                 continue;
             }
-            if(!plans[i].User.notificationsPlans) {
+            if (!plans[i].User.notificationsPlans) {
                 continue;
             }
             mailServer.add(plans[i].User.email, MailType.startPlan, {
@@ -272,6 +276,7 @@ async function main() {
         }
         ApplicationLogger.logBase(
             LogLevel.INFO,
+            0,
             null,
             null,
             'cronjob/reminder/plan',
@@ -281,6 +286,7 @@ async function main() {
     } catch (err) {
         ApplicationLogger.logBase(
             LogLevel.FATAL,
+            0,
             null,
             null,
             'cronjob/reminder/plan',
@@ -308,7 +314,7 @@ async function main() {
         });
 
         for (let i = 0; i < plans.length; i++) {
-            if(!plans[i].User.notificationsRatings) {
+            if (!plans[i].User.notificationsRatings) {
                 continue;
             }
             mailServer.add(plans[i].User.email, MailType.rateVisited, {
@@ -320,6 +326,7 @@ async function main() {
         }
         ApplicationLogger.logBase(
             LogLevel.INFO,
+            0,
             null,
             null,
             'cronjob/reminder/ratings',
@@ -329,6 +336,7 @@ async function main() {
     } catch (err) {
         ApplicationLogger.logBase(
             LogLevel.FATAL,
+            0,
             null,
             null,
             'cronjob/reminder/ratings',
@@ -360,6 +368,7 @@ async function main() {
         .then(() => {
             ApplicationLogger.logBase(
                 LogLevel.INFO,
+                0,
                 null,
                 null,
                 'cronjob/recommender',
@@ -370,6 +379,7 @@ async function main() {
         .catch((err) => {
             ApplicationLogger.logBase(
                 LogLevel.FATAL,
+                0,
                 null,
                 null,
                 'cronjob/recommender',

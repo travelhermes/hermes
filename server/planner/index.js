@@ -1,4 +1,5 @@
 /* jshint esversion: 8 */
+const cluster = require('cluster');
 const db = require('../db/models.js');
 const fs = require('fs');
 const geolib = require('geolib');
@@ -591,7 +592,7 @@ exports.plan = async function (plan, places, days, start, dayStart, dayEnd, quic
     try {
         problem = await createProblem(plan.id, places, days, start, dayStart, dayEnd, quicker);
     } catch (error) {
-        ApplicationLogger.logBase(LogLevel.ERROR, plan.UserId, null, 'planner/plan/creator', null, error);
+        ApplicationLogger.logBase(LogLevel.ERROR, cluster.worker.id, plan.UserId, null, 'planner/plan/creator', null, error);
         plan.status = -1;
         await plan.save();
         return;
@@ -601,7 +602,7 @@ exports.plan = async function (plan, places, days, start, dayStart, dayEnd, quic
     try {
         fs.writeFileSync(path, problem);
     } catch (error) {
-        ApplicationLogger.logBase(LogLevel.ERROR, plan.UserId, null, 'planner/plan/writer', null, error);
+        ApplicationLogger.logBase(LogLevel.ERROR, cluster.worker.id, plan.UserId, null, 'planner/plan/writer', null, error);
         plan.status = -1;
         await plan.save();
         return;
@@ -627,14 +628,14 @@ exports.plan = async function (plan, places, days, start, dayStart, dayEnd, quic
                     plan.status = 2;
                     await plan.save();
                 } else {
-                    ApplicationLogger.logBase(LogLevel.ERROR, plan.UserId, null, 'planner/plan/planner/simple', null, error);
+                    ApplicationLogger.logBase(LogLevel.ERROR, cluster.worker.id, plan.UserId, null, 'planner/plan/planner/simple', null, error);
                 }
                 return;
             }
         } else {
             plan.status = -1;
             await plan.save();
-            ApplicationLogger.logBase(LogLevel.ERROR, plan.UserId, null, 'planner/plan/planner', null, error);
+            ApplicationLogger.logBase(LogLevel.ERROR, cluster.worker.id, plan.UserId, null, 'planner/plan/planner', null, error);
             return;
         }
     }
@@ -648,7 +649,7 @@ exports.plan = async function (plan, places, days, start, dayStart, dayEnd, quic
             plan.status = 3;
             await plan.save();
         } else {
-            ApplicationLogger.logBase(LogLevel.ERROR, plan.UserId, null, 'planner/plan/parser', null, error);
+            ApplicationLogger.logBase(LogLevel.ERROR, cluster.worker.id, plan.UserId, null, 'planner/plan/parser', null, error);
         }
         return;
     }
@@ -656,7 +657,7 @@ exports.plan = async function (plan, places, days, start, dayStart, dayEnd, quic
     try {
         await db.PlanItem.bulkCreate(items);
     } catch (error) {
-        ApplicationLogger.logBase(LogLevel.ERROR, plan.UserId, null, 'planner/plan/db', null, error);
+        ApplicationLogger.logBase(LogLevel.ERROR, cluster.worker.id, plan.UserId, null, 'planner/plan/db', null, error);
         plan.status = -1;
         await plan.save();
         return;
@@ -665,7 +666,7 @@ exports.plan = async function (plan, places, days, start, dayStart, dayEnd, quic
     try {
         fs.rmSync(path);
     } catch (error) {
-        ApplicationLogger.logBase(LogLevel.ERROR, plan.UserId, null, 'planner/plan/cleanup', null, error);
+        ApplicationLogger.logBase(LogLevel.ERROR, cluster.worker.id, plan.UserId, null, 'planner/plan/cleanup', null, error);
     }
 
     plan.status = 0;
