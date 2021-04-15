@@ -156,44 +156,29 @@ async function setStars(element, index) {
     }
 }
 
-/**
- * Checks the first step, making sure Captcha is completed an valid and email is not already registered
- * @param  {HTMLElement} form First step form
- */
-async function checkFirstStep(form) {
-    form.querySelector('#invalidEmail').classList.add('d-none');
-    form.querySelector('#cooldown').classList.add('d-none');
+function continueFirstStep(form) {
     form.querySelector('#invalidCaptcha').classList.add('d-none');
 
-    const hCaptchaReponse = form.querySelector('#hCaptcha').querySelector('iframe').getAttribute('data-hcaptcha-response');
+    const hCaptchaReponse = form
+        .querySelector('#hCaptcha')
+        .querySelector('iframe')
+        .getAttribute('data-hcaptcha-response');
     if (hCaptchaReponse == null || hCaptchaReponse.length == 0) {
         form.querySelector('#invalidCaptcha').classList.remove('d-none');
         return;
+    } else {
+        form.querySelector('#invalidCaptcha').classList.add('d-none');
     }
 
-    setLoadButton(form.querySelector('#inputSubmitStep1'));
-    post(ENDPOINTS.check, { email: form.querySelector('#inputEmail').value, hCaptcha: hCaptchaReponse })
-        .then((res) => {
-            if (!res.exists) {
-                form.classList.add('d-none');
-                document.querySelector('#step2').classList.remove('d-none');
-            } else {
-                form.querySelector('#invalidEmail').classList.remove('d-none');
-                unsetLoadButton(form.querySelector('#inputSubmitStep1'));
-            }
-        })
-        .catch((err) => {
-            unsetLoadButton(document.querySelector('#inputSubmitStep1'));
-            if (err.status == 429) {
-                form.querySelector('#cooldown').classList.remove('d-none');
-            } else if (err.status == 403) {
-                form.querySelector('#invalidCaptcha').classList.remove('d-none');
-            } else {
-                throwError(err);
-            }
-        });
+    form.classList.add('d-none');
+    document.querySelector('#step2').classList.remove('d-none');
 
     return false;
+}
+
+function backSecondStep(button) {
+    button.closest('form').classList.add('d-none');
+    document.querySelector('#step1').classList.remove('d-none');
 }
 
 /**
@@ -232,16 +217,32 @@ function signup() {
         password: sha256(document.querySelector('#inputPassword').value),
         country: document.querySelector('#inputCountry').value,
         preferences: preferences,
+        hCaptcha: document
+            .querySelector('#step1')
+            .querySelector('#hCaptcha')
+            .querySelector('iframe')
+            .getAttribute('data-hcaptcha-response'),
     };
 
     post(ENDPOINTS.signup, data)
         .then(() => {
+            document.querySelector('#invalidEmail').classList.add('d-none');
+            document.querySelector('#cooldown').classList.add('d-none');
+
             document.querySelector('#step2').classList.add('d-none');
             document.querySelector('#step3').classList.remove('d-none');
         })
         .catch((err) => {
             unsetLoadButton(document.querySelector('#inputSubmitStep2'));
-            throwError(err);
+            if (err.status == 409) {
+                document.querySelector('#invalidEmail').classList.remove('d-none');
+                window.location = '#invalidEmail';
+            } else if (err.status == 429) {
+                document.querySelector('#cooldown').classList.remove('d-none');
+                window.location = '#cooldown';
+            } else {
+                throwError(err);
+            }
         });
 
     return false;
@@ -276,4 +277,6 @@ async function main() {
     loadPlaces();
 }
 
-window.onload = () => { main(); };
+window.onload = () => {
+    main();
+};

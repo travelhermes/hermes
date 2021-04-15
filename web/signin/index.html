@@ -36,6 +36,9 @@
                             Introduce tu correo electrónico a continuación. Si la cuenta existe, recibirás un correo
                             electrónico en tu bandeja de entrada
                         </p>
+                        <div class="alert alert-danger d-none mb-1 mt-4" role="alert" id="cooldownReset" style="text-shadow: none">
+                            Se han producido demasiadas solicitudes seguidas. Inténtelo de nuevo más tarde.
+                        </div>
                         <input type="email" id="inputEmailRecover" placeholder="Correo electrónico" required />
                     </div>
                     <div class="modal-footer">
@@ -49,16 +52,16 @@
         <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
             <main class="mb-auto mt-auto">
                 <img class="mt-4" src="/assets/logo_light_256.png" alt="" width="128" height="128" />
+                <div class="mt-2">
+                    <a href="/help/" target="_blank" class="text-white"
+                        ><i class="bi bi-question-circle mx-1"></i>¿Necesitas ayuda?</a
+                    >
+                </div>
 
-                <form class="form-signin" onsubmit="return signin(this);">
-                    <div class="mb-1">
+                <form class="form-signin pt-1" onsubmit="return signin(this);">
+                    <div class="mb-2">
                         ¿No tienes cuenta?
                         <a href="/signup/" class="text-white">Únete</a>
-                    </div>
-                    <div class="mb-3">
-                        <a href="/help/" target="_blank" class="text-white"
-                            ><i class="bi bi-question-circle mx-1"></i>¿Necesitas ayuda?</a
-                        >
                     </div>
                     <div
                         class="alert alert-danger d-none"

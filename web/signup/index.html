@@ -21,22 +21,23 @@
         <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
             <main class="mb-auto mt-auto">
                 <img class="mt-4" src="/assets/logo_light_256.png" alt="" width="128" height="128" />
+                <div class="mt-2">
+                    <a href="/help/" target="_blank" class="text-white">
+                        <i class="bi bi-question-circle mx-1"></i>¿Necesitas ayuda?
+                    </a>
+                </div>
+
+                <!-- Alerts -->
+                <div class="alert alert-danger d-none mb-1 mt-4" role="alert" id="invalidEmail" style="text-shadow: none">
+                    Este correo electrónico ya está en uso
+                </div>
+                <div class="alert alert-danger d-none mb-1 mt-4" role="alert" id="cooldown" style="text-shadow: none">
+                    Se han producido demasiadas solicitudes seguidas. Inténtelo de nuevo más tarde.
+                </div>
 
                 <!-- Sign-up first step -->
-                <form class="form-signup" id="step1" onsubmit="checkFirstStep(this); return false;">
+                <form class="form-signup pt-1" id="step1" onsubmit="continueFirstStep(this); return false;">
                     <div class="mb-2">¿Ya tienes cuenta? <a href="/signin/" class="text-white">Acceder</a></div>
-                    <div class="mb-3">
-                        <a href="/help/" target="_blank" class="text-white"
-                            ><i class="bi bi-question-circle mx-1"></i>¿Necesitas ayuda?</a
-                        >
-                    </div>
-
-                    <div class="alert alert-danger d-none" role="alert" id="invalidEmail" style="text-shadow: none">
-                        Este correo electrónico ya está en uso
-                    </div>
-                    <div class="alert alert-danger d-none" role="alert" id="cooldown" style="text-shadow: none">
-                        Se han producido demasiadas solicitudes seguidas. Inténtelo de nuevo más tarde.
-                    </div>
 
                     <!-- Name and surname -->
                     <div class="join">
@@ -56,7 +57,6 @@
                             class="form-control"
                             placeholder="Apellidos"
                             required
-                            autofocus
                         />
                     </div>
 
@@ -69,7 +69,7 @@
                             class="form-control"
                             placeholder="Correo electrónico"
                             required
-                            autofocus
+                            onchange="document.querySelector('#invalidEmail').classList.add('d-none');"
                         />
                         <label for="inputPassword" class="visually-hidden">Contraseña</label>
                         <input
@@ -103,12 +103,12 @@
                 </form>
 
                 <!-- Sign-up second step -->
-                <form class="form-signup d-none" id="step2" onsubmit="signup(); return false;">
-                    <div class="mb-0">
-                        <a href="/help/" target="_blank" class="text-white"
-                            ><i class="bi bi-question-circle mx-1"></i>¿Necesitas ayuda?</a
-                        >
-                    </div>
+                <form class="form-signup d-none pt-1" id="step2" onsubmit="signup(); return false;">
+                    <p class="mt-0 mb-0">
+                        <a href="#" class="text-white" onclick="backSecondStep(this);">
+                            <i class="bi bi-arrow-left me-1"></i>Volver
+                        </a>
+                    </p>
                     <label for="inputCountry" class="form-label mt-3 mb-2 fs-5">¿De donde eres?</label>
 
                     <!-- Country selection -->
@@ -1083,12 +1083,7 @@
                     </button>
                 </form>
 
-                <form class="form-signup d-none" id="step3" onsubmit="continueThirdStep(); return false;">
-                    <div class="mb-3">
-                        <a href="/help/" target="_blank" class="text-white"
-                            ><i class="bi bi-question-circle mx-1"></i>¿Necesitas ayuda?</a
-                        >
-                    </div>
+                <form class="form-signup d-none pt-1" id="step3" onsubmit="continueThirdStep(); return false;">
                     <!-- Cold-start place ratings -->
                     <label class="mt-2 mb-2 fs-5">¿Conoces algun sitio?</label>
                     <p class="text-muted">

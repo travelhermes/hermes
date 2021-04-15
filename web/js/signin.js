@@ -54,12 +54,17 @@ function recover(form) {
     post(ENDPOINTS.passwordRequest, { email: email })
         .then((res) => {
             setDoneButton(document.querySelector('#inputSubmitRecover'));
+            document.querySelector('#cooldownReset').classList.add('d-none');
             recoverModal.hide();
         })
         .catch((err) => {
             unsetLoadButton(document.querySelector('#inputSubmitRecover'));
-            throwError(err);
-            recoverModal.hide();
+            if (err.status == 429) {
+                document.querySelector('#cooldownReset').classList.remove('d-none');
+            } else {
+                throwError(err);
+                recoverModal.hide();
+            }
         });
 
     return false;
