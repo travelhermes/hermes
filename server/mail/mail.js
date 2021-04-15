@@ -9,10 +9,10 @@ const MailType = {
     passwordChange: 1,
     newAccount: 2,
     confirmDelete: 3,
-    newLogin: 5,
-    emailChange: 6,
-    startPlan: 7,
-    rateVisited: 8,
+    newLogin: 4,
+    emailChange: 5,
+    startPlan: 6,
+    rateVisited: 7,
 };
 
 const MailSubject = [
