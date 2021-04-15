@@ -584,6 +584,13 @@ class AuthController {
             },
         });
 
+        // Remove all logins
+        await db.Login.destroy({
+            where: {
+                UserId: user.id,
+            },
+        });
+
         reply.status(200).send();
         ApplicationLogger.warning(request, reply, 'Logout');
     }
