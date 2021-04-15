@@ -168,18 +168,6 @@ class AuthController {
         this._createCache();
 
         // Info methods
-        fastify.post(
-            '/api/auth/check',
-            {
-                config: {
-                    rateLimit: {
-                        max: 100,
-                        timeWindow: '10m',
-                    },
-                },
-            },
-            this.check
-        );
         fastify.get('/api/auth/id', this.id);
 
         // Sign in, sign up and logout
@@ -189,7 +177,16 @@ class AuthController {
         fastify.get('/api/auth/logoutSessions', this.logoutSessions);
 
         // Password changes
-        fastify.post('/api/auth/password/request', this.request);
+        fastify.post('/api/auth/password/request',
+            {
+                config: {
+                    rateLimit: {
+                        max: 15,
+                        timeWindow: '10m',
+                    },
+                },
+            },
+            this.request);
         fastify.put('/api/auth/password/change', this.change);
         fastify.put('/api/auth/password/update', this.update);
 
@@ -206,53 +203,6 @@ class AuthController {
                 attributes: ['id'],
             })
         );
-    }
-
-    /**
-     * Checks if a user with a given email already exists and if captcha is valid
-     * @param  {Request} request HTTP Request
-     * @param  {Reply}   reply   HTTP Reply
-     */
-    async check(request, reply) {
-        if (!request.body || !request.body.email || !validator.isEmail(request.body.email) || !request.body.hCaptcha) {
-            reply.status(400).send();
-            return;
-        }
-
-        request.body.email = sanitize(request.body.email);
-
-        const params = new URLSearchParams();
-        params.append('response', request.body.hCaptcha);
-        params.append('secret', CONFIG.hCaptcha.secret);
-        params.append('sitekey', CONFIG.hCaptcha.sitekey);
-
-        const config = {
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-        };
-
-        axios
-            .post('https://hcaptcha.com/siteverify', params, config)
-            .then(async (result) => {
-                if (result.data.success) {
-                    // Get user
-                    const user = await db.User.findOne({
-                        where: {
-                            email: request.body.email,
-                        },
-                    });
-
-                    // If user exists, reply with true
-                    reply.status(200).send({ exists: user ? true : false });
-                } else {
-                    reply.status(403).send();
-                }
-            })
-            .catch(async (error) => {
-                const logId = await ApplicationLogger.fatal(request, reply, error);
-                reply.status(500).send({ error: 'Internal Server Error', statusCode: 500, logId: logId });
-            });
     }
 
     /**
@@ -398,14 +348,14 @@ class AuthController {
                     reply.status(500).send({ error: 'Internal Server Error', statusCode: 500, logId: logId });
                 });
         } else {
-            reply.status(404).send();
+            reply.status(401).send();
             ApplicationLogger.logBase(
                 LogLevel.WARNING,
                 request.worker,
                 null,
                 request.realIp,
                 request.url,
-                404,
+                401,
                 'User not found'
             );
         }
@@ -424,7 +374,8 @@ class AuthController {
             !request.body.country ||
             !request.body.preferences ||
             request.body.preferences.length < 3 ||
-            hasDuplicates(request.body.preferences)
+            hasDuplicates(request.body.preferences) ||
+            !request.body.hCaptcha
         ) {
             reply.status(400).send();
             return;
@@ -443,19 +394,50 @@ class AuthController {
             },
         });
 
-        // If user exists, return not allowed
+        // If user exists, return conflict
         if (user) {
-            reply.status(403).send();
+            reply.status(409).send();
             ApplicationLogger.logBase(
                 LogLevel.WARNING,
                 request.worker,
                 user.id,
                 request.realIp,
                 request.url,
-                403,
+                409,
                 'User exists'
             );
             return;
+        }
+
+        const params = new URLSearchParams();
+        params.append('response', request.body.hCaptcha);
+        params.append('secret', CONFIG.hCaptcha.secret);
+        params.append('sitekey', CONFIG.hCaptcha.sitekey);
+
+        const config = {
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+        };
+
+        try {
+            const res = await axios.post('https://hcaptcha.com/siteverify', params, config);
+            if (!res.data.success) {
+                reply.status(403).send();
+                ApplicationLogger.logBase(
+                    LogLevel.WARNING,
+                    request.worker,
+                    user.id,
+                    request.realIp,
+                    request.url,
+                    403,
+                    'Invalid captcha'
+                );
+                return;
+            }
+        } catch (error) {
+            const logId = await ApplicationLogger.fatal(request, reply, error);
+            reply.status(500).send({ error: 'Internal Server Error', statusCode: 500, logId: logId });
         }
 
         // Validate and sanitize preferences
