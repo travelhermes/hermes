@@ -94,7 +94,7 @@ paths:
                       email: hermes@galisteo.me
                       name: Alvaro
                       surname: G.
-  /api/account/update:
+  /api/account/update/account:
     put:
       security:
         - hermesSession: []
@@ -168,7 +168,38 @@ paths:
           description: Successful update
           content: {}
         "400":
-          description: Missing attributes
+          description: Missing or bad attributes
+          content: {}
+  /api/account/update/notifications:
+    put:
+      security:
+        - hermesSession: []
+      tags:
+        - Account
+      summary: Update account notifications
+      description: Update an account notifications settings
+      operationId: updateAccountNotifications
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                plans:
+                  type: boolean
+                  example: true
+                ratings:
+                  type: boolean
+                  example: false
+            example:
+              plans: true
+              ratings: false
+      responses:
+        "200":
+          description: Successful update
+          content: {}
+        "400":
+          description: Missing or bad attributes
           content: {}
   /api/auth/delete:
     post:
