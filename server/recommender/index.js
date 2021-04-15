@@ -259,6 +259,7 @@ exports.generateCBRecommendations = async function (user) {
             },
         })
     ).map((preference) => {
+        userViews[preference.CategoryId] = 0.75;
         return preference.CategoryId;
     });
 
@@ -271,11 +272,7 @@ exports.generateCBRecommendations = async function (user) {
             },
         })
     ).forEach((userView) => {
-        if (preferences.includes(userView.CategoryId)) {
-            userViews[userView.CategoryId] = Math.max(userView.views / user.views, 0.75);
-        } else {
-            userViews[userView.CategoryId] = userView.views / user.views;
-        }
+        userViews[userView.CategoryId] = Math.max(userView.views / user.views, userViews[userView.CategoryId] || 0);
     });
 
     // Get Places and Categories
