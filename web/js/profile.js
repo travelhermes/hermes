@@ -95,6 +95,27 @@ async function change(form) {
 }
 
 /**
+ * Sends a request to update email options
+ * @param  {HTMLElement} form Passwords form
+ */
+async function updateNotifications(form) {
+    setLoadButton(document.querySelector('#inputSaveNotifications'));
+    const request = {
+        plans: form.querySelector('#notificationsPlans').checked,
+        ratings: form.querySelector('#notificationsRatings').checked,
+    };
+    try {
+        await put(ENDPOINTS.notificationsUpdate, request);
+        setDoneButton(document.querySelector('#inputSaveNotifications'));
+    } catch (err) {
+        throwError(err);
+        unsetLoadButton(document.querySelector('#inputSaveNotifications'));
+    }
+
+    return false;
+}
+
+/**
  * Sends a request to close all sessions
  * @param  {HTMLElement} button Button that triggered the action
  */
@@ -179,6 +200,9 @@ async function main() {
             document.querySelector('#inputName').value = res.user.name;
             document.querySelector('#inputSurname').value = res.user.surname;
             document.querySelector('#inputEmail').value = res.user.email;
+
+            document.querySelector('#notificationsPlans').checked = res.notifications.plans;
+            document.querySelector('#notificationsRatings').checked = res.notifications.ratings;
 
             res.preferences.forEach((preference) => {
                 document.querySelector('#cat-' + preference).checked = true;

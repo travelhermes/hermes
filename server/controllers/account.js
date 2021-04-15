@@ -26,7 +26,8 @@ class AccountController {
         // Init cache
         this._createCache();
 
-        fastify.put('/api/account/update', this.update);
+        fastify.put('/api/account/update/account', this.updateAccount);
+        fastify.put('/api/account/update/notifications', this.updateNotifications);
         fastify.get('/api/account/info', this.info);
         fastify.get('/api/account/download', this.download);
     }
@@ -48,7 +49,7 @@ class AccountController {
      * @param  {Request} request HTTP Request
      * @param  {Reply}   reply   HTTP reply.
      */
-    async update(request, reply) {
+    async updateAccount(request, reply) {
         // Validate and sanitize input
         if (
             !request.body ||
@@ -120,8 +121,45 @@ class AccountController {
                 currentEmail: currentEmail,
                 newEmail: request.body.user.email,
             });
-            ApplicationLogger.warning(request, reply, 'Email changed');
+            ApplicationLogger.warning(request, reply, 'Email changed from ' + currentEmail + ' to ' + request.body.user.email);
         }
+    }
+
+    /**
+     * REQUIRES SESSION!
+     * Update notification settings of a user account
+     * @param  {Request} request HTTP Request
+     * @param  {Reply}   reply   HTTP reply.
+     */
+    async updateNotifications(request, reply) {
+        // Validate and sanitize input
+        if (
+            !request.body ||
+            request.body.ratings == undefined ||
+            request.body.ratings == null ||
+            typeof request.body.ratings != 'boolean' ||
+            request.body.plans == undefined ||
+            request.body.plans == null ||
+            typeof request.body.plans != 'boolean'
+        ) {
+            reply.status(400).send();
+            return;
+        }
+
+        // Get user
+        var user = await Session.getSessionUser(request);
+        if (!user) {
+            reply.status(403).send();
+            return;
+        }
+
+        // Update user
+        user.notificationsPlans = request.body.plans;
+        user.notificationsRatings = request.body.ratings;
+        await user.save();
+
+        // Send reply
+        reply.status(200).send();
     }
 
     /**
@@ -133,13 +171,22 @@ class AccountController {
     async info(request, reply) {
         const userId = await Session.getSessionUserId(request);
         if (userId) {
+            const user = await db.User.findOne({
+                where: {
+                    id: userId,
+                },
+            });
+
             reply.status(200).send({
-                user: await db.User.findOne({
-                    attributes: ['name', 'surname', 'email'],
-                    where: {
-                        id: userId,
-                    },
-                }),
+                user: {
+                    name: user.name,
+                    surname: user.name,
+                    email: user.email,
+                },
+                notifications: {
+                    plans: user.notificationsPlans,
+                    ratings: user.notificationsRatings,
+                },
                 preferences: (
                     await db.UserCategory.findAll({
                         attributes: ['CategoryId'],
@@ -258,7 +305,7 @@ class AccountController {
                         timeSpent: item.timeSpent,
                         type: getType(item.type),
                         travelNext: item.travelNext,
-                        description: item.description,
+                        notes: item.description,
                         place: item.Place ? item.Place.name : null,
                     };
                 }),

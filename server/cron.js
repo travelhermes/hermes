@@ -254,6 +254,9 @@ async function main() {
             if (plans[i].startDate.toDateString() != tomorrow.toDateString()) {
                 continue;
             }
+            if(!plans[i].User.notificationsPlans) {
+                continue;
+            }
             mailServer.add(plans[i].User.email, MailType.startPlan, {
                 name: plans[i].User.name,
                 planName: plans[i].name,
@@ -305,6 +308,9 @@ async function main() {
         });
 
         for (let i = 0; i < plans.length; i++) {
+            if(!plans[i].User.notificationsRatings) {
+                continue;
+            }
             mailServer.add(plans[i].User.email, MailType.rateVisited, {
                 name: plans[i].User.name,
             });

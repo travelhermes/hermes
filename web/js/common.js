@@ -10,7 +10,8 @@ const ENDPOINTS = {
     logoutAll: '/api/auth/logoutSessions',
 
     accountInfo: '/api/account/info',
-    accountUpdate: '/api/account/update',
+    accountUpdate: '/api/account/update/account',
+    notificationsUpdate: '/api/account/update/notifications',
     accountDelete: '/api/auth/delete',
     accountDownload: '/api/account/download',
 

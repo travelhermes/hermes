@@ -104,6 +104,16 @@ const User = sequelize.define(
             allowNull: false,
             defaultValue: 0,
         },
+        notificationsPlans: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+            defaultValue: true,
+        },
+        notificationsRatings: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+            defaultValue: true,
+        },
     },
     { paranoid: true }
 );

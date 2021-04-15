@@ -187,6 +187,20 @@
                     <li class="nav-item">
                         <a
                             class="nav-link active"
+                            id="notifications-tab"
+                            data-bs-toggle="tab"
+                            data-bs-target="#notifications"
+                            type="button"
+                            role="tab"
+                            aria-controls="notifications"
+                            aria-selected="true"
+                        >
+                            <i class="mx-md-1 bi bi-bell-fill"></i> Notificaciones
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a
+                            class="nav-link"
                             id="basic-tab"
                             data-bs-toggle="tab"
                             data-bs-target="#basic"
@@ -210,7 +224,7 @@
                             aria-selected="false"
                             href="#"
                         >
-                            <i class="mx-md-1 bi bi-shield-lock"></i> Seguridad
+                            <i class="mx-md-1 bi bi-shield-lock-fill"></i> Seguridad
                         </a>
                     </li>
                     <li class="nav-item">
@@ -231,7 +245,42 @@
                     </li>
                 </ul>
                 <div class="tab-content" id="profileContent">
-                    <div class="tab-pane fade show active" id="basic" role="tabpanel" aria-labelledby="basic-tab">
+                    <div class="tab-pane fade show active" id="notifications" role="tabpanel" aria-labelledby="notifications-tab">
+                        <form class="notifications-form" class="mt-5" onsubmit="updateNotifications(this); return false;">
+                            <div class="container px-0 mx-0 mt-3">
+                                <h3 class="mt-3">Administrar notificaciones</h3>
+                                <p class="w-100 text-muted mb-0">
+                                    Desde aquí, podrás activar o desactivar notificaciones de Hermes.
+                                </p>
+                                <p class="w-100 text-muted">
+                                    <i class="bi bi-exclamation-circle me-1"></i> <b>Nota:</b> Las notificaciones de seguridad, como por ejemplo, los inicios de sesión, cambios de contraseña, o confirmaciones de eliminación de cuenta no se pueden desactivar.
+                                </p>
+                                <div>
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="notificationsPlans" checked>
+                                        <label class="form-check-label" for="notificationsPlans">Notificaciones de plan</label>
+                                    </div>
+                                    <p class="mb-3 w-100 text-muted">Un día antes de comenzar el plan recibirás notificaciones de recordatorio de este.</p>
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="notificationsRatings" checked>
+                                        <label class="form-check-label" for="notificationsRatings">Notificaciones de puntuaciones</label>
+                                    </div>
+                                    <p class="mb-3 w-100 text-muted">Al finalizar el día, recibirás un recordatorio para puntuar los sitios que has visitado recientemente. Recuerda que tus puntuaciones son necesarias para mejorar la precisión de Hermes.</p>
+                                </div>
+                            </div>
+                            <div class="mt-3 w-100">
+                                <button
+                                    type="submit"
+                                    class="btn btn-success"
+                                    id="inputSaveNotifications"
+                                    original-data="Guardar cambios"
+                                >
+                                    Guardar cambios
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="tab-pane fade" id="basic" role="tabpanel" aria-labelledby="basic-tab">
                         <form id="account-form" class="mt-3" onsubmit="save(this); return false;">
                             <div class="container px-0 mx-0">
                                 <h3 class="mt-3">Datos de contacto</h3>

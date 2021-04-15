@@ -9,12 +9,10 @@ const MailType = {
     passwordChange: 1,
     newAccount: 2,
     confirmDelete: 3,
-    activePlan: 4,
-    rememberRate: 5,
-    newLogin: 6,
-    emailChange: 7,
-    startPlan: 8,
-    rateVisited: 9,
+    newLogin: 5,
+    emailChange: 6,
+    startPlan: 7,
+    rateVisited: 8,
 };
 
 const MailSubject = [
@@ -22,8 +20,6 @@ const MailSubject = [
     'Se ha actualizado la contraseña de la cuenta',
     '¡Bienvenido a Hermes!',
     'Confirmación de eliminación de cuenta',
-    '¡Prepárate! Tu plan comienza dentro de poco',
-    '¡Hey! ¿Por qué no puntúas los sitios que acabas de visitar?',
     'Se ha producido un nuevo inicio de sesión en tu cuenta',
     'Se ha cambiado la dirección de correo asociada a la cuenta',
     'Uno de tus planes empieza mañana. ¿Estás preparado?',
