@@ -5,30 +5,28 @@ services:
         image: srgmc/hermes
         networks:
             - default
+        environment:
+            - SERVER=dev
         volumes:
-            - ./config.json:/usr/src/app/config.json
+            - ./server/config.json:/usr/src/app/config.json
             - ./web:/usr/src/app/web:ro
-            - /etc/timezone:/etc/timezone:ro
-            - /etc/localtime:/etc/localtime:ro
+           - /etc/timezone:/etc/timezone:ro
+           - /etc/localtime:/etc/localtime:ro
         ports:
             - 8080:80
         security_opt:
             - no-new-privileges:true
         restart: always
 
-    mariadb:
-        image: yobasystems/alpine-mariadb
-        networks:
-            - default
-        environment:
-            MYSQL_ROOT_PASSWORD: password
-            MYSQL_DATABASE: hermes
-            MYSQL_USER: hermes
-            MYSQL_PASSWORD: hermes
-        volumes:
-            - ./volumes/mariadb:/var/lib/mysql
-        ports:
-            - 3306:3306
-        security_opt:
-            - no-new-privileges:true
+   mariadb:
+       image: yobasystems/alpine-mariadb
+       networks:
+           - default
+       env_file: ./mariadb.env
+       volumes:
+           - ./volumes/mariadb:/var/lib/mysql
+       ports:
+           - 3306:3306
+       security_opt:
+           - no-new-privileges:true
         restart: always

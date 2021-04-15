@@ -65,6 +65,7 @@ Los pasos de despligue son los siguientes:
     3. Metric-FF: Compile el código fuente de [Metric-FF 1.2](https://fai.cs.uni-saarland.de/hoffmann/metric-ff.html) acorde a la arquitectura de su máquina. Mueva el ejecutable `ff` generado a  `server/planner/ff`.
 3. Genere la imagen del servidor: Desde `server/`, ejecute `docker build -t srgmc/hermes .`
 4. Configure  `docker-compose.yaml` para que las rutas sean las correctas.
+    - La variable `SERVER` es necesaria en el caso de usar logs en producción, ya que determina el nombre del servidor en el que se ejecuta.
 5. Creación de la base de datos: 
     1. Inicie el contenedor de la base de datos que va a utilizar para Hermes con `docker-compose up mariadb`.
     2. Inicie la instancia de Graphhopper.
