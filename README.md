@@ -73,6 +73,7 @@ Los pasos de despligue son los siguientes:
         - Esto añadirá todas las tablas a la base de datos y posteriormente añadirá todos los lugares de `db.json`. Puede generar este archivo con los scripts del directorio `data/`.
 6. Iniciar el servidor: Inicie el servidor con `docker-compose up -d`
 7. Configuración de cron: En el archivo `crontab`, se muestra un ejemplo de una tarea períodica.
+    - Tenga en cuenta que las fechas están en formato UTC.
 
 ## Licencia
 

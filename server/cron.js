@@ -116,6 +116,45 @@ async function main() {
     console.log('Today', today);
     console.log('Tomorrow', tomorrow);
 
+    // Clean logs older than two months
+    console.log(`[${new Date().toLocaleString()}] (cron.js) - Cleaning old logs`);
+    try {
+        let count = 0;
+        var logs = await db.ApplicationLog.findAll({
+            where: {
+                createdAt: {
+                    [Op.lt]: new Date(today).addDays(-62),
+                },
+            },
+        });
+        for (let i = 0; i < logs.length; i++) {
+            logs[i].destroy();
+            count++;
+        }
+        logs = await db.AccessLog.findAll({
+            where: {
+                createdAt: {
+                    [Op.lt]: new Date(today).addDays(-62),
+                },
+            },
+        });
+        for (let i = 0; i < logs.length; i++) {
+            logs[i].destroy();
+            count++;
+        }
+        ApplicationLogger.logBase(LogLevel.INFO, 0, null, null, 'cronjob/logs', null, 'Cleaned ' + count + ' logs');
+    } catch (err) {
+        ApplicationLogger.logBase(
+            LogLevel.FATAL,
+            0,
+            null,
+            null,
+            'cronjob/logs',
+            null,
+            'Errored @ ' + new Date() + ': ' + err
+        );
+    }
+
     // Clean old sessions
     console.log(`[${new Date().toLocaleString()}] (cron.js) - Cleaning old sessions`);
     try {
@@ -125,6 +164,9 @@ async function main() {
             if (sessions[i].maxAge < (new Date() - sessions[i].createdAt) / 1000) {
                 sessions[i].destroy();
                 count++;
+            }
+            if (sessions[i].deletedAt != null && sessions[i].deletedAt < new Date(today).addDays(-14)) {
+                sessions[i].destroy({ force: true });
             }
         }
         ApplicationLogger.logBase(
@@ -152,10 +194,10 @@ async function main() {
     console.log(`[${new Date().toLocaleString()}] (cron.js) - Cleaning deleted accounts`);
     try {
         let count = 0;
-        const users = await db.User.findAll({});
+        const users = await db.User.findAll();
         for (let i = 0; i < users.length; i++) {
             // 5 days
-            if (users[i].deletedAt != null && 432000 < (new Date() - users[i].deletedAt) / 1000) {
+            if (users[i].deletedAt != null && users[i].deletedAt < new Date(today).addDays(-5)) {
                 db.User.destroy({
                     where: {
                         id: users[i].id,
@@ -295,7 +337,7 @@ async function main() {
         });
         // Update every plan
         for (var i = 0; i < plans.length; i++) {
-            if (plans[i].endDate.addDays(1).toDateString() == today.toDateString()) {
+            if (plans[i].endDate.addDays(1) <= today) {
                 plans[i].status = 4;
                 await plans[i].save();
 

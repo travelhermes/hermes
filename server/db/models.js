@@ -670,7 +670,6 @@ const PlanItem = sequelize.define(
         },
     },
     {
-        paranoid: true,
         indexes: [
             {
                 fields: ['PlanId'],
