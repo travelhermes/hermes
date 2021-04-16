@@ -24,11 +24,11 @@ const MailSubject = [
     'Se ha producido un nuevo inicio de sesión en tu cuenta',
     'Se ha cambiado la dirección de correo asociada a la cuenta',
     'Uno de tus planes empieza mañana. ¿Estás preparado?',
-    '¿Por qué no puntúas los sitios que visitaste ayer?',
+    '¡Hey! Recuerda puntuar los sitios que visitaste ayer',
 ];
 
 class MailServer {
-    constructor(host, port, auth = {}, service = null, secure = true, tls = {}) {
+    constructor(host, port, auth = {}, service = null, secure = true, tls = {}, worker = 0) {
         this.host = host;
         this.port = port;
         this.auth = auth;
@@ -37,6 +37,7 @@ class MailServer {
         this.tls = tls;
         this.messages = [];
         this.transport = null;
+        this.worker = worker;
     }
 
     /**
@@ -72,10 +73,10 @@ class MailServer {
             const message = this.messages.shift();
             this._send(message)
                 .then((info) => {
-                    ApplicationLogger.logBase(LogLevel.INFO, cluster.worker.id, null, null, 'mail/send', null, info);
+                    ApplicationLogger.logBase(LogLevel.INFO, this.worker, null, null, 'mail/send', null, info);
                 })
                 .catch((error) => {
-                    ApplicationLogger.logBase(LogLevel.FATAL, cluster.worker.id, null, null, 'mail/send', null, error);
+                    ApplicationLogger.logBase(LogLevel.FATAL, this.worker, null, null, 'mail/send', null, error);
                     this.messages.push(message);
                 });
         }
@@ -112,7 +113,7 @@ class MailServer {
         try {
             body = pug.renderFile(__dirname + '/' + Object.keys(MailType)[messageType] + '.pug', dictionary);
         } catch (error) {
-            ApplicationLogger.logBase(LogLevel.FATAL, cluster.worker.id, null, null, 'mail/add', null, error);
+            ApplicationLogger.logBase(LogLevel.FATAL, this.worker, null, null, 'mail/add', null, error);
             return;
         }
 

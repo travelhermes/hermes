@@ -51,7 +51,8 @@ if (cluster.isMaster) {
         CONFIG.mail.secure,
         {
             rejectUnauthorized: !CONFIG.mail.selfSigned,
-        }
+        },
+        cluster.worker.id
     );
     mailServer.interval = setInterval(function () {
         //mailServer.messages = [];
