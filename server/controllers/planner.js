@@ -802,10 +802,11 @@ class PlannerController {
             !request.body.places ||
             hasDuplicates(request.body.places) ||
             request.body.places.length < 3 ||
-            !request.body.dayStart ||
             typeof request.body.dayStart != 'number' ||
-            !request.body.dayEnd ||
+            request.body.dayStart < 0 ||
             typeof request.body.dayEnd != 'number' ||
+            request.body.dayEnd < 0 ||
+            request.body.dayStart > request.body.dayEnd ||
             !request.body.start ||
             !request.body.start.lat ||
             !request.body.start.lon
