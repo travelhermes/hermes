@@ -16,6 +16,12 @@ function splitArray(array, parts) {
     return result;
 }
 
+Date.prototype.addDays = function (days) {
+    var date = new Date(this.valueOf());
+    date.setDate(date.getDate() + days);
+    return date;
+};
+
 function daysBetween(date1, date2, abs = true) {
     if (typeof date1 == 'string') {
         date1 = new Date(date1);
@@ -88,15 +94,24 @@ const mailServer = new MailServer(
     }
 );
 
+function sendEmails() {
+    return new Promise(async (resolve) => {
+        const count = mailServer.messages.length;
+        while (mailServer.messages.length > 0) {
+            mailServer.send();
+            await sleep(1000);
+        }
+        resolve(count);
+    });
+}
+
 // Note: Runs every 24h, at night
 async function main() {
     console.log(`Master with PID ${process.pid} is running`);
-    const now24 = new Date();
-    now24.setHours(now24.getHours() - 24);
 
     const today = new Date();
-    const tomorrow = new Date(today);
-    tomorrow.setDate(tomorrow.getDate() + 1);
+    //today.setHours(4, 0);
+    const tomorrow = new Date(today).addDays(1);
 
     console.log('Today', today);
     console.log('Tomorrow', tomorrow);
@@ -163,6 +178,94 @@ async function main() {
         );
     }
 
+    // Send reminder emails
+    console.log(`[${new Date().toLocaleString()}] (cron.js) - Creating reminder emails`);
+    try {
+        let countPlans = 0;
+        let countRatings = 0;
+        const plans = await db.Plan.findAll({
+            where: {
+                status: 0,
+            },
+            include: [
+                {
+                    model: db.User,
+                },
+            ],
+        });
+        for (let i = 0; i < plans.length; i++) {
+            // Send plan reminder emails
+            if (plans[i].startDate.toDateString() == tomorrow.toDateString()) {
+                if (!plans[i].User.notificationsPlans) {
+                    continue;
+                }
+                mailServer.add(plans[i].User.email, MailType.startPlan, {
+                    name: plans[i].User.name,
+                    planName: plans[i].name,
+                    planDescription: plans[i].description,
+                    length: daysBetween(plans[i].startDate, plans[i].endDate) + 1,
+                    startDate: getFormattedDate(plans[i].startDate, false, '/'),
+                    endDate: getFormattedDate(plans[i].endDate, false, '/'),
+                    id: plans[i].id,
+                });
+                countPlans++;
+            }
+            // Send rating reminder emails
+            else if (plans[i].startDate.addDays(1) <= today && today < plans[i].endDate.addDays(2)) {
+                if (!plans[i].User.notificationsRatings) {
+                    continue;
+                }
+                mailServer.add(plans[i].User.email, MailType.rateVisited, {
+                    name: plans[i].User.name,
+                });
+                countRatings++;
+            }
+        }
+        ApplicationLogger.logBase(
+            LogLevel.INFO,
+            0,
+            null,
+            null,
+            'cronjob/reminders',
+            null,
+            'Added ' + countPlans + ' plan reminder emails and ' + countRatings + ' rating reminder emails'
+        );
+    } catch (err) {
+        ApplicationLogger.logBase(
+            LogLevel.FATAL,
+            0,
+            null,
+            null,
+            'cronjob/reminders',
+            null,
+            'Errored @ ' + new Date() + ': ' + err
+        );
+    }
+
+    sendEmails()
+        .then((count) => {
+            ApplicationLogger.logBase(
+                LogLevel.INFO,
+                0,
+                null,
+                null,
+                'cronjob/emails',
+                null,
+                'Sent ' + count + ' emails'
+            );
+        })
+        .catch((err) => {
+            ApplicationLogger.logBase(
+                LogLevel.FATAL,
+                0,
+                null,
+                null,
+                'cronjob/emails',
+                null,
+                'Errored @ ' + new Date() + ': ' + err
+            );
+        });
+
     // Update active plans
     console.log(`[${new Date().toLocaleString()}] (cron.js) - Finishing active plans`);
     try {
@@ -170,9 +273,6 @@ async function main() {
         const plans = await db.Plan.findAll({
             where: {
                 status: 0,
-                endDate: {
-                    [Op.lt]: new Date(),
-                },
             },
             include: [
                 {
@@ -195,37 +295,39 @@ async function main() {
         });
         // Update every plan
         for (var i = 0; i < plans.length; i++) {
-            plans[i].status = 4;
-            await plans[i].save();
+            if (plans[i].endDate.addDays(1).toDateString() == today.toDateString()) {
+                plans[i].status = 4;
+                await plans[i].save();
 
-            // Traverse every plan item
-            for (var j = 0; j < plans[i].PlanItems.length; j++) {
-                const place = plans[i].PlanItems[j].Place;
-                if (!place) {
-                    continue;
-                }
-                // Finding all corresponding userViews and incrementing them
-                (
-                    await db.UserView.findAll({
-                        where: {
-                            UserId: plans[i].User.id,
-                            CategoryId: {
-                                [Op.in]: place.Categories.map((category) => {
-                                    return category.id;
-                                }),
+                // Traverse every plan item
+                for (var j = 0; j < plans[i].PlanItems.length; j++) {
+                    const place = plans[i].PlanItems[j].Place;
+                    if (!place) {
+                        continue;
+                    }
+                    // Finding all corresponding userViews and incrementing them
+                    (
+                        await db.UserView.findAll({
+                            where: {
+                                UserId: plans[i].User.id,
+                                CategoryId: {
+                                    [Op.in]: place.Categories.map((category) => {
+                                        return category.id;
+                                    }),
+                                },
                             },
-                        },
-                    })
-                ).forEach(async (userView) => {
-                    // Increment each view by one
-                    userView.views += 1;
-                    plans[i].User.views += 1;
-                    await userView.save();
-                });
-            }
-            await plans[i].User.save();
+                        })
+                    ).forEach(async (userView) => {
+                        // Increment each view by one
+                        userView.views += 1;
+                        plans[i].User.views += 1;
+                        await userView.save();
+                    });
+                }
+                await plans[i].User.save();
 
-            count++;
+                count++;
+            }
         }
         ApplicationLogger.logBase(LogLevel.INFO, 0, null, null, 'cronjob/plans', null, 'Updated ' + count + ' plans');
     } catch (err) {
@@ -235,111 +337,6 @@ async function main() {
             null,
             null,
             'cronjob/plans',
-            null,
-            'Errored @ ' + new Date() + ': ' + err
-        );
-    }
-
-    // Send plan reminder emails
-    console.log(`[${new Date().toLocaleString()}] (cron.js) - Sending plan reminder emails`);
-    try {
-        let count = 0;
-        const plans = await db.Plan.findAll({
-            where: {
-                status: 0,
-            },
-            include: [
-                {
-                    model: db.User,
-                },
-            ],
-        });
-        for (let i = 0; i < plans.length; i++) {
-            if (plans[i].startDate.toDateString() != tomorrow.toDateString()) {
-                continue;
-            }
-            if (!plans[i].User.notificationsPlans) {
-                continue;
-            }
-            mailServer.add(plans[i].User.email, MailType.startPlan, {
-                name: plans[i].User.name,
-                planName: plans[i].name,
-                planDescription: plans[i].description,
-                length: daysBetween(plans[i].startDate, plans[i].endDate) + 1,
-                startDate: getFormattedDate(plans[i].startDate, false, '/'),
-                endDate: getFormattedDate(plans[i].endDate, false, '/'),
-                id: plans[i].id,
-            });
-            mailServer.send();
-            sleep(1000);
-            count++;
-        }
-        ApplicationLogger.logBase(
-            LogLevel.INFO,
-            0,
-            null,
-            null,
-            'cronjob/reminder/plan',
-            null,
-            'Sent ' + count + ' plan reminder emails'
-        );
-    } catch (err) {
-        ApplicationLogger.logBase(
-            LogLevel.FATAL,
-            0,
-            null,
-            null,
-            'cronjob/reminder/plan',
-            null,
-            'Errored @ ' + new Date() + ': ' + err
-        );
-    }
-
-    // Send rating reminder emails
-    console.log(`[${new Date().toLocaleString()}] (cron.js) - Sending rating reminder emails`);
-    try {
-        let count = 0;
-        const plans = await db.Plan.findAll({
-            where: {
-                startDate: {
-                    [Op.gt]: today,
-                    [Op.lte]: today,
-                },
-            },
-            include: [
-                {
-                    model: db.User,
-                },
-            ],
-        });
-
-        for (let i = 0; i < plans.length; i++) {
-            if (!plans[i].User.notificationsRatings) {
-                continue;
-            }
-            mailServer.add(plans[i].User.email, MailType.rateVisited, {
-                name: plans[i].User.name,
-            });
-            mailServer.send();
-            sleep(1000);
-            count++;
-        }
-        ApplicationLogger.logBase(
-            LogLevel.INFO,
-            0,
-            null,
-            null,
-            'cronjob/reminder/ratings',
-            null,
-            'Sent ' + count + ' rating reminder emails'
-        );
-    } catch (err) {
-        ApplicationLogger.logBase(
-            LogLevel.FATAL,
-            0,
-            null,
-            null,
-            'cronjob/reminder/ratings',
             null,
             'Errored @ ' + new Date() + ': ' + err
         );
