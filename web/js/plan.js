@@ -250,7 +250,6 @@ function renderPlace(item) {
     card.querySelector('.maps').href = item.place.gmapsUrl;
     card.querySelector('.notes').value = item.notes;
     if (item.place.phone) {
-        card.querySelector('.phone').innerHTML = item.place.phone;
         card.querySelector('.phone').href = 'tel:' + item.place.phone.replace(' ', '');
     } else {
         card.querySelector('.phone').remove();
@@ -943,6 +942,10 @@ async function main() {
     });
 
     document.addEventListener('scroll', showHeader);
+    document.querySelector('#start-date').disabled = true;
+    document.querySelector('#name').disabled = true;
+    document.querySelector('#description').disabled = true;
+
 
     document.querySelector('#loader').addEventListener('shown.bs.modal', async function (event) {
         post(ENDPOINTS.plannerGet, { id: id })
