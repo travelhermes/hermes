@@ -7,7 +7,53 @@ const sequelize = new Sequelize(CONNECTION_STRING);
 /*
  * Tables
  */
-const log = {
+const AccessLog = sequelize.define('AccessLog', {
+    id: {
+        type: Sequelize.UUID,
+        defaultValue: Sequelize.UUIDV4,
+        allowNull: false,
+        unique: true,
+        primaryKey: true,
+    },
+    hostname: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    worker: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+    },
+    level: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+    },
+    userId: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+    },
+    ip: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
+    location: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
+    status: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
+    time: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: -1,
+    },
+    message: {
+        type: DataTypes.TEXT,
+        allowNull: true,
+    },
+});
+const ApplicationLog = sequelize.define('ApplicationLog', {
     id: {
         type: Sequelize.UUID,
         defaultValue: Sequelize.UUIDV4,
@@ -47,9 +93,7 @@ const log = {
         type: DataTypes.TEXT,
         allowNull: true,
     },
-};
-const AccessLog = sequelize.define('AccessLog', log);
-const ApplicationLog = sequelize.define('ApplicationLog', log);
+});
 
 const User = sequelize.define(
     'User',

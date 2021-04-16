@@ -76,6 +76,7 @@ if (cluster.isMaster) {
     // Declare error handling
     fastify.addHook('onSend', async (request, reply, payload) => {
         reply.header('X-Worker', cluster.worker.id);
+        request.endTime = new Date();
 
         if (reply.statusCode < 400) {
             AccessLogger.info(request, reply);
@@ -88,7 +89,7 @@ if (cluster.isMaster) {
 
         console.log(
             `[Worker ${cluster.worker.id}] [${new Date().toLocaleString()}] ${
-                new Date() - request.startTime
+                request.endTime - request.startTime
             }ms (Request) ${reply.statusCode} ${request.realIp} - ${request.url}`
         );
     });

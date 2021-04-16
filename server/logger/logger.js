@@ -28,6 +28,7 @@ class AccessLogger {
         const ip = request.realIp;
         const location = request.url;
         const status = reply.statusCode;
+        const time = request.endTime - request.startTime;
 
         db.AccessLog.create({
             level: level,
@@ -37,6 +38,7 @@ class AccessLogger {
             ip: ip,
             location: location,
             status: status,
+            time: time,
             message: JSON.stringify({
                 'user-agent': request.headers['user-agent'],
                 accept: request.headers.accept,
