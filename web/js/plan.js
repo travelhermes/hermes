@@ -932,7 +932,6 @@ function savePlan(button) {
     for (var i = 0; i < dates.length; i++) {
         var route = plan.days[i].route;
         for (var j = 0; j < route.length; j++) {
-            console.log(route[j].timeSpent);
             request.items.push({
                 order: j,
                 day: i,

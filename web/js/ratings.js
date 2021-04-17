@@ -180,7 +180,6 @@ function renderPlaces(places, container, remove = true, split = true) {
         }
 
         if (place.rating) {
-            console.log(place);
             setStars(document.getElementById(place.id).querySelector('.bi-star'), place.rating, false);
         }
     }
