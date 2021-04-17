@@ -75,6 +75,23 @@ async function renderPlaces(places, container, button) {
                 card.querySelector('.url').remove();
             }
 
+            card.querySelector('.stars').addEventListener('mouseout', (e) => {
+                unfillStars(e.target);
+            });
+            card.querySelector('.stars')
+                .querySelectorAll('.bi-star')
+                .forEach((item) => {
+                    item.addEventListener('click', (e) => {
+                        setStars(e.target, parseInt(item.getAttribute('data-index')));
+                    });
+                    item.addEventListener('mouseover', (e) => {
+                        fillStar(e.target, parseInt(item.getAttribute('data-index')));
+                    });
+                    item.addEventListener('mouseout', (e) => {
+                        unfillStars(e.target.parentElement);
+                    });
+                });
+
             container.appendChild(card);
         });
     } else {
@@ -96,6 +113,10 @@ async function renderPlaces(places, container, button) {
  */
 function fillStar(element, index) {
     const parent = element.parentElement;
+    if (parent.getAttribute('rated') == 'true') {
+        return;
+    }
+
     const stars = parent.querySelectorAll('.bi');
 
     for (let i = 0; i < stars.length; i++) {
@@ -115,6 +136,10 @@ function fillStar(element, index) {
  * @param  element Star element
  */
 function unfillStars(element) {
+    if (element.getAttribute('rated') == 'true') {
+        return;
+    }
+
     const stars = element.querySelectorAll('.bi');
 
     for (let i = 0; i < stars.length; i++) {
@@ -131,26 +156,22 @@ function unfillStars(element) {
  * @param {Boolean} send    (default: true) If true, sends a request to add rating to database.
  */
 async function setStars(element, index) {
-    fillStar(element, index);
     const parent = element.parentElement;
-    parent.classList.remove('active');
-    const stars = parent.querySelectorAll('.bi');
-
-    parent.onmouseout = null;
-    for (let i = 0; i < stars.length; i++) {
-        stars[i].onmouseover = null;
-        stars[i].onclick = null;
+    if (parent.getAttribute('rated') == 'true') {
+        return;
     }
 
     const id = element.closest('.card').getAttribute('id').replace('place-', '');
-
-    places.push({
-        id: parseInt(id),
-        rating: index,
-    });
-
     try {
         await post(ENDPOINTS.ratingCreate, { placeId: parseInt(id), rating: index });
+        fillStar(element, index);
+        parent.classList.remove('active');
+
+        parent.setAttribute('rated', true);
+        places.push({
+            id: parseInt(id),
+            rating: index,
+        });
     } catch (err) {
         throwError(err);
     }
@@ -274,6 +295,41 @@ function continueThirdStep() {
 }
 
 async function main() {
+    // Event listeners
+    document.querySelector('#step1').addEventListener('submit', (e) => {
+        e.preventDefault();
+        continueFirstStep(e.target);
+        return false;
+    });
+    document.querySelector('#step2').addEventListener('submit', (e) => {
+        e.preventDefault();
+        signup();
+        return false;
+    });
+    document.querySelector('#step3').addEventListener('submit', (e) => {
+        e.preventDefault();
+        continueThirdStep();
+        return false;
+    });
+    document.querySelector('#backButton1').addEventListener('click', (e) => {
+        backSecondStep(e.target);
+    });
+    document.querySelectorAll('.dropdown-item').forEach((item) => {
+        item.addEventListener('click', (e) => {
+            toggleCheckbox(e.target.closest('.dropdown-item'));
+        });
+    });
+    document.querySelector('#inputSubmitSearch').addEventListener('click', (e) => {
+        searchPlaces();
+    });
+    document.querySelector('#inputPlaces').addEventListener('click', (e) => {
+        loadPlaces();
+    });
+
+    document.querySelector('#inputEmail').addEventListener('change', (e) => {
+        document.querySelector('#invalidEmail').classList.add('d-none');
+    });
+
     loadPlaces();
 }
 

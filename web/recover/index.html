@@ -21,11 +21,11 @@
             <main class="mb-auto mt-auto">
                 <img class="mt-4" src="/assets/logo_light_256.png" alt="" width="128" height="128" />
 
-                <form class="form-recover" onsubmit="recover(this); return false;">
+                <form class="form-recover" id="recoverForm">
                     <div class="mb-3">
                         ¿Has recordado la contraseña? <a href="/signin/" class="text-white">Acceder</a>
                     </div>
-                    <div class="alert alert-danger d-none" role="alert" id="invalidLink" style="text-shadow: none">
+                    <div class="alert alert-danger d-none" role="alert" id="invalidLink">
                         Enlace de cambio de contraseña inválido
                     </div>
                     <div class="join">
@@ -44,7 +44,6 @@
                             class="form-control"
                             placeholder="Repetir contraseña"
                             required
-                            onkeyup="validate(this);"
                         />
                         <div class="mt-2 d-none" id="inputInvalid">
                             <i class="bi bi-exclamation-circle"></i> Las contraseñas no coinciden
@@ -62,21 +61,21 @@
                     Creado por
                     <a href="https://galisteo.me" class="text-white">Álvaro Galisteo</a><br />
                     <a href="/attributions/" class="text-white">Atribuciones</a> -
-                    <a href="/help/" class="text-white">Ayuda</a><br>
+                    <a href="/help/" class="text-white">Ayuda</a> -
+
+                    <a href="https://status.travelhermes.com" class="text-white">Estado</a><br>
                     <a href="/terms/" class="text-white">Terminos y condiciones</a> - 
                     <a href="/privacy/" class="text-white">Política de privacidad</a>
                 </p>
             </footer>
         </div>
 
+        <!-- Bootstrap -->
         <script src="/js/bootstrap.bundle.min.js"></script>
+
+        <!-- Hermes -->
         <script src="/js/common.js"></script>
         <script src="/js/recover.js"></script>
-        <script
-            async
-            defer
-            data-website-id="0f73de68-9610-4a9c-a7a8-ab61ab30208a"
-            src="https://u.fcld.ml/umami.js"
-        ></script>
+        <script async defer data-website-id="0f73de68-9610-4a9c-a7a8-ab61ab30208a" src="https://data.travelhermes.com/umami.js"></script>
     </body>
 </html>

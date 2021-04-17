@@ -19,7 +19,7 @@
     </head>
     <body class="d-flex flex-column min-vh-100">
         <div
-            class="modal fade"
+            class="modal fade show"
             id="loader"
             data-bs-backdrop="static"
             data-bs-keyboard="false"
@@ -50,9 +50,9 @@
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                         <button
                             type="button"
+                            id="deletePlan"
                             class="btn btn-danger"
                             original-data="Sí, estoy seguro"
-                            onclick="deletePlan(this);"
                         >
                             Sí, estoy seguro
                         </button>
@@ -165,7 +165,9 @@
                 Creado por
                 <a href="https://galisteo.me">Álvaro Galisteo</a><br />
                 <a href="/attributions/">Atribuciones</a> -
-                <a href="/help/">Ayuda</a><br>
+                <a href="/help/">Ayuda</a> -
+
+                <a href="https://status.travelhermes.com">Estado</a><br>
                 <a href="/terms/">Terminos y condiciones</a> -
                 <a href="/privacy/">Política de privacidad</a>
             </p>
@@ -262,14 +264,12 @@
             </div>
         </template>
 
+        <!-- Bootstrap -->
         <script src="/js/bootstrap.bundle.min.js"></script>
+
+        <!-- Hermes -->
         <script src="/js/common.js"></script>
         <script src="/js/plans.js"></script>
-        <script
-            async
-            defer
-            data-website-id="0f73de68-9610-4a9c-a7a8-ab61ab30208a"
-            src="https://u.fcld.ml/umami.js"
-        ></script>
+        <script async defer data-website-id="0f73de68-9610-4a9c-a7a8-ab61ab30208a" src="https://data.travelhermes.com/umami.js"></script>
     </body>
 </html>

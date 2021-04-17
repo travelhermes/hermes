@@ -20,7 +20,7 @@
     </head>
     <body class="d-flex flex-column min-vh-100">
         <div
-            class="modal fade"
+            class="modal fade show"
             id="loader"
             data-bs-backdrop="static"
             data-bs-keyboard="false"
@@ -98,8 +98,8 @@
                         <button
                             type="button"
                             class="btn btn-danger"
+                            id="deletePlan"
                             original-data="Sí, estoy seguro"
-                            onclick="deletePlan(this);"
                         >
                             Sí, estoy seguro
                         </button>
@@ -110,7 +110,7 @@
 
         <div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="searchModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-dialog-scrollabl">
-                <form class="modal-content">
+                <form class="modal-content" id="searchForm">
                     <div class="modal-header">
                         <h5 class="modal-title" id="searchModalLabel">Insertar lugar</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
@@ -131,8 +131,8 @@
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                         <button
                             type="submit"
+                            id="searchButton"
                             class="btn btn-primary"
-                            onclick="search(this); return false;"
                             original-data="Buscar"
                         >
                             Buscar
@@ -154,7 +154,7 @@
             <div class="w-100 text-white px-3 py-2 d-none" id="headerInfo" style="min-height: 52px;">
                 <div class="fs-4 d-inline-block" id="headerName"></div>
                 <div class="ms-3 btn-group edit-mode-hide" role="group" aria-label="Acciones" id="actions" style="margin-top: -15px;">
-                    <button type="button" class="btn btn-sm btn-secondary" id="editButtonHeader" onclick="edit = true; editMode();">
+                    <button type="button" class="btn btn-sm btn-secondary" id="editButtonHeader">
                         <i class="mx-md-1 bi bi-pencil-fill"></i>
                     </button>
                     <button
@@ -170,13 +170,13 @@
                 <div class="ms-3 btn-group d-none edit-mode-show" role="group" aria-label="Acciones" id="actions" style="margin-top: -15px;">
                     <button
                         type="button"
+                        id="saveButtonHeader"
                         class="btn btn-sm btn-success"
-                        onclick="savePlan(this);"
                         original-data="<i class='mx-md-1 bi bi-save'></i>"
                     >
                         <i class="mx-md-1 bi bi-save"></i>
                     </button>
-                    <button type="button" class="btn btn-sm btn-secondary" onclick="edit = false; cancelEdit();">
+                    <button type="button" class="btn btn-sm btn-secondary" id="cancelButtonHeader">
                         <i class="mx-md-1 bi bi-x-circle"></i>
                     </button>
                 </div>
@@ -247,7 +247,6 @@
                         disabled
                         id="start-date"
                         style="width: 150px"
-                        onchange="updateDates(this);"
                     />
                     <i class="mx-md-1 bi bi-arrow-right"></i>
                     <input
@@ -265,7 +264,6 @@
                 id="name"
                 class="form-control fs-1 w-75 text-center d-inline-block mb-1 mx-2 edit-mode-disable"
                 disabled
-                onkeyup="renderHeaderName(this.value);"
             />
             <textarea
                 type="text"
@@ -281,7 +279,7 @@
                     <i class="mx-md-1 bi bi-arrow-down"></i>
                     Ir al plan
                 </a>
-                <button type="button" class="btn btn-secondary" id="editButton" onclick="edit = true; editMode();">
+                <button type="button" class="btn btn-secondary" id="editButton">
                     <i class="mx-md-1 bi bi-pencil-fill"></i>
                     Editar
                 </button>
@@ -300,13 +298,13 @@
                 <button
                     type="button"
                     class="btn btn-success"
-                    onclick="savePlan(this);"
+                    id="saveButton"
                     original-data="<i class='mx-md-1 bi bi-save'></i>Guardar"
                 >
                     <i class="mx-md-1 bi bi-save"></i>
                     Guardar
                 </button>
-                <button type="button" class="btn btn-secondary" onclick="edit = false; cancelEdit();">
+                <button type="button" class="btn btn-secondary" id="cancelButton">
                     <i class="mx-md-1 bi bi-x-circle"></i>
                     Cancelar
                 </button>
@@ -320,8 +318,6 @@
                         id="prev"
                         type="button"
                         class="btn btn-outline-secondary"
-                        id="prevButton"
-                        onclick="prevDay(this)"
                     >
                         <i class="mx-md-1 bi bi-arrow-left"></i>
                         <span class="d-none d-lg-inline"> Anterior día </span>
@@ -330,8 +326,6 @@
                         id="next"
                         type="button"
                         class="btn btn-outline-secondary"
-                        id="nextButton"
-                        onclick="nextDay(this)"
                     >
                         <span class="d-none d-lg-inline"> Siguiente día </span>
                         <i class="mx-md-1 bi bi-arrow-right"></i>
@@ -352,7 +346,9 @@
                 Creado por
                 <a href="https://galisteo.me">Álvaro Galisteo</a><br />
                 <a href="/attributions/">Atribuciones</a> -
-                <a href="/help/">Ayuda</a><br>
+                <a href="/help/">Ayuda</a> -
+
+                <a href="https://status.travelhermes.com">Estado</a><br>
                 <a href="/terms/">Terminos y condiciones</a> -
                 <a href="/privacy/">Política de privacidad</a>
             </p>
@@ -391,7 +387,6 @@
                                         disabled
                                         min="15"
                                         step="1"
-                                        onchange="updateCustomTime(this)"
                                     />
                                     minutos
                                 </div>
@@ -400,21 +395,7 @@
                                     <a href="#" target="_blank" class="btn btn-outline-success phone">
                                         <i class="bi bi-telephone-fill"></i>
                                     </a>
-                                    <a href="#" target="_blank" class="btn btn-outline-secondary wiki">
-                                        <svg
-                                            style="height: 16px"
-                                            aria-hidden="true"
-                                            focusable="false"
-                                            role="img"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            viewBox="0 0 640 512"
-                                        >
-                                            <path
-                                                fill="currentColor"
-                                                d="M640 51.2l-.3 12.2c-28.1.8-45 15.8-55.8 40.3-25 57.8-103.3 240-155.3 358.6H415l-81.9-193.1c-32.5 63.6-68.3 130-99.2 193.1-.3.3-15 0-15-.3C172 352.3 122.8 243.4 75.8 133.4 64.4 106.7 26.4 63.4.2 63.7c0-3.1-.3-10-.3-14.2h161.9v13.9c-19.2 1.1-52.8 13.3-43.3 34.2 21.9 49.7 103.6 240.3 125.6 288.6 15-29.7 57.8-109.2 75.3-142.8-13.9-28.3-58.6-133.9-72.8-160-9.7-17.8-36.1-19.4-55.8-19.7V49.8l142.5.3v13.1c-19.4.6-38.1 7.8-29.4 26.1 18.9 40 30.6 68.1 48.1 104.7 5.6-10.8 34.7-69.4 48.1-100.8 8.9-20.6-3.9-28.6-38.6-29.4.3-3.6 0-10.3.3-13.6 44.4-.3 111.1-.3 123.1-.6v13.6c-22.5.8-45.8 12.8-58.1 31.7l-59.2 122.8c6.4 16.1 63.3 142.8 69.2 156.7L559.2 91.8c-8.6-23.1-36.4-28.1-47.2-28.3V49.6l127.8 1.1.2.5z"
-                                            ></path>
-                                        </svg>
-                                    </a>
+                                    <a href="#" target="_blank" class="btn btn-outline-secondary wiki"><i class="fab fa-wikipedia-w"></i></a>
                                     <a href="#" target="_blank" class="btn btn-outline-success link">
                                         <i class="bi bi-link-45deg"></i>
                                     </a>
@@ -433,13 +414,12 @@
                                     Ver en Google Maps
                                 </a>
                                 <div class="btn-group edit-mode-show d-none" role="group" aria-label="Acciones">
-                                    <button onclick="removeItem(this)" class="btn btn-outline-danger remove">
+                                    <button class="btn btn-outline-danger remove">
                                         <i class="mx-md-1 bi bi-trash-fill"></i>
                                         <span class="d-none d-lg-inline"> Eliminar </span>
                                     </button>
                                 </div>
                                 <textarea
-                                    onchange="updateNotes(this)"
                                     placeholder="Notas"
                                     class="edit-mode-disable notes w-100 d-block form-control mt-2"
                                     disabled
@@ -452,20 +432,19 @@
                 <div class="h6 text-muted time-end edit-mode-hide"></div>
                 <div class="my-3 text-center edit-mode-show d-none">
                     <button
-                        class="btn btn-primary my-1"
-                        onclick="openInsertPlace(this);"
+                        class="btn btn-primary my-1 insert-place"
                         data-bs-toggle="modal"
                         data-bs-target="#searchModal"
                     >
                         <i class="bi bi-geo-alt-fill me-1"></i>Insertar lugar
                     </button>
-                    <button class="btn btn-primary my-1" onclick="insertCustom(this)">
+                    <button class="btn btn-primary my-1 insert-custom">
                         <i class="bi bi-plus-circle me-1"></i>Insertar personalizado
                     </button>
-                    <button class="btn btn-primary my-1" onclick="insertRest(this)">
+                    <button class="btn btn-primary my-1 insert-rest">
                         <i class="bi bi-tree-fill me-1"></i>Insertar descanso
                     </button>
-                    <button class="btn btn-primary my-1" onclick="insertWait(this)">
+                    <button class="btn btn-primary my-1 insert-wait">
                         <i class="bi bi-hourglass-split me-1"></i>Insertar espera
                     </button>
                 </div>
@@ -495,20 +474,19 @@
                 <div class="h6 text-muted time-end edit-mode-hide"></div>
                 <div class="my-3 text-center edit-mode-show d-none">
                     <button
-                        class="btn btn-primary my-1"
-                        onclick="openInsertPlace(this);"
+                        class="btn btn-primary my-1 insert-place"
                         data-bs-toggle="modal"
                         data-bs-target="#searchModal"
                     >
                         <i class="bi bi-geo-alt-fill me-1"></i>Insertar lugar
                     </button>
-                    <button class="btn btn-primary my-1" onclick="insertCustom(this)">
+                    <button class="btn btn-primary my-1 insert-custom">
                         <i class="bi bi-plus-circle me-1"></i>Insertar personalizado
                     </button>
-                    <button class="btn btn-primary my-1" onclick="insertRest(this)">
+                    <button class="btn btn-primary my-1 insert-rest">
                         <i class="bi bi-tree-fill me-1"></i>Insertar descanso
                     </button>
-                    <button class="btn btn-primary my-1" onclick="insertWait(this)">
+                    <button class="btn btn-primary my-1 insert-wait">
                         <i class="bi bi-hourglass-split me-1"></i>Insertar espera
                     </button>
                 </div>
@@ -535,7 +513,6 @@
                                         disabled
                                         min="15"
                                         step="1"
-                                        onchange="updateCustomTime(this)"
                                     />
                                     minutos
                                 </div>
@@ -548,7 +525,7 @@
                                     role="group"
                                     aria-label="Acciones"
                                 >
-                                    <button onclick="removeItem(this)" class="btn btn-outline-danger remove">
+                                    <button class="btn btn-outline-danger remove">
                                         <i class="mx-md-1 bi bi-trash-fill"></i>
                                         <span class="d-none d-lg-inline"> Eliminar </span>
                                     </button>
@@ -560,20 +537,19 @@
                 <div class="h6 text-muted time-end edit-mode-hide"></div>
                 <div class="my-3 text-center edit-mode-show d-none">
                     <button
-                        class="btn btn-primary my-1"
-                        onclick="openInsertPlace(this);"
+                        class="btn btn-primary my-1 insert-place"
                         data-bs-toggle="modal"
                         data-bs-target="#searchModal"
                     >
                         <i class="bi bi-geo-alt-fill me-1"></i>Insertar lugar
                     </button>
-                    <button class="btn btn-primary my-1" onclick="insertCustom(this)">
+                    <button class="btn btn-primary my-1 insert-custom">
                         <i class="bi bi-plus-circle me-1"></i>Insertar personalizado
                     </button>
-                    <button class="btn btn-primary my-1" onclick="insertRest(this)">
+                    <button class="btn btn-primary my-1 insert-rest">
                         <i class="bi bi-tree-fill me-1"></i>Insertar descanso
                     </button>
-                    <button class="btn btn-primary my-1" onclick="insertWait(this)">
+                    <button class="btn btn-primary my-1 insert-wait">
                         <i class="bi bi-hourglass-split me-1"></i>Insertar espera
                     </button>
                 </div>
@@ -600,7 +576,6 @@
                                         disabled
                                         min="15"
                                         step="1"
-                                        onchange="updateCustomTime(this)"
                                     />
                                     minutos
                                 </div>
@@ -612,13 +587,12 @@
                                     role="group"
                                     aria-label="Acciones"
                                 >
-                                    <button onclick="removeItem(this)" class="btn btn-outline-danger remove">
+                                    <button class="btn btn-outline-danger remove">
                                         <i class="mx-md-1 bi bi-trash-fill"></i>
                                         <span class="d-none d-lg-inline"> Eliminar </span>
                                     </button>
                                 </div>
                                 <textarea
-                                    onchange="updateNotes(this)"
                                     placeholder="Notas"
                                     class="edit-mode-disable notes w-100 d-block form-control mt-2 mb-1 me-2"
                                     disabled
@@ -631,20 +605,19 @@
                 <div class="h6 text-muted time-end edit-mode-hide"></div>
                 <div class="my-3 text-center edit-mode-show d-none">
                     <button
-                        class="btn btn-primary my-1"
-                        onclick="openInsertPlace(this);"
+                        class="btn btn-primary my-1 insert-place"
                         data-bs-toggle="modal"
                         data-bs-target="#searchModal"
                     >
                         <i class="bi bi-geo-alt-fill me-1"></i>Insertar lugar
                     </button>
-                    <button class="btn btn-primary my-1" onclick="insertCustom(this)">
+                    <button class="btn btn-primary my-1 insert-custom">
                         <i class="bi bi-plus-circle me-1"></i>Insertar personalizado
                     </button>
-                    <button class="btn btn-primary my-1" onclick="insertRest(this)">
+                    <button class="btn btn-primary my-1 insert-rest">
                         <i class="bi bi-tree-fill me-1"></i>Insertar descanso
                     </button>
-                    <button class="btn btn-primary my-1" onclick="insertWait(this)">
+                    <button class="btn btn-primary my-1 insert-wait">
                         <i class="bi bi-hourglass-split me-1"></i>Insertar espera
                     </button>
                 </div>
@@ -679,7 +652,6 @@
                                         disabled
                                         min="15"
                                         step="1"
-                                        onchange="updateCustomTime(this)"
                                     />
                                     minutos
                                 </div>
@@ -688,13 +660,12 @@
                                     de Hermes.
                                 </p>
                                 <div class="btn-group edit-mode-show d-none my-2" role="group" aria-label="Acciones">
-                                    <button onclick="removeItem(this)" class="btn btn-outline-danger remove">
+                                    <button class="btn btn-outline-danger remove">
                                         <i class="mx-md-1 bi bi-trash-fill"></i>
                                         <span class="d-none d-lg-inline"> Eliminar </span>
                                     </button>
                                 </div>
                                 <textarea
-                                    onchange="updateNotes(this)"
                                     placeholder="Notas"
                                     class="edit-mode-disable notes w-100 d-block form-control"
                                     disabled
@@ -707,20 +678,19 @@
                 <div class="h6 text-muted time-end edit-mode-hide"></div>
                 <div class="my-3 text-center edit-mode-show d-none">
                     <button
-                        class="btn btn-primary my-1"
-                        onclick="openInsertPlace(this);"
+                        class="btn btn-primary my-1 insert-place"
                         data-bs-toggle="modal"
                         data-bs-target="#searchModal"
                     >
                         <i class="bi bi-geo-alt-fill me-1"></i>Insertar lugar
                     </button>
-                    <button class="btn btn-primary my-1" onclick="insertCustom(this)">
+                    <button class="btn btn-primary my-1 insert-custom">
                         <i class="bi bi-plus-circle me-1"></i>Insertar personalizado
                     </button>
-                    <button class="btn btn-primary my-1" onclick="insertRest(this)">
+                    <button class="btn btn-primary my-1 insert-rest">
                         <i class="bi bi-tree-fill me-1"></i>Insertar descanso
                     </button>
-                    <button class="btn btn-primary my-1" onclick="insertWait(this)">
+                    <button class="btn btn-primary my-1 insert-wait">
                         <i class="bi bi-hourglass-split me-1"></i>Insertar espera
                     </button>
                 </div>
@@ -791,20 +761,7 @@
                 <div class="card-header">
                     <h3 class="my-0">
                         <span class="title"> </span>
-                        <a href="" target="_blank" class="wikipedia text-primary">
-                            <svg
-                                style="height: 24px; margin-left: 15px; text-decoration: none; padding-bottom: 5px"
-                                aria-hidden="true"
-                                focusable="false"
-                                role="img"
-                                xmlns="http://www.w3.org/2000/svg"
-                                viewBox="0 0 640 512"
-                            >
-                                <path
-                                    fill="currentColor"
-                                    d="M640 51.2l-.3 12.2c-28.1.8-45 15.8-55.8 40.3-25 57.8-103.3 240-155.3 358.6H415l-81.9-193.1c-32.5 63.6-68.3 130-99.2 193.1-.3.3-15 0-15-.3C172 352.3 122.8 243.4 75.8 133.4 64.4 106.7 26.4 63.4.2 63.7c0-3.1-.3-10-.3-14.2h161.9v13.9c-19.2 1.1-52.8 13.3-43.3 34.2 21.9 49.7 103.6 240.3 125.6 288.6 15-29.7 57.8-109.2 75.3-142.8-13.9-28.3-58.6-133.9-72.8-160-9.7-17.8-36.1-19.4-55.8-19.7V49.8l142.5.3v13.1c-19.4.6-38.1 7.8-29.4 26.1 18.9 40 30.6 68.1 48.1 104.7 5.6-10.8 34.7-69.4 48.1-100.8 8.9-20.6-3.9-28.6-38.6-29.4.3-3.6 0-10.3.3-13.6 44.4-.3 111.1-.3 123.1-.6v13.6c-22.5.8-45.8 12.8-58.1 31.7l-59.2 122.8c6.4 16.1 63.3 142.8 69.2 156.7L559.2 91.8c-8.6-23.1-36.4-28.1-47.2-28.3V49.6l127.8 1.1.2.5z"
-                                ></path></svg
-                        ></a>
+                        <a href="" target="_blank" class="wikipedia text-primary"><i class="fab fa-wikipedia-w"></i></a>
                         <a href="" target="_blank" class="url text-primary">
                             <i class="bi bi-link-45deg"></i>
                         </a>
@@ -827,8 +784,7 @@
                             <div class="btn-group" role="group" aria-label="Acciones">
                                 <button
                                     type="button"
-                                    class="btn btn-primary"
-                                    onclick="insertPlace(this);"
+                                    class="btn btn-primary insert-button"
                                     data-bs-dismiss="modal"
                                 >
                                     <i class="bi bi-plus-circle me-1"></i>
@@ -888,18 +844,21 @@
             </div>
         </template>
 
+        <!-- Bootstrap -->
         <script src="/js/bootstrap.bundle.min.js"></script>
+
+        <!-- Fontawesome -->
         <script src="/js/fontawesome.min.js"></script>
         <script src="/js/fa-solid.min.js"></script>
+        <script src="/js/fa-brands.min.js"></script>
+
+        <!-- Leaflet -->
         <script src="/js/leaflet.js"></script>
         <script src="/js/leaflet.curve.js"></script>
+
+        <!-- Hermes -->
         <script src="/js/common.js"></script>
         <script src="/js/plan.js"></script>
-        <script
-            async
-            defer
-            data-website-id="0f73de68-9610-4a9c-a7a8-ab61ab30208a"
-            src="https://u.fcld.ml/umami.js"
-        ></script>
+        <script async defer data-website-id="0f73de68-9610-4a9c-a7a8-ab61ab30208a" src="https://data.travelhermes.com/umami.js"></script>
     </body>
 </html>

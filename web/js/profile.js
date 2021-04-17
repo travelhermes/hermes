@@ -193,6 +193,45 @@ async function main() {
         focus: true,
     });
     loader.show();
+
+    // Event listeners
+    document.querySelector('#inputDeleteSubmit').addEventListener('click', (e) => {
+        deleteAccount(e.target.closest('.btn'));
+    });
+    document.querySelector('#notificationsForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        updateNotifications(e.target);
+        return false;
+    });
+    document.querySelector('#accountForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        save(e.target);
+        return false;
+    });
+    document.querySelectorAll('.dropdown-item').forEach((item) => {
+        item.addEventListener('click', (e) => {
+            toggleCheckbox(e.target.closest('.dropdown-item'));
+        });
+    });
+    document.querySelector('#logout').addEventListener('click', (e) => {
+        localStorage.clear();
+    });
+    document.querySelector('#inputPassword2').addEventListener('keyup', (e) => {
+        validate(e.target);
+    });
+    document.querySelector('#passwordForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        change(e.target);
+        return false;
+    });
+    document.querySelector('#logoutSessions').addEventListener('click', (e) => {
+        closeAllSessions(e.target.closest('.btn'));
+    });
+    document.querySelector('#download').addEventListener('click', (e) => {
+        downloadData(e.target.closest('.btn'));
+    });
+
+    // Data fetch
     document.querySelector('#loader').addEventListener('shown.bs.modal', async function (event) {
         try {
             const res = await get(ENDPOINTS.accountInfo);
@@ -206,6 +245,7 @@ async function main() {
 
             res.preferences.forEach((preference) => {
                 document.querySelector('#cat-' + preference).checked = true;
+                document.querySelector('#cat-' + preference).closest('.dropdown-item').setAttribute('checked', 'true');
             });
             loader.hide();
         } catch (err) {
@@ -215,4 +255,6 @@ async function main() {
     });
 }
 
-window.onload = () => { main(); };
+window.onload = () => {
+    main();
+};

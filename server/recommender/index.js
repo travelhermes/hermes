@@ -251,7 +251,8 @@ exports.generateCBRecommendations = async function (user) {
     const userId = user.id;
 
     // Get preferences
-    const preferences = (
+    const userViews = {};
+    (
         await db.UserCategory.findAll({
             attributes: ['CategoryId'],
             where: {
@@ -264,7 +265,6 @@ exports.generateCBRecommendations = async function (user) {
     });
 
     // Get UserViews
-    const userViews = {};
     (
         await db.UserView.findAll({
             where: {

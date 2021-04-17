@@ -55,3 +55,18 @@ async function recover(form) {
 
     return false;
 }
+
+function main() {
+    document.querySelector('#inputPassword2').addEventListener('keyup', (e) => {
+        validate(e.target);
+    });
+    document.querySelector('#recoverForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        recover(e.target);
+        return false;
+    });
+}
+
+window.onload = () => {
+    main();
+};

@@ -149,7 +149,7 @@ class AuthMiddleware {
 
             if (
                 !request.url.includes('/help') &&
-                (request.url.includes('/signin') || request.url.includes('/signup'))
+                (request.url.includes('/signin') || request.url.includes('/signup') || request.url.includes('/recover'))
             ) {
                 reply.redirect('/dashboard/');
                 return;

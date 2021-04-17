@@ -19,14 +19,14 @@
     </head>
     <body>
         <div
-            class="modal fade"
+            class="modal fade show"
             id="loader"
             data-bs-backdrop="static"
             data-bs-keyboard="false"
             tabindex="-1"
             aria-hidden="true"
         >
-            <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-dialog modal-dialog-centered modal">
                 <div class="modal-content text-center py-5">
                     <div class="spinner-border mx-auto" role="status">
                         <span class="visually-hidden">Cargando...</span>
@@ -97,7 +97,6 @@
                         <button
                             type="button"
                             class="btn btn-danger"
-                            onclick="deleteAccount(this);"
                             id="inputDeleteSubmit"
                             original-data="Eliminar mi cuenta"
                         >
@@ -246,7 +245,7 @@
                 </ul>
                 <div class="tab-content" id="profileContent">
                     <div class="tab-pane fade show active" id="notifications" role="tabpanel" aria-labelledby="notifications-tab">
-                        <form class="notifications-form" class="mt-5" onsubmit="updateNotifications(this); return false;">
+                        <form class="notifications-form" class="mt-5" id="notificationsForm">
                             <div class="container px-0 mx-0 mt-3">
                                 <h3 class="mt-3">Administrar notificaciones</h3>
                                 <p class="w-100 text-muted mb-0">
@@ -281,7 +280,7 @@
                         </form>
                     </div>
                     <div class="tab-pane fade" id="basic" role="tabpanel" aria-labelledby="basic-tab">
-                        <form id="account-form" class="mt-3" onsubmit="save(this); return false;">
+                        <form class="account-form" class="mt-3" id="accountForm">
                             <div class="container px-0 mx-0">
                                 <h3 class="mt-3">Datos de contacto</h3>
                                 <div class="row">
@@ -317,11 +316,7 @@
                                                             data-bs-toggle="dropdown"
                                                             aria-expanded="false"
                                                         >
-                                                            <i
-                                                                class="bi bi-life-preserver"
-                                                                style="margin-right: 5px"
-                                                            ></i
-                                                            ><br />
+                                                            <i class="bi bi-life-preserver"></i><br />
                                                             Agua y costas
                                                         </button>
                                                         <ul
@@ -329,29 +324,26 @@
                                                             aria-labelledby="inputCategoriesWater"
                                                             id="dropdownCategoriesWater"
                                                         >
-                                                            <li class="dropdown-item" onclick="toggleCheckbox(this);">
+                                                            <li class="dropdown-item">
                                                                 <input
                                                                     type="checkbox"
                                                                     class="form-check-input me-1"
-                                                                    style="margin-left: 0.75rem"
                                                                     id="cat-45"
                                                                 />
                                                                 <label> Bahía </label>
                                                             </li>
-                                                            <li class="dropdown-item" onclick="toggleCheckbox(this);">
+                                                            <li class="dropdown-item">
                                                                 <input
                                                                     type="checkbox"
                                                                     class="form-check-input me-1"
-                                                                    style="margin-left: 0.75rem"
                                                                     id="cat-24"
                                                                 />
                                                                 <label> Faro </label>
                                                             </li>
-                                                            <li class="dropdown-item" onclick="toggleCheckbox(this);">
+                                                            <li class="dropdown-item">
                                                                 <input
                                                                     type="checkbox"
                                                                     class="form-check-input me-1"
-                                                                    style="margin-left: 0.75rem"
                                                                     id="cat-16"
                                                                 />
                                                                 <label> Lago </label>
@@ -368,37 +360,33 @@
                                                             data-bs-toggle="dropdown"
                                                             aria-expanded="false"
                                                         >
-                                                            <i class="fas fa-paw" style="margin-right: 5px"></i
-                                                            ><br />Animales
+                                                            <i class="fas fa-paw"></i><br />Animales
                                                         </button>
                                                         <ul
                                                             class="dropdown-menu"
                                                             aria-labelledby="inputCategoriesAnimals"
                                                             id="dropdownCategoriesAnimals"
                                                         >
-                                                            <li class="dropdown-item" onclick="toggleCheckbox(this);">
+                                                            <li class="dropdown-item">
                                                                 <input
                                                                     type="checkbox"
                                                                     class="form-check-input me-1"
-                                                                    style="margin-left: 0.75rem"
                                                                     id="cat-39"
                                                                 />
                                                                 <label> Acuario </label>
                                                             </li>
-                                                            <li class="dropdown-item" onclick="toggleCheckbox(this);">
+                                                            <li class="dropdown-item">
                                                                 <input
                                                                     type="checkbox"
                                                                     class="form-check-input me-1"
-                                                                    style="margin-left: 0.75rem"
                                                                     id="cat-35"
                                                                 />
                                                                 <label> Exibición zoologica </label>
                                                             </li>
-                                                            <li class="dropdown-item" onclick="toggleCheckbox(this);">
+                                                            <li class="dropdown-item">
                                                                 <input
                                                                     type="checkbox"
                                                                     class="form-check-input me-1"
-                                                                    style="margin-left: 0.75rem"
                                                                     id="cat-10"
                                                                 />
                                                                 <label> Zoológico </label>
@@ -425,29 +413,26 @@
                                                             aria-labelledby="inputCategoriesPublicArt"
                                                             id="dropdownCategoriesPublicArt"
                                                         >
-                                                            <li class="dropdown-item" onclick="toggleCheckbox(this);">
+                                                            <li class="dropdown-item">
                                                                 <input
                                                                     type="checkbox"
                                                                     class="form-check-input me-1"
-                                                                    style="margin-left: 0.75rem"
                                                                     id="cat-18"
                                                                 />
                                                                 <label> Arte callejero </label>
                                                             </li>
-                                                            <li class="dropdown-item" onclick="toggleCheckbox(this);">
+                                                            <li class="dropdown-item">
                                                                 <input
                                                                     type="checkbox"
                                                                     class="form-check-input me-1"
-                                                                    style="margin-left: 0.75rem"
                                                                     id="cat-12"
                                                                 />
                                                                 <label> Arte público </label>
                                                             </li>
-                                                            <li class="dropdown-item" onclick="toggleCheckbox(this);">
+                                                            <li class="dropdown-item">
                                                                 <input
                                                                     type="checkbox"
                                                                     class="form-check-input me-1"
-                                                                    style="margin-left: 0.75rem"
                                                                     id="cat-4"
                                                                 />
                                                                 <label> Esculturas al aire libre </label>
@@ -472,47 +457,42 @@
                                                             aria-labelledby="inputCategoriesArts"
                                                             id="dropdownCategoriesArts"
                                                         >
-                                                            <li class="dropdown-item" onclick="toggleCheckbox(this);">
+                                                            <li class="dropdown-item">
                                                                 <input
                                                                     type="checkbox"
                                                                     class="form-check-input me-1"
-                                                                    style="margin-left: 0.75rem"
                                                                     id="cat-50"
                                                                 />
                                                                 <label> Anfiteatros </label>
                                                             </li>
-                                                            <li class="dropdown-item" onclick="toggleCheckbox(this);">
+                                                            <li class="dropdown-item">
                                                                 <input
                                                                     type="checkbox"
                                                                     class="form-check-input me-1"
-                                                                    style="margin-left: 0.75rem"
                                                                     id="cat-29"
                                                                 />
                                                                 <label> Auditorios </label>
                                                             </li>
-                                                            <li class="dropdown-item" onclick="toggleCheckbox(this);">
+                                                            <li class="dropdown-item">
                                                                 <input
                                                                     type="checkbox"
                                                                     class="form-check-input me-1"
-                                                                    style="margin-left: 0.75rem"
                                                                     id="cat-1"
                                                                 />
                                                                 <label> Sala de conciertos </label>
                                                             </li>
-                                                            <li class="dropdown-item" onclick="toggleCheckbox(this);">
+                                                            <li class="dropdown-item">
                                                                 <input
                                                                     type="checkbox"
                                                                     class="form-check-input me-1"
-                                                                    style="margin-left: 0.75rem"
                                                                     id="cat-6"
                                                                 />
                                                                 <label> Salón de ópera </label>
                                                             </li>
-                                                            <li class="dropdown-item" onclick="toggleCheckbox(this);">
+                                                            <li class="dropdown-item">
                                                                 <input
                                                                     type="checkbox"
                                                                     class="form-check-input me-1"
-                                                                    style="margin-left: 0.75rem"
                                                                     id="cat-51"
                                                                 />
                                                                 <label> Teatros </label>
@@ -539,11 +519,10 @@
                                                             aria-labelledby="inputCategoriesSports"
                                                             id="dropdownCategoriesSports"
                                                         >
-                                                            <li class="dropdown-item" onclick="toggleCheckbox(this);">
+                                                            <li class="dropdown-item">
                                                                 <input
                                                                     type="checkbox"
                                                                     class="form-check-input me-1"
-                                                                    style="margin-left: 0.75rem"
                                                                     id="cat-17"
                                                                 />
                                                                 <label> Estadios </label>
@@ -568,65 +547,58 @@
                                                             aria-labelledby="inputCategoriesMonuments"
                                                             id="dropdownCategoriesMonuments"
                                                         >
-                                                            <li class="dropdown-item" onclick="toggleCheckbox(this);">
+                                                            <li class="dropdown-item">
                                                                 <input
                                                                     type="checkbox"
                                                                     class="form-check-input me-1"
-                                                                    style="margin-left: 0.75rem"
                                                                     id="cat-28"
                                                                 />
                                                                 <label> Castillo </label>
                                                             </li>
-                                                            <li class="dropdown-item" onclick="toggleCheckbox(this);">
+                                                            <li class="dropdown-item">
                                                                 <input
                                                                     type="checkbox"
                                                                     class="form-check-input me-1"
-                                                                    style="margin-left: 0.75rem"
                                                                     id="cat-7"
                                                                 />
                                                                 <label> Cueva </label>
                                                             </li>
-                                                            <li class="dropdown-item" onclick="toggleCheckbox(this);">
+                                                            <li class="dropdown-item">
                                                                 <input
                                                                     type="checkbox"
                                                                     class="form-check-input me-1"
-                                                                    style="margin-left: 0.75rem"
                                                                     id="cat-13"
                                                                 />
                                                                 <label> Lugares conmemorativos </label>
                                                             </li>
-                                                            <li class="dropdown-item" onclick="toggleCheckbox(this);">
+                                                            <li class="dropdown-item">
                                                                 <input
                                                                     type="checkbox"
                                                                     class="form-check-input me-1"
-                                                                    style="margin-left: 0.75rem"
                                                                     id="cat-44"
                                                                 />
                                                                 <label> Lugares históricos </label>
                                                             </li>
-                                                            <li class="dropdown-item" onclick="toggleCheckbox(this);">
+                                                            <li class="dropdown-item">
                                                                 <input
                                                                     type="checkbox"
                                                                     class="form-check-input me-1"
-                                                                    style="margin-left: 0.75rem"
                                                                     id="cat-25"
                                                                 />
                                                                 <label> Monumentos </label>
                                                             </li>
-                                                            <li class="dropdown-item" onclick="toggleCheckbox(this);">
+                                                            <li class="dropdown-item">
                                                                 <input
                                                                     type="checkbox"
                                                                     class="form-check-input me-1"
-                                                                    style="margin-left: 0.75rem"
                                                                     id="cat-38"
                                                                 />
                                                                 <label> Palacios </label>
                                                             </li>
-                                                            <li class="dropdown-item" onclick="toggleCheckbox(this);">
+                                                            <li class="dropdown-item">
                                                                 <input
                                                                     type="checkbox"
                                                                     class="form-check-input me-1"
-                                                                    style="margin-left: 0.75rem"
                                                                     id="cat-48"
                                                                 />
                                                                 <label> Puente </label>
@@ -653,29 +625,26 @@
                                                             aria-labelledby="inputCategoriesGovernment"
                                                             id="dropdownCategoriesGovernment"
                                                         >
-                                                            <li class="dropdown-item" onclick="toggleCheckbox(this);">
+                                                            <li class="dropdown-item">
                                                                 <input
                                                                     type="checkbox"
                                                                     class="form-check-input me-1"
-                                                                    style="margin-left: 0.75rem"
                                                                     id="cat-22"
                                                                 />
                                                                 <label> Ayuntamientos </label>
                                                             </li>
-                                                            <li class="dropdown-item" onclick="toggleCheckbox(this);">
+                                                            <li class="dropdown-item">
                                                                 <input
                                                                     type="checkbox"
                                                                     class="form-check-input me-1"
-                                                                    style="margin-left: 0.75rem"
                                                                     id="cat-27"
                                                                 />
                                                                 <label> Capitolio </label>
                                                             </li>
-                                                            <li class="dropdown-item" onclick="toggleCheckbox(this);">
+                                                            <li class="dropdown-item">
                                                                 <input
                                                                     type="checkbox"
                                                                     class="form-check-input me-1"
-                                                                    style="margin-left: 0.75rem"
                                                                     id="cat-42"
                                                                 />
                                                                 <label> Juntas municipales </label>
@@ -700,29 +669,26 @@
                                                             aria-labelledby="inputCategoriesGardens"
                                                             id="dropdownCategoriesGardens"
                                                         >
-                                                            <li class="dropdown-item" onclick="toggleCheckbox(this);">
+                                                            <li class="dropdown-item">
                                                                 <input
                                                                     type="checkbox"
                                                                     class="form-check-input me-1"
-                                                                    style="margin-left: 0.75rem"
                                                                     id="cat-3"
                                                                 />
                                                                 <label> Jardínes botánicos </label>
                                                             </li>
-                                                            <li class="dropdown-item" onclick="toggleCheckbox(this);">
+                                                            <li class="dropdown-item">
                                                                 <input
                                                                     type="checkbox"
                                                                     class="form-check-input me-1"
-                                                                    style="margin-left: 0.75rem"
                                                                     id="cat-31"
                                                                 />
                                                                 <label> Jardínes de esculturas </label>
                                                             </li>
-                                                            <li class="dropdown-item" onclick="toggleCheckbox(this);">
+                                                            <li class="dropdown-item">
                                                                 <input
                                                                     type="checkbox"
                                                                     class="form-check-input me-1"
-                                                                    style="margin-left: 0.75rem"
                                                                     id="cat-9"
                                                                 />
                                                                 <label> Jardínes públicos </label>
@@ -749,74 +715,66 @@
                                                             aria-labelledby="inputCategoriesCult"
                                                             id="dropdownCategoriesCult"
                                                         >
-                                                            <li class="dropdown-item" onclick="toggleCheckbox(this);">
+                                                            <li class="dropdown-item">
                                                                 <input
                                                                     type="checkbox"
                                                                     class="form-check-input me-1"
-                                                                    style="margin-left: 0.75rem"
                                                                     id="cat-21"
                                                                 />
                                                                 <label> Cementerios </label>
                                                             </li>
-                                                            <li class="dropdown-item" onclick="toggleCheckbox(this);">
+                                                            <li class="dropdown-item">
                                                                 <input
                                                                     type="checkbox"
                                                                     class="form-check-input me-1"
-                                                                    style="margin-left: 0.75rem"
                                                                     id="cat-41"
                                                                 />
                                                                 <label> Iglesias </label>
                                                             </li>
-                                                            <li class="dropdown-item" onclick="toggleCheckbox(this);">
+                                                            <li class="dropdown-item">
                                                                 <input
                                                                     type="checkbox"
                                                                     class="form-check-input me-1"
-                                                                    style="margin-left: 0.75rem"
                                                                     id="cat-2"
                                                                 />
                                                                 <label> Mezquitas </label>
                                                             </li>
-                                                            <li class="dropdown-item" onclick="toggleCheckbox(this);">
+                                                            <li class="dropdown-item">
                                                                 <input
                                                                     type="checkbox"
                                                                     class="form-check-input me-1"
-                                                                    style="margin-left: 0.75rem"
                                                                     id="cat-30"
                                                                 />
                                                                 <label> Monasterios </label>
                                                             </li>
-                                                            <li class="dropdown-item" onclick="toggleCheckbox(this);">
+                                                            <li class="dropdown-item">
                                                                 <input
                                                                     type="checkbox"
                                                                     class="form-check-input me-1"
-                                                                    style="margin-left: 0.75rem"
                                                                     id="cat-34"
                                                                 />
                                                                 <label> Santuarios </label>
                                                             </li>
-                                                            <li class="dropdown-item" onclick="toggleCheckbox(this);">
+                                                            <li class="dropdown-item">
                                                                 <input
                                                                     type="checkbox"
                                                                     class="form-check-input me-1"
-                                                                    style="margin-left: 0.75rem"
                                                                     id="cat-26"
                                                                 />
                                                                 <label> Sinagogas </label>
                                                             </li>
-                                                            <li class="dropdown-item" onclick="toggleCheckbox(this);">
+                                                            <li class="dropdown-item">
                                                                 <input
                                                                     type="checkbox"
                                                                     class="form-check-input me-1"
-                                                                    style="margin-left: 0.75rem"
                                                                     id="cat-32"
                                                                 />
                                                                 <label> Templos budistas </label>
                                                             </li>
-                                                            <li class="dropdown-item" onclick="toggleCheckbox(this);">
+                                                            <li class="dropdown-item">
                                                                 <input
                                                                     type="checkbox"
                                                                     class="form-check-input me-1"
-                                                                    style="margin-left: 0.75rem"
                                                                     id="cat-47"
                                                                 />
                                                                 <label> Templos Sikh </label>
@@ -841,47 +799,42 @@
                                                             aria-labelledby="inputCategoriesPublic"
                                                             id="dropdownCategoriesPublic"
                                                         >
-                                                            <li class="dropdown-item" onclick="toggleCheckbox(this);">
+                                                            <li class="dropdown-item">
                                                                 <input
                                                                     type="checkbox"
                                                                     class="form-check-input me-1"
-                                                                    style="margin-left: 0.75rem"
                                                                     id="cat-40"
                                                                 />
                                                                 <label> Fuentes </label>
                                                             </li>
-                                                            <li class="dropdown-item" onclick="toggleCheckbox(this);">
+                                                            <li class="dropdown-item">
                                                                 <input
                                                                     type="checkbox"
                                                                     class="form-check-input me-1"
-                                                                    style="margin-left: 0.75rem"
                                                                     id="cat-11"
                                                                 />
                                                                 <label> Mercados </label>
                                                             </li>
-                                                            <li class="dropdown-item" onclick="toggleCheckbox(this);">
+                                                            <li class="dropdown-item">
                                                                 <input
                                                                     type="checkbox"
                                                                     class="form-check-input me-1"
-                                                                    style="margin-left: 0.75rem"
                                                                     id="cat-49"
                                                                 />
                                                                 <label> Parque </label>
                                                             </li>
-                                                            <li class="dropdown-item" onclick="toggleCheckbox(this);">
+                                                            <li class="dropdown-item">
                                                                 <input
                                                                     type="checkbox"
                                                                     class="form-check-input me-1"
-                                                                    style="margin-left: 0.75rem"
                                                                     id="cat-5"
                                                                 />
                                                                 <label> Plazas peatonales </label>
                                                             </li>
-                                                            <li class="dropdown-item" onclick="toggleCheckbox(this);">
+                                                            <li class="dropdown-item">
                                                                 <input
                                                                     type="checkbox"
                                                                     class="form-check-input me-1"
-                                                                    style="margin-left: 0.75rem"
                                                                     id="cat-37"
                                                                 />
                                                                 <label> Plazas públicas </label>
@@ -908,20 +861,18 @@
                                                             aria-labelledby="inputCategoriesLookouts"
                                                             id="dropdownCategoriesLookouts"
                                                         >
-                                                            <li class="dropdown-item" onclick="toggleCheckbox(this);">
+                                                            <li class="dropdown-item">
                                                                 <input
                                                                     type="checkbox"
                                                                     class="form-check-input me-1"
-                                                                    style="margin-left: 0.75rem"
                                                                     id="cat-19"
                                                                 />
                                                                 <label> Miradores elevados </label>
                                                             </li>
-                                                            <li class="dropdown-item" onclick="toggleCheckbox(this);">
+                                                            <li class="dropdown-item">
                                                                 <input
                                                                     type="checkbox"
                                                                     class="form-check-input me-1"
-                                                                    style="margin-left: 0.75rem"
                                                                     id="cat-15"
                                                                 />
                                                                 <label> Miradores </label>
@@ -946,56 +897,50 @@
                                                             aria-labelledby="inputCategoriesMuseums"
                                                             id="dropdownCategoriesMuseums"
                                                         >
-                                                            <li class="dropdown-item" onclick="toggleCheckbox(this);">
+                                                            <li class="dropdown-item">
                                                                 <input
                                                                     type="checkbox"
                                                                     class="form-check-input me-1"
-                                                                    style="margin-left: 0.75rem"
                                                                     id="cat-23"
                                                                 />
                                                                 <label> Galerías de arte </label>
                                                             </li>
-                                                            <li class="dropdown-item" onclick="toggleCheckbox(this);">
+                                                            <li class="dropdown-item">
                                                                 <input
                                                                     type="checkbox"
                                                                     class="form-check-input me-1"
-                                                                    style="margin-left: 0.75rem"
                                                                     id="cat-14"
                                                                 />
                                                                 <label> Museos de arte </label>
                                                             </li>
-                                                            <li class="dropdown-item" onclick="toggleCheckbox(this);">
+                                                            <li class="dropdown-item">
                                                                 <input
                                                                     type="checkbox"
                                                                     class="form-check-input me-1"
-                                                                    style="margin-left: 0.75rem"
                                                                     id="cat-36"
                                                                 />
                                                                 <label> Museos de ciencia </label>
                                                             </li>
-                                                            <li class="dropdown-item" onclick="toggleCheckbox(this);">
+                                                            <li class="dropdown-item">
                                                                 <input
                                                                     type="checkbox"
                                                                     class="form-check-input me-1"
-                                                                    style="margin-left: 0.75rem"
                                                                     id="cat-43"
                                                                 />
                                                                 <label> Museos de historia </label>
                                                             </li>
-                                                            <li class="dropdown-item" onclick="toggleCheckbox(this);">
+                                                            <li class="dropdown-item">
                                                                 <input
                                                                     type="checkbox"
                                                                     class="form-check-input me-1"
-                                                                    style="margin-left: 0.75rem"
                                                                     id="cat-33"
                                                                 />
                                                                 <label> Museos eróticos </label>
                                                             </li>
-                                                            <li class="dropdown-item" onclick="toggleCheckbox(this);">
+                                                            <li class="dropdown-item">
                                                                 <input
                                                                     type="checkbox"
                                                                     class="form-check-input me-1"
-                                                                    style="margin-left: 0.75rem"
                                                                     id="cat-20"
                                                                 />
                                                                 <label> Planetario </label>
@@ -1024,11 +969,11 @@
                         </form>
                         <div class="mt-3">
                             <h3 class="mt-5">Cerrar sesión</h3>
-                            <a href="/api/auth/logout" onclick="localStorage.clear()" class="btn btn-danger">Cerrar sesión</a>
+                            <a href="/api/auth/logout" id="logout" class="btn btn-danger">Cerrar sesión</a>
                         </div>
                     </div>
                     <div class="tab-pane fade" id="security" role="tabpanel" aria-labelledby="security-tab">
-                        <form class="security-form" class="mt-5" onsubmit="change(this); return false;">
+                        <form class="security-form" class="mt-5" id="passwordForm">
                             <div class="container px-0 mx-0 mt-3">
                                 <h3 class="mt-3">Cambiar contraseña</h3>
                                 <div class="row">
@@ -1045,7 +990,6 @@
                                             type="password"
                                             id="inputPassword2"
                                             class="form-control"
-                                            onkeyup="validate(this);"
                                             required
                                         />
                                         <div class="text-danger d-none" id="inputInvalid">
@@ -1071,7 +1015,7 @@
                             <button
                                 class="btn btn-danger"
                                 original-data="Cerrar todas las sesiones"
-                                onclick="closeAllSessions(this);"
+                                id="logoutSessions"
                             >
                                 Cerrar todas las sesiones
                             </button>
@@ -1086,8 +1030,8 @@
                             <button
                                 type="button"
                                 class="btn btn-secondary"
-                                onclick="downloadData(this);"
                                 original-data="Descargar mis datos"
+                                id="download"
                             >
                                 Descargar mis datos
                             </button>
@@ -1122,23 +1066,25 @@
                 Creado por
                 <a href="https://galisteo.me">Álvaro Galisteo</a><br />
                 <a href="/attributions/">Atribuciones</a> -
-                <a href="/help/">Ayuda</a><br>
+                <a href="/help/">Ayuda</a> -
+
+                <a href="https://status.travelhermes.com">Estado</a><br>
                 <a href="/terms/">Terminos y condiciones</a> -
                 <a href="/privacy/">Política de privacidad</a>
             </p>
         </footer>
 
-        <!-- JS -->
+        <!-- Bootstrap -->
         <script src="/js/bootstrap.bundle.min.js"></script>
-        <script src="/js/common.js"></script>
-        <script src="/js/profile.js"></script>
+
+        <!-- Fontawesome -->
         <script src="/js/fontawesome.min.js"></script>
         <script src="/js/fa-solid.min.js"></script>
-        <script
-            async
-            defer
-            data-website-id="0f73de68-9610-4a9c-a7a8-ab61ab30208a"
-            src="https://u.fcld.ml/umami.js"
-        ></script>
+        <script src="/js/fa-brands.min.js"></script>
+
+        <!-- Hermes -->
+        <script src="/js/common.js"></script>
+        <script src="/js/profile.js"></script>
+        <script async defer data-website-id="0f73de68-9610-4a9c-a7a8-ab61ab30208a" src="https://data.travelhermes.com/umami.js"></script>
     </body>
 </html>

@@ -76,6 +76,7 @@ if (cluster.isMaster) {
     // Declare error handling
     fastify.addHook('onSend', async (request, reply, payload) => {
         reply.header('X-Worker', cluster.worker.id);
+
         request.endTime = new Date();
 
         if (reply.statusCode < 400) {
@@ -106,20 +107,29 @@ if (cluster.isMaster) {
 
     // Declare Security Headers, cookies and rate limiting
     fastify.register(fastifyHelmet, {
-        contentSecurityPolicy: false,
-        // {
-        //     directives: {
-        //         "default-src": ["'self'"],
-        //         "img-src": ["'self'"],
-        //         "unsafe-inline": ["'self'"],
-        //         "base-uri": ["'self'"],
-        //         "form-action": ["'self'"],
-        //         "script-src": ["'self'", 'https://hcaptcha.com', 'https://*.hcaptcha.com'],
-        //         "frame-src": ['https://hcaptcha.com', 'https://*.hcaptcha.com'],
-        //         "style-src": ["'self'", 'https://hcaptcha.com', 'https://*.hcaptcha.com'],
-        //         "connect-src": ["'self'", 'https://hcaptcha.com', 'https://*.hcaptcha.com'],
-        //     },
-        // },
+        contentSecurityPolicy: {
+            directives: {
+                'base-uri': ["'self'"],
+                'connect-src': ["'self'", 'travelhermes.com', '*.travelhermes.com'],
+                'default-src': ["'self'"],
+                'font-src': ["'self'"],
+                'frame-src': ["'self'", 'https://*.hcaptcha.com'],
+                'img-src': ["'self'", 'data:', 'travelhermes.com', '*.travelhermes.com'],
+                'manifest-src': ["'self'"],
+                'media-src': ["'self'"],
+                'object-src': ["'none'"],
+                'script-src': [
+                    "'self'",
+                    //"'unsafe-inline'",
+                    'hcaptcha.com',
+                    '*.hcaptcha.com',
+                    'travelhermes.com',
+                    '*.travelhermes.com',
+                ],
+                'style-src': ["'self'", "'unsafe-inline'"],
+                'worker-src': ["'none'"],
+            },
+        },
     });
     fastify.register(fastifyCors, {
         origin: [/\.galisteo\.me$/, /\.hcaptcha\.com$/],

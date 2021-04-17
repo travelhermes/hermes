@@ -14,10 +14,6 @@ body {
 /*
  * Base structure
  */
-body {
-    text-shadow: 0 0.05rem 0.1rem rgba(0, 0, 0, 0.5);
-}
-
 .cover-container {
     max-width: 42em;
 }

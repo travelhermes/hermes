@@ -55,7 +55,7 @@ function recover(form) {
         .then((res) => {
             setDoneButton(document.querySelector('#inputSubmitRecover'));
             document.querySelector('#cooldownReset').classList.add('d-none');
-            recoverModal.hide();
+            //recoverModal.hide();
         })
         .catch((err) => {
             unsetLoadButton(document.querySelector('#inputSubmitRecover'));
@@ -63,9 +63,26 @@ function recover(form) {
                 document.querySelector('#cooldownReset').classList.remove('d-none');
             } else {
                 throwError(err);
-                recoverModal.hide();
+                //recoverModal.hide();
             }
         });
 
     return false;
 }
+
+function main() {
+    document.querySelector('#recoverForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        recover(e.target);
+        return false;
+    });
+    document.querySelector('#signinForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        signin(e.target);
+        return false;
+    });
+}
+
+window.onload = () => {
+    main();
+};

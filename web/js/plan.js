@@ -384,6 +384,36 @@ function renderPlan(plan, day) {
             card.querySelector('.time-start').remove();
         }
 
+        if(card.querySelector('.time')) {
+            card.querySelector('.time').addEventListener('change', (e) => {
+                updateCustomTime(e.target);
+            });
+        }
+        if(card.querySelector('.remove')) {
+            card.querySelector('.remove').addEventListener('click', (e) => {
+                removeItem(e.target.closest('.btn'));
+            });
+        }
+        if(card.querySelector('.notes')) {
+            card.querySelector('.notes').addEventListener('change', (e) => {
+                updateNotes(e.target);
+            });
+        }
+
+        // Insertion buttons
+        card.querySelector('.insert-place').addEventListener('click', (e) => {
+            openInsertPlace(e.target.closest('.btn'));
+        });
+        card.querySelector('.insert-custom').addEventListener('click', (e) => {
+            insertCustom(e.target.closest('.btn'));
+        });
+        card.querySelector('.insert-rest').addEventListener('click', (e) => {
+            insertRest(e.target.closest('.btn'));
+        });
+        card.querySelector('.insert-wait').addEventListener('click', (e) => {
+            insertWait(e.target.closest('.btn'));
+        });
+
         if (
             item.type != 1 &&
             item.type != 2 &&
@@ -711,11 +741,9 @@ async function search(button) {
 }
 
 /**
- * Given a place list and a container, renders the places into the container
+ * Given a place list and a container, renders the places into the (search) container
  * @param  {Array<object>}  places  Places array
  * @param  {HTMLElement}  container Parent container
- * @param  {Boolean} remove    (default: true) If true, enables remove button
- * @param  {Boolean} split     (default: true) If true, renders in columns
  */
 function renderInsertPlaces(places, container) {
     container.innerHTML = '';
@@ -740,6 +768,10 @@ function renderInsertPlaces(places, container) {
 
         card.querySelector('.title').innerHTML = place.name;
         card.querySelector('.description').innerHTML = place.description;
+
+        card.querySelector('.insert-button').addEventListener('click', (e) => {
+            insertPlace(e.target.closest('.btn'));
+        });
 
         if (place.wikipedia) {
             card.querySelector('.wikipedia').href = 'https://wikipedia.org/wiki/' + place.wikipedia;
@@ -818,8 +850,8 @@ function insertItem(type, index) {
         timeSpent: 0,
         travelNext: null,
         type: type,
-        lat: place.lat,
-        lon: place.lon,
+        lat: null,
+        lon: null,
     });
     renderPlan(plan, currentDay);
     editMode(document.querySelector('#planning'));
@@ -946,6 +978,49 @@ async function main() {
     document.querySelector('#name').disabled = true;
     document.querySelector('#description').disabled = true;
 
+    // Event listeners
+    document.querySelector('#deletePlan').addEventListener('click', (e) => {
+        deletePlan(e.target.closest('.btn'));
+    });
+    document.querySelector('#searchForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        search(e.target.querySelector('#searchButton'));
+        return false;
+    });
+    document.querySelector('#editButtonHeader').addEventListener('click', (e) => {
+        edit = true; 
+        editMode();
+    });
+    document.querySelector('#editButton').addEventListener('click', (e) => {
+        edit = true; 
+        editMode();
+    });
+    document.querySelector('#saveButtonHeader').addEventListener('click', (e) => {
+        savePlan(e.target.closest('.btn'));
+    });
+    document.querySelector('#saveButton').addEventListener('click', (e) => {
+        savePlan(e.target.closest('.btn'));
+    });
+    document.querySelector('#cancelButtonHeader').addEventListener('click', (e) => {
+        edit = false; 
+        cancelEdit();
+    });
+    document.querySelector('#cancelButton').addEventListener('click', (e) => {
+        edit = false; 
+        cancelEdit();
+    });
+    document.querySelector('#start-date').addEventListener('change', (e) => {
+        updateDates(e.target);
+    });
+    document.querySelector('#name').addEventListener('keyup', (e) => {
+        renderHeaderName(e.target.value);
+    });
+    document.querySelector('#prev').addEventListener('click', (e) => {
+        prevDay(e.target);
+    });
+    document.querySelector('#next').addEventListener('click', (e) => {
+        nextDay(e.target);
+    });
 
     document.querySelector('#loader').addEventListener('shown.bs.modal', async function (event) {
         post(ENDPOINTS.plannerGet, { id: id })

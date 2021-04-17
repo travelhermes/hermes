@@ -180,7 +180,7 @@ class AccountController {
             reply.status(200).send({
                 user: {
                     name: user.name,
-                    surname: user.name,
+                    surname: user.surname,
                     email: user.email,
                 },
                 notifications: {

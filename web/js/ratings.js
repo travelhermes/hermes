@@ -9,6 +9,10 @@ var modified = false;
  */
 function fillStar(element, index) {
     const parent = element.parentElement;
+    if (parent.getAttribute('rated') == 'true') {
+        return;
+    }
+
     const stars = parent.querySelectorAll('.bi');
 
     for (let i = 0; i < stars.length; i++) {
@@ -28,6 +32,10 @@ function fillStar(element, index) {
  * @param  element Star element
  */
 function unfillStars(element) {
+    if (element.getAttribute('rated') == 'true') {
+        return;
+    }
+
     const stars = element.querySelectorAll('.bi');
 
     for (let i = 0; i < stars.length; i++) {
@@ -44,24 +52,22 @@ function unfillStars(element) {
  * @param {Boolean} send    (default: true) If true, sends a request to add rating to database.
  */
 async function setStars(element, index, send = true) {
-    fillStar(element, index);
     const parent = element.parentElement;
-    parent.classList.remove('active');
-    const stars = parent.querySelectorAll('.bi');
-
-    parent.onmouseout = null;
-    for (let i = 0; i < stars.length; i++) {
-        stars[i].onmouseover = null;
-        stars[i].onclick = null;
+    if (parent.getAttribute('rated') == 'true') {
+        return;
     }
+    const id = element.closest('.card').getAttribute('id').replace('place-', '');
 
-    if (send) {
-        const id = parseInt(parent.closest('.card').getAttribute('id'));
-        try {
-            await post(ENDPOINTS.ratingCreate, { placeId: id, rating: index });
-        } catch (err) {
-            throwError(err);
+    try {
+        if (send) {
+            await post(ENDPOINTS.ratingCreate, { placeId: parseInt(id), rating: index });
         }
+        fillStar(element, index);
+        parent.classList.remove('active');
+
+        parent.setAttribute('rated', true);
+    } catch (err) {
+        throwError(err);
     }
 }
 
@@ -140,7 +146,28 @@ function renderPlaces(places, container, remove = true, split = true) {
 
         if (!remove) {
             card.querySelector('.btn-group').remove();
+        } else {
+            card.querySelector('.delete').addEventListener('click', (e) => {
+                del(e.target.closest('.btn'));
+            });
         }
+
+        card.querySelector('.stars').addEventListener('mouseout', (e) => {
+            unfillStars(e.target);
+        });
+        card.querySelector('.stars')
+            .querySelectorAll('.bi-star')
+            .forEach((item) => {
+                item.addEventListener('click', (e) => {
+                    setStars(e.target, parseInt(item.getAttribute('data-index')));
+                });
+                item.addEventListener('mouseover', (e) => {
+                    fillStar(e.target, parseInt(item.getAttribute('data-index')));
+                });
+                item.addEventListener('mouseout', (e) => {
+                    unfillStars(e.target.parentElement);
+                });
+            });
 
         if (split) {
             if (i % 2 == 0) {
@@ -153,6 +180,7 @@ function renderPlaces(places, container, remove = true, split = true) {
         }
 
         if (place.rating) {
+            console.log(place);
             setStars(document.getElementById(place.id).querySelector('.bi-star'), place.rating, false);
         }
     }
@@ -185,6 +213,25 @@ async function main() {
         focus: true,
     });
     loader.show();
+
+    document.querySelectorAll('.close').forEach((btn) => {
+        btn.addEventListener('click', async (e) => {
+            window.location.reload();
+            // try {
+            //     const res = await get(ENDPOINTS.ratingsGet, {});
+            //     renderPlaces(res.pending, document.querySelector('#pendingRatings'), false);
+            //     renderPlaces(res.done, document.querySelector('#completedRatings'));
+            // } catch (err) {
+            //     throwError(err);
+            // }
+        });
+    });
+    document.querySelector('#searchForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        search(e.target.querySelector('#btnSubmitSearch'));
+        return false;
+    });
+
     document.querySelector('#loader').addEventListener('shown.bs.modal', async function (event) {
         try {
             const res = await get(ENDPOINTS.ratingsGet, {});
@@ -199,4 +246,6 @@ async function main() {
     });
 }
 
-window.onload = () => { main(); };
+window.onload = () => {
+    main();
+};

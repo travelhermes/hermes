@@ -125,6 +125,7 @@ class RatingsController {
             return;
         }
 
+        const user = await Session.getSessionUser(request);
         const place = await db.Place.findOne({
             where: {
                 id: request.body.placeId,
@@ -142,10 +143,21 @@ class RatingsController {
             return;
         }
 
-        const user = await Session.getSessionUser(request);
+        const rating = await db.Rating.findOne({
+            where: {
+                PlaceId: request.body.placeId,
+                UserId: user.id,
+            }
+        });
+
+        if (rating) {
+            reply.status(400).send();
+            return;
+        }
+
         if (user) {
             // Create rating
-            db.Rating.create({
+            await db.Rating.create({
                 PlaceId: place.id,
                 UserId: user.id,
                 rating: request.body.rating,

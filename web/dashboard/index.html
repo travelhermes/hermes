@@ -38,7 +38,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                        <button type="button" class="btn btn-danger" onclick="clearPlan();" data-bs-dismiss="modal">
+                        <button type="button" id="clearPlan" class="btn btn-danger" data-bs-dismiss="modal">
                             Vaciar plan
                         </button>
                     </div>
@@ -55,7 +55,7 @@
             aria-hidden="true"
         >
             <div class="modal-dialog modal-dialog-centered">
-                <form class="modal-content" onsubmit="createPlan(); return false;">
+                <form class="modal-content" id="createPlan">
                     <div class="modal-header">
                         <h5 class="modal-title" id="createPlanModalLabel">Crear plan</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -72,7 +72,6 @@
                                     role="tab"
                                     aria-controls="info"
                                     aria-selected="true"
-                                    onclick="getDayHeuristic()"
                                 >
                                     1. Información
                                 </button>
@@ -87,7 +86,6 @@
                                     role="tab"
                                     aria-controls="times"
                                     aria-selected="true"
-                                    onclick="getDayHeuristic()"
                                 >
                                     2. Horas
                                 </button>
@@ -102,7 +100,6 @@
                                     role="tab"
                                     aria-controls="start"
                                     aria-selected="false"
-                                    onclick="setTimeout(function(){startMap.invalidateSize();},500);getDayHeuristic()"
                                 >
                                     3. Lugar de inicio
                                 </button>
@@ -117,7 +114,6 @@
                                     role="tab"
                                     aria-controls="days"
                                     aria-selected="false"
-                                    onclick="getDayHeuristic()"
                                 >
                                     4. Días
                                 </button>
@@ -132,7 +128,7 @@
                                 aria-labelledby="info-tab"
                             >
                                 <label for="planName" class="form-label fs-5 mt-1">Nombre del plan</label>
-                                <input type="text" class="form-control" id="planName" required onkeyup="checkInfo();" />
+                                <input type="text" class="form-control" id="planName" required />
                                 <div class="text-danger d-none mt-1" id="planNameValidation">
                                     Por favor, introduce un nombre
                                 </div>
@@ -146,7 +142,6 @@
                                         type="button"
                                         id="infoNextButton"
                                         disabled
-                                        onclick="document.querySelector('#times-tab').click();"
                                     >
                                         Siguiente<i class="bi bi-arrow-right-short ms-1"></i>
                                     </button>
@@ -167,7 +162,6 @@
                                                 type="time"
                                                 class="form-control"
                                                 id="timeStart"
-                                                onchange="checkTimes(this);"
                                                 required
                                             />
                                         </div>
@@ -179,7 +173,6 @@
                                                 type="time"
                                                 class="form-control"
                                                 id="timeEnd"
-                                                onchange="checkTimes(this);"
                                                 required
                                             />
                                         </div>
@@ -200,7 +193,6 @@
                                         type="button"
                                         id="timesNextButton"
                                         disabled
-                                        onclick="document.querySelector('#start-tab').click();"
                                     >
                                         Siguiente<i class="bi bi-arrow-right-short ms-1"></i>
                                     </button>
@@ -223,7 +215,6 @@
                                         type="button"
                                         id="startNextButton"
                                         disabled
-                                        onclick="document.querySelector('#days-tab').click();"
                                     >
                                         Siguiente<i class="bi bi-arrow-right-short ms-1"></i>
                                     </button>
@@ -253,7 +244,6 @@
                                             class="form-control"
                                             id="daysStart"
                                             required
-                                            onchange="checkDays();"
                                         />
                                     </div>
                                     <div class="col col-6">
@@ -263,7 +253,6 @@
                                             class="form-control"
                                             id="daysEnd"
                                             required
-                                            onchange="checkDays();"
                                         />
                                     </div>
                                 </div>
@@ -315,7 +304,6 @@
                     id="searchInput"
                     data-bs-toggle="dropdown"
                     aria-expanded="false"
-                    onkeyup="searchPlaces(this);"
                 />
                 <ul class="dropdown-menu w-100" aria-labelledby="searchInput" id="searchDropdown" style="
                     box-shadow: 0px 6px 16px 0px rgba(0,0,0,0.70);
@@ -435,7 +423,6 @@
                                 data-bs-placement="top"
                                 data-bs-original-title="Selecciona al menos 3 lugares antes de planificar"
                                 title="Selecciona al menos 3 lugares antes de planificar"
-                                onclick="getDayHeuristic()"
                             >
                                 Planificar
                                 <div class="text-white" style="font-size: 0.75rem !important">
@@ -457,10 +444,9 @@
         -->
         <!-- Sidebar Card -->
         <template id="templateCard">
-            <div class="card place-card" id="" onclick="selectPlaceByElement(this);">
+            <div class="card place-card">
                 <button
                     class="btn btn-sm btn-outline-danger position-absolute end-0 me-3 mt-3 remove d-none"
-                    onclick="removeFromPlan(this);"
                 >
                     <i class="bi bi-calendar2-x"></i>
                 </button>
@@ -537,8 +523,8 @@
                     </div>
                 </div>
                 <div class="fs-6 my-3 text-center actions">
-                    <button class="w-100 btn btn-primary add-to-plan" onclick="addToPlan(this);">Añadir al plan</button>
-                    <button class="w-100 btn btn-danger remove-from-plan d-none" onclick="removeFromPlan(this);">
+                    <button class="w-100 btn btn-primary add-to-plan">Añadir al plan</button>
+                    <button class="w-100 btn btn-danger remove-from-plan d-none">
                         Eliminar del plan
                     </button>
                 </div>
@@ -548,7 +534,7 @@
         <!-- Search item template -->
         <template id="templateSearchItem">
             <li>
-                <a class="dropdown-item text-wrap" href="#" onclick="displaySearchResult(this);">
+                <a class="dropdown-item text-wrap" href="#">
                     <b class="title"></b>
                     <div class="text-muted d-inline ms-1 categories"></div>
                     <div class="description"></div>
@@ -556,17 +542,21 @@
             </li>
         </template>
 
-        <!-- JS -->
+        <!-- Bootstrap -->
         <script src="/js/bootstrap.bundle.min.js"></script>
-        <script src="/js/common.js"></script>
+
+        <!-- Fontawesome -->
+        <script src="/js/fontawesome.min.js"></script>
+        <script src="/js/fa-solid.min.js"></script>
+        <script src="/js/fa-brands.min.js"></script>
+
+        <!-- Leaflet -->
         <script src="/js/leaflet.js"></script>
         <script src="/js/leaflet-icons.js"></script>
+
+        <!-- Hermes -->
+        <script src="/js/common.js"></script>
         <script src="/js/dashboard.js"></script>
-        <script
-            async
-            defer
-            data-website-id="0f73de68-9610-4a9c-a7a8-ab61ab30208a"
-            src="https://u.fcld.ml/umami.js"
-        ></script>
+        <script async defer data-website-id="0f73de68-9610-4a9c-a7a8-ab61ab30208a" src="https://data.travelhermes.com/umami.js"></script>
     </body>
 </html>

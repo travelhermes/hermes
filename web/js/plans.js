@@ -159,6 +159,11 @@ async function main() {
         });
     }
     loader.show();
+
+    // Event listeners
+    document.querySelector('#deletePlan').addEventListener('click', (e) => {
+        deletePlan(e.target.closest('.btn'));
+    });
     document.querySelector('#loader').addEventListener('shown.bs.modal', async function (event) {
         get(ENDPOINTS.plannerList)
             .then((res) => {

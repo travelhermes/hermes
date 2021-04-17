@@ -139,13 +139,23 @@ function createMarkerContent(place, added = false) {
         }
     }
 
+    content.querySelector('.add-to-plan').addEventListener('click', (e) => {
+        addToPlan(e.target.closest('.btn'));
+    });
+    content.querySelector('.remove-from-plan').addEventListener('click', (e) => {
+        removeFromPlan(e.target.closest('.btn'));
+    });
+
     content.querySelector('.actions').setAttribute('placeId', place.id);
     if (added) {
         content.querySelector('.actions').querySelector('.add-to-plan').classList.add('d-none');
         content.querySelector('.actions').querySelector('.remove-from-plan').classList.remove('d-none');
     }
 
-    return carousel.firstElementChild.outerHTML + content.firstElementChild.outerHTML;
+    const container = document.createElement("div");
+    container.appendChild(carousel.firstElementChild);
+    container.appendChild(content.firstElementChild);
+    return container;
 }
 
 /**
@@ -183,10 +193,17 @@ function renderPlaces(places) {
             card.querySelector('.card-text').remove();
         }
 
-        card.querySelector('.time').innerHTML +=
-            ' ' + (place.timeSpent ? minutesToHoursMinutes(place.timeSpent) : '?');
+        card.querySelector('.time').innerHTML += ' ' + (place.timeSpent ? minutesToHoursMinutes(place.timeSpent) : '?');
         card.querySelector('.rating').innerHTML += ' ' + place.rating.toFixed(1);
         card.querySelector('.prediction').innerHTML += ' ' + (place.probability * 100).toFixed(0) + '%';
+
+        card.querySelector('.card').addEventListener('click', (e) => {
+            selectPlaceByElement(e.target.closest('.card'));
+        });
+        card.querySelector('.remove').addEventListener('click', (e) => {
+            e.preventDefault();
+            removeFromPlan(e.target.closest('.btn'));
+        });
 
         list.appendChild(card);
     }
@@ -218,7 +235,7 @@ function selectPlaceByElement(place, toggler = true) {
     var id = parseInt(place.getAttribute('id').replace('placeCard', ''));
     getElementByKey(places, 'id', id).marker.openPopup();
     selectPlaceById(id);
-    if(window.innerWidth < 768 && toggler) {
+    if (window.innerWidth < 768 && toggler) {
         document.querySelector('#navbar-toggler').click();
     }
 }
@@ -260,6 +277,11 @@ function searchPlaces(input) {
                     searchItem.querySelector('.title').innerHTML = res[i].name;
                     searchItem.querySelector('.categories').innerHTML = '(' + res[i].categories.join(', ') + ')';
                     searchItem.querySelector('.description').innerHTML = res[i].description;
+
+                    searchItem.querySelector('.dropdown-item').addEventListener('click', (e) => {
+                        displaySearchResult(e.target.closest('.dropdown-item'));
+                    });
+
                     document.querySelector('#searchItems').appendChild(searchItem);
                 }
 
@@ -334,6 +356,14 @@ function addPlace(placeId, recommended = true) {
                     ' ' + (place.timeSpent ? minutesToHoursMinutes(place.timeSpent) : '?');
                 card.querySelector('.rating').innerHTML += ' ' + place.rating.toFixed(1);
                 card.querySelector('.prediction').remove();
+
+                card.querySelector('.card').addEventListener('click', (e) => {
+                    selectPlaceByElement(e.target.closest('.card'));
+                });
+                card.querySelector('.remove').addEventListener('click', (e) => {
+                    e.preventDefault();
+                    removeFromPlan(e.target.closest('.btn'));
+                });
 
                 document.querySelector('#places').appendChild(card);
 
@@ -479,6 +509,7 @@ function clearPlan() {
         unmarkPlaceInPlanById(ids[i], getElementByKey(places, 'id', ids[i]));
     }
     plan = {};
+    saveToLocalStorage();
 
     // Update selected count and disable button
     document.querySelector('#selectedCount').innerHTML = Object.keys(plan).length;
@@ -589,7 +620,6 @@ function checkTimes(element) {
  */
 function _getDayHeuristic() {
     return new Promise((resolve, reject) => {
-
         var request = {
             places: Object.keys(plan).map((place) => {
                 return parseInt(place);
@@ -619,11 +649,12 @@ function _getDayHeuristic() {
  * Check if recommended length can be fetched and fetch if true
  */
 function getDayHeuristic() {
-    document.querySelector('#recommendedDayLength').innerHTML = '<div class="spinner-border spinner-border-sm" role="status"></div>';
+    document.querySelector('#recommendedDayLength').innerHTML =
+        '<div class="spinner-border spinner-border-sm" role="status"></div>';
     _getDayHeuristic()
         .then(() => {})
         .catch((err) => {
-            console.log("Missing data");
+            console.log('Missing data');
         });
 }
 
@@ -715,6 +746,62 @@ async function main() {
     document.querySelector('#daysStart').min = getFormattedDate(new Date(), true);
     document.querySelector('#daysEnd').min = getFormattedDate(new Date(), true);
 
+    // Event listeners
+    document.querySelector('#clearPlan').addEventListener('click', (e) => {
+        clearPlan();
+    });
+    document.querySelector('#createPlan').addEventListener('submit', (e) => {
+        e.preventDefault();
+        createPlan();
+        return false;
+    });
+    document
+        .querySelector('#createPlanModal')
+        .querySelectorAll('.nav-item')
+        .forEach((item) => {
+            item.addEventListener('click', (e) => {
+                getDayHeuristic();
+                if (e.target.getAttribute('id') == 'start-tab') {
+                    setTimeout(function () {
+                        startMap.invalidateSize();
+                    }, 500);
+                }
+            });
+        });
+    document.querySelector('#planName').addEventListener('keyup', (e) => {
+        checkInfo();
+    });
+    document.querySelector('#infoNextButton').addEventListener('click', (e) => {
+        document.querySelector('#times-tab').click();
+    });
+    document.querySelector('#timesNextButton').addEventListener('click', (e) => {
+        document.querySelector('#start-tab').click();
+    });
+    document.querySelector('#startNextButton').addEventListener('click', (e) => {
+        document.querySelector('#days-tab').click();
+    });
+    document.querySelector('#timeStart').addEventListener('change', (e) => {
+        checkTimes(e.target);
+    });
+    document.querySelector('#timeEnd').addEventListener('change', (e) => {
+        checkTimes(e.target);
+    });
+    document.querySelector('#daysStart').addEventListener('change', (e) => {
+        checkDays();
+    });
+    document.querySelector('#daysEnd').addEventListener('change', (e) => {
+        checkDays();
+    });
+    document.querySelector('#searchInput').addEventListener('keyup', (e) => {
+        searchPlaces(e.target);
+    });
+    document.querySelector('#planButton').addEventListener('click', (e) => {
+        getDayHeuristic();
+        checkInfo();
+        checkTimes();
+        checkDays();
+    });
+
     try {
         const request = await get(ENDPOINTS.recommendationsGet);
         places = request.places;
@@ -734,4 +821,6 @@ async function main() {
     }
 }
 
-window.onload = () => { main(); };
+window.onload = () => {
+    main();
+};
