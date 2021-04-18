@@ -1,6 +1,11 @@
 /* jshint esversion: 8 */
 const axios = require('axios').default;
+const axiosCookieJarSupport = require('axios-cookiejar-support').default;
+const tough = require('tough-cookie');
 const ora = require('ora');
+
+axiosCookieJarSupport(axios);
+const cookieJar = new tough.CookieJar();
 
 function joinDict(dict, separator1, separator2, keep = true) {
     var keys = Object.keys(dict);
@@ -19,61 +24,76 @@ function joinDict(dict, separator1, separator2, keep = true) {
     return res;
 }
 
-function get(url, withCreedentials = false, cookies = null) {
+function get(url, cookies = null, followRedirect = false) {
     return new Promise((resolve) => {
         const config = {
             headers: {},
-            withCreedentials: withCreedentials,
+            jar: cookieJar,
+            withCredentials: true,
+            maxRedirects: followRedirect ? 5 : 0,
         };
         if (cookies != null) {
             config.headers.Cookie = joinDict(cookies, '=', '; ').trim();
         }
 
-        axios.get(url, config).then((res) => {
-            resolve(res);
-        }).catch((err) => {
-            resolve(err.response);
-        });
+        axios
+            .get(url, config)
+            .then((res) => {
+                resolve(res);
+            })
+            .catch((err) => {
+                resolve(err.response);
+            });
     });
 }
 
-function post(url, data = {}, withCreedentials = false, cookies = null) {
+function post(url, data = {}, cookies = null, followRedirect = false) {
     return new Promise((resolve) => {
         const config = {
             headers: {
                 'Content-Type': 'application/json',
             },
-            withCreedentials: withCreedentials,
+            jar: cookieJar,
+            withCredentials: true,
+            maxRedirects: followRedirect ? 5 : 0,
         };
         if (cookies != null) {
             config.headers.Cookie = joinDict(cookies, '=', '; ').trim();
         }
 
-        axios.post(url, data, config).then((res) => {
-            resolve(res);
-        }).catch((err) => {
-            resolve(err.response);
-        });
+        axios
+            .post(url, data, config)
+            .then((res) => {
+                resolve(res);
+            })
+            .catch((err) => {
+                resolve(err.response);
+            });
     });
 }
 
-function put(url, data = {}, withCreedentials = false, cookies = null) {
+function put(url, data = {}, cookies = null, followRedirect = false) {
     return new Promise((resolve) => {
         const config = {
             headers: {
                 'Content-Type': 'application/json',
             },
-            withCreedentials: withCreedentials,
+            jar: cookieJar,
+            withCredentials: true,
+            maxRedirects: followRedirect ? 5 : 0,
         };
         if (cookies != null) {
             config.headers.Cookie = joinDict(cookies, '=', '; ').trim();
         }
 
-        axios.put(url, data, config).then((res) => {
-            resolve(res);
-        }).catch((err) => {
-            resolve(err.response);
-        });
+        axios
+            .put(url, data, config)
+            .then((res) => {
+                resolve(res);
+            })
+            .catch((err) => {
+                resolve(err.response);
+            });
     });
 }
 
@@ -206,10 +226,69 @@ class Spinner {
         }
         process.exit(1);
     }
+
+    assert(result, success, fail) {
+        if (typeof result == 'boolean') {
+            if (result) {
+                this.succeed(success);
+            } else {
+                this.fail(fail);
+            }
+        } else {
+            for (var i = 0; i < result.length; i++) {
+                if (!result[i]) {
+                    this.fail(success);
+                    return;
+                }
+            }
+            this.succeed(fail);
+        }
+    }
 }
+
+const ENDPOINTS = {
+    signin: process.env.SERVER + '/api/auth/signin',
+    signup: process.env.SERVER + '/api/auth/signup',
+    check: process.env.SERVER + '/api/auth/check',
+    logoutAll: process.env.SERVER + '/api/auth/logoutSessions',
+    logout: process.env.SERVER + '/api/auth/logout',
+    id: process.env.SERVER + '/api/auth/id',
+
+    accountInfo: process.env.SERVER + '/api/account/info',
+    accountUpdate: process.env.SERVER + '/api/account/update/account',
+    notificationsUpdate: process.env.SERVER + '/api/account/update/notifications',
+    accountDelete: process.env.SERVER + '/api/auth/delete',
+    accountDownload: process.env.SERVER + '/api/account/download',
+
+    passwordUpdate: process.env.SERVER + '/api/auth/password/update',
+    passwordRequest: process.env.SERVER + '/api/auth/password/request',
+    passwordChange: process.env.SERVER + '/api/auth/password/change',
+
+    placesRandom: process.env.SERVER + '/api/places/random',
+    placesSearch: process.env.SERVER + '/api/places/search',
+    placeInfo: process.env.SERVER + '/api/places/info',
+
+    ratingsGet: process.env.SERVER + '/api/ratings/get',
+    ratingCreate: process.env.SERVER + '/api/ratings/create',
+    ratingDelete: process.env.SERVER + '/api/ratings/delete',
+    ratingUpdate: process.env.SERVER + '/api/ratings/update',
+    ratingsSearch: process.env.SERVER + '/api/ratings/search',
+
+    recommendationsGet: process.env.SERVER + '/api/recommendations/get',
+    recommendationsRequest: process.env.SERVER + '/api/recommendations/request',
+
+    plannerLength: process.env.SERVER + '/api/plans/length',
+    plannerCreate: process.env.SERVER + '/api/plans/create',
+    plannerGet: process.env.SERVER + '/api/plans/get',
+    plannerList: process.env.SERVER + '/api/plans/list',
+    plannerStatus: process.env.SERVER + '/api/plans/status',
+    plannerDelete: process.env.SERVER + '/api/plans/delete',
+    plannerUpdate: process.env.SERVER + '/api/plans/update',
+};
 
 exports.get = get;
 exports.post = post;
 exports.put = put;
 exports.sha256 = sha256;
 exports.Spinner = Spinner;
+exports.ENDPOINTS = ENDPOINTS;
