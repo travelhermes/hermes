@@ -195,6 +195,7 @@ class PlannerController {
         if (
             !request.body ||
             !request.body.name ||
+            request.body.name.length <= 0 ||
             !request.body.places ||
             hasDuplicates(request.body.places) ||
             request.body.places.length < 3 ||
@@ -547,6 +548,7 @@ class PlannerController {
             !request.body.plan.id ||
             typeof request.body.plan.id != 'number' ||
             !request.body.plan.name ||
+            request.body.plan.name.length <= 0 ||
             typeof request.body.plan.name != 'string' ||
             !request.body.plan.startDate
         ) {
@@ -647,6 +649,8 @@ class PlannerController {
             const item = request.body.items[i];
             var prev = request.body.items[i - 1] ? request.body.items[i - 1] : null;
             var next = request.body.items[i + 1] ? request.body.items[i + 1] : null;
+
+            item.notes = sanitize(item.notes);
 
             if (prev && prev.type == 1) {
                 prev = await db.Place.findOne({

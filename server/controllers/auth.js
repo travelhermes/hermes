@@ -368,6 +368,9 @@ class AuthController {
             !request.body.name ||
             !request.body.surname ||
             !request.body.email ||
+            request.body.user.name.length <= 0 ||
+            request.body.user.surname.length <= 0 ||
+            request.body.user.email.length <= 0 ||
             !validator.isEmail(request.body.email) ||
             !request.body.password ||
             !validator.isHexadecimal(request.body.password) ||
@@ -633,6 +636,7 @@ class AuthController {
         if (
             !request.body ||
             !request.body.token ||
+            request.body.token.length <= 0 ||
             !request.body.password ||
             !validator.isHexadecimal(request.body.password)
         ) {
