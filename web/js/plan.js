@@ -621,6 +621,10 @@ function loadPlan(data, parse = true) {
         document.querySelector('#prev').disabled = true;
     }
 
+    if(dates[0] < new Date()) {
+        document.querySelector('#start-date').classList.remove('edit-mode-disable');
+    }
+
     if (dates[dates.length - 1].addDays(1) < new Date()) {
         document.querySelector('#editButtonHeader').disabled = true;
         document.querySelector('#editButton').disabled = true;
