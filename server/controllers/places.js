@@ -66,7 +66,7 @@ class PlacesController {
      * @param  {Reply}   reply   HTTP Reply
      */
     async random(request, reply) {
-        const ignores = request.body ? request.body.ignores : [];
+        const ignores = request.body && request.body.ignores ? request.body.ignores : [];
         reply.status(200).send({
             places: (
                 await db.Place.findAll({

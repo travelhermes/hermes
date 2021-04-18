@@ -272,7 +272,14 @@ exports.generateCBRecommendations = async function (user) {
             },
         })
     ).forEach((userView) => {
-        userViews[userView.CategoryId] = Math.max(userView.views / user.views, userViews[userView.CategoryId] || 0);
+        if(!userViews[userView.CategoryId]) {
+            userViews[userView.CategoryId] = 0;
+        }
+        if(user.views != 0) {
+            userViews[userView.CategoryId] = Math.max(userView.views / user.views, userViews[userView.CategoryId] || 0);
+        } else {
+            userViews[userView.CategoryId] = userViews[userView.CategoryId] || 0;
+        }
     });
 
     // Get Places and Categories

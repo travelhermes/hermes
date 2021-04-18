@@ -427,7 +427,7 @@ class AuthController {
                 ApplicationLogger.logBase(
                     LogLevel.WARNING,
                     request.worker,
-                    user.id,
+                    0,
                     request.realIp,
                     request.url,
                     403,
@@ -438,6 +438,7 @@ class AuthController {
         } catch (error) {
             const logId = await ApplicationLogger.fatal(request, reply, error);
             reply.status(500).send({ error: 'Internal Server Error', statusCode: 500, logId: logId });
+            return;
         }
 
         // Validate and sanitize preferences

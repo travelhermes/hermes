@@ -197,6 +197,7 @@ class PlannerController {
             !request.body.name ||
             !request.body.places ||
             hasDuplicates(request.body.places) ||
+            request.body.places.length < 3 ||
             !request.body.startDate ||
             !request.body.endDate ||
             typeof request.body.dayStart != 'number' ||
@@ -553,6 +554,9 @@ class PlannerController {
             return;
         }
 
+        var today = new Date();
+        today.setHours(0, 0, 0, 0);
+
         request.body.plan.name = sanitize(request.body.plan.name);
         request.body.plan.description = sanitize(request.body.plan.description);
         request.body.plan.startDate = new Date(request.body.plan.startDate);
@@ -586,6 +590,11 @@ class PlannerController {
             }
         }
 
+        if (request.body.plan.startDate < today) {
+            reply.status(400).send();
+            return;
+        }
+
         // Get user
         var user = await Session.getSessionUser(request);
         if (!user) {
@@ -603,11 +612,6 @@ class PlannerController {
 
         if (!plan) {
             reply.status(403).send();
-            return;
-        }
-
-        if (plan.endDate.addDays(1) < new Date()) {
-            reply.status(400).send();
             return;
         }
 

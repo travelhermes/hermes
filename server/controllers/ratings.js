@@ -147,7 +147,7 @@ class RatingsController {
             where: {
                 PlaceId: request.body.placeId,
                 UserId: user.id,
-            }
+            },
         });
 
         if (rating) {
@@ -219,6 +219,11 @@ class RatingsController {
                 ],
             });
 
+            if (!rating) {
+                reply.status(404).send();
+                return;
+            }
+
             const place = await db.Place.findOne({
                 where: {
                     id: rating.PlaceId,
@@ -238,29 +243,25 @@ class RatingsController {
                 ],
             });
 
-            if (rating) {
-                for (var i = 0; i < place.Categories.length; i++) {
-                    place.Categories[i].UserViews[0].decrement('views');
-                    await place.Categories[i].UserViews[0].save();
-                }
-                user.views = user.views - place.Categories.length;
-                await user.save();
-
-                if (place.count > 1) {
-                    place.rating = (place.rating * place.count - rating.rating) / (place.count - 1);
-                    place.count = place.count - 1;
-                } else {
-                    place.rating = 0;
-                    place.count = 0;
-                }
-                await place.save();
-
-                rating.destroy();
-
-                reply.status(200).send();
-            } else {
-                reply.status(404).send();
+            for (var i = 0; i < place.Categories.length; i++) {
+                place.Categories[i].UserViews[0].decrement('views');
+                await place.Categories[i].UserViews[0].save();
             }
+            user.views = user.views - place.Categories.length;
+            await user.save();
+
+            if (place.count > 1) {
+                place.rating = (place.rating * place.count - rating.rating) / (place.count - 1);
+                place.count = place.count - 1;
+            } else {
+                place.rating = 0;
+                place.count = 0;
+            }
+            await place.save();
+
+            rating.destroy();
+
+            reply.status(200).send();
         } else {
             reply.status(403).send();
         }
