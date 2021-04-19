@@ -1,7 +1,6 @@
 /* jshint esversion: 8 */
 const { Spinner, get, post, put, sha256, ENDPOINTS } = require('./utils.js');
-const db = require('../db/models.js');
-const { toDecimal } = require('geolib');
+const db = require('../../db/models.js');
 
 db.sequelize.options.logging = false;
 
