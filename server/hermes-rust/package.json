@@ -1,6 +1,6 @@
 {
     "name": "hermes-rust",
-    "version": "1.0.2",
+    "version": "2.0.0",
     "description": "",
     "main": "lib/index.js",
     "author": "Álvaro Galisteo (https://alvaro.galisteo.me)",
