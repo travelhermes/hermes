@@ -368,9 +368,9 @@ class AuthController {
             !request.body.name ||
             !request.body.surname ||
             !request.body.email ||
-            request.body.user.name.length <= 0 ||
-            request.body.user.surname.length <= 0 ||
-            request.body.user.email.length <= 0 ||
+            request.body.name.length <= 0 ||
+            request.body.surname.length <= 0 ||
+            request.body.email.length <= 0 ||
             !validator.isEmail(request.body.email) ||
             !request.body.password ||
             !validator.isHexadecimal(request.body.password) ||
