@@ -6,5 +6,6 @@ exports.sanitize = function (string) {
         return '';
     }
 
-    return validator.trim(validator.escape(string));
+    string = string.replace(/[]/g)
+    return validator.trim(validator.escape(validator.blacklist(string, '`\'"{}<>&\/')));
 };
