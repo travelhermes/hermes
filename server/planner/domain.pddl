@@ -7,12 +7,12 @@
         wait - place
     )
     (:predicates
-        (visited ?place - place)
-        (unvisited ?place - place)
-        (next-day ?day1 ?day2 - day)
-        (current-day ?day - day)
+        (visited       ?place - place)
+        (unvisited     ?place - place)
+        (next-day      ?day1 ?day2 - day)
+        (current-day   ?day - day)
         (current-place ?place - place)
-        (waiting ?place - place)
+        (waiting       ?place - place)
     )
     (:functions
         (visit-duration ?place - place)
@@ -20,6 +20,7 @@
         (closes         ?place - place ?day - day)
         (distance       ?place1 ?place2 - place)
         (travel-time    ?place1 ?place2 - place)
+        (visits         ?day - day)
 
         (day-start)
         (day-end)
@@ -103,18 +104,20 @@
         )
     )
     (:action visit
-        :parameters (?place - place)
+        :parameters (?place - place ?day - day)
         :precondition (and
             ; If currently in p
             (current-place ?place)
             (unvisited ?place)
             (not (= ?place wait))
+            (current-day ?day)
         )
         :effect (and 
             ; Mark as visited and increase current-time
             (visited ?place)
             (not (unvisited ?place))
             (increase (current-time) (visit-duration ?place))
+            (increase (visits ?day) 1)
         )
     )
 
