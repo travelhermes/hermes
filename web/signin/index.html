@@ -27,7 +27,7 @@
             <div class="modal-dialog modal-dialog-centered">
                 <form class="modal-content" id="recoverForm">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="recoverModalLabel">Recuperar contraseña</h5>
+                        <h4 class="modal-title" id="recoverModalLabel">Recuperar contraseña</h4>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                     </div>
                     <div class="modal-body">
@@ -38,7 +38,7 @@
                         <div class="alert alert-danger d-none mb-1 mt-4" role="alert" id="cooldownReset">
                             Se han producido demasiadas solicitudes seguidas. Inténtelo de nuevo más tarde.
                         </div>
-                        <input type="email" id="inputEmailRecover" placeholder="Correo electrónico" required />
+                        <input type="email" id="inputEmailRecover" placeholder="Correo electrónico" required maxlength="127"/>
                     </div>
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-primary" id="inputSubmitRecover" original-data="Enviar enlace de recuperación">
@@ -83,6 +83,7 @@
                             placeholder="Correo electrónico"
                             required
                             autofocus
+                            maxlength="127"
                         />
                         <label for="inputPassword" class="visually-hidden"> Contraseña </label>
                         <input
@@ -91,6 +92,7 @@
                             class="form-control"
                             placeholder="Contraseña"
                             required
+                            maxlength="127"
                         />
                     </div>
                     <button

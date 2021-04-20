@@ -56,17 +56,21 @@ async function setStars(element, index, send = true) {
     if (parent.getAttribute('rated') == 'true') {
         return;
     }
+    parent.parentElement.querySelector('.spinner-border').classList.remove('d-none');
     const id = element.closest('.card').getAttribute('id').replace('place-', '');
 
     try {
         if (send) {
             await post(ENDPOINTS.ratingCreate, { placeId: parseInt(id), rating: index });
+            umami('Rated ' + index + ' stars');
         }
         fillStar(element, index);
         parent.classList.remove('active');
 
         parent.setAttribute('rated', true);
+        parent.parentElement.querySelector('.spinner-border').classList.add('d-none');
     } catch (err) {
+        parent.parentElement.querySelector('.spinner-border').classList.add('d-none');
         throwError(err);
     }
 }
@@ -96,8 +100,9 @@ async function del(button) {
  * @param  {HTMLElement}  container Parent container
  * @param  {Boolean} remove    (default: true) If true, enables remove button
  * @param  {Boolean} split     (default: true) If true, renders in columns
+ * @param  {Boolean} alert     (default: true) If true, shows or hides the 'No results' alert
  */
-function renderPlaces(places, container, remove = true, split = true) {
+function renderPlaces(places, container, remove = true, split = true, alert = true) {
     var cols;
     var col1;
     var col2;
@@ -111,10 +116,12 @@ function renderPlaces(places, container, remove = true, split = true) {
         container.innerHTML = '';
     }
 
-    if (!places || places.length == 0) {
-        container.parentElement.querySelector('.alert').classList.remove('d-none');
-    } else {
-        container.parentElement.querySelector('.alert').classList.add('d-none');
+    if(alert) {
+        if (!places || places.length == 0) {
+            container.parentElement.querySelector('.alert').classList.remove('d-none');
+        } else {
+            container.parentElement.querySelector('.alert').classList.add('d-none');
+        }
     }
 
     for (let i = 0; i < places.length; i++) {
@@ -194,13 +201,28 @@ async function search(button) {
     const modal = button.closest('.modal');
     const query = modal.querySelector('#inputSearch').value;
     modal.querySelector('.alert').classList.add('d-none');
+    document.querySelector('#ratingSuggestions').classList.add('d-none');
 
     try {
         var res = (await get(ENDPOINTS.ratingsSearch + '/' + query)).result;
-        renderPlaces(res, document.querySelector('#searchItems'), false, false);
+        renderPlaces(res, document.querySelector('#searchItemsList'), false, false);
+        document.querySelector('#searchItems').classList.remove('d-none');
         setDoneButton(button);
     } catch (err) {
         unsetLoadButton(button);
+        throwError(err);
+    }
+}
+
+/**
+ * Load random suggestions
+ * @param {Array<Place>} places Places to render
+ */
+async function getRandomSuggestions(places) {
+    try {
+        const rand = (await post(ENDPOINTS.ratingsRandom, {max: 3})).result;
+        renderPlaces(rand, document.querySelector('#ratingSuggestionsList'), false, false, false);
+    } catch(err) {
         throwError(err);
     }
 }
@@ -230,6 +252,18 @@ async function main() {
         search(e.target.querySelector('#btnSubmitSearch'));
         return false;
     });
+    document.querySelector('#refreshSuggestions').addEventListener('click', (e) => {
+        getRandomSuggestions();
+    });
+    document.querySelector('#inputSearch').addEventListener('keyup', (e) => {
+        if(e.target.value.length == 0) {
+            document.querySelector('#ratingSuggestions').classList.remove('d-none');
+            document.querySelector('#searchItems').classList.add('d-none');
+            document.querySelector('#btnSubmitSearch').disabled = true;
+        } else {
+            document.querySelector('#btnSubmitSearch').disabled = false;
+        }
+    });
 
     document.querySelector('#loader').addEventListener('shown.bs.modal', async function (event) {
         try {
@@ -242,6 +276,10 @@ async function main() {
             throwError(err);
             loader.hide();
         }
+
+        getRandomSuggestions();
+        // 2 min.
+        setInterval(getRandomSuggestions, 120000);
     });
 }
 

@@ -39,7 +39,7 @@
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="deleteConfirmLabel">Eliminar ruta</h5>
+                        <h4 class="modal-title" id="deleteConfirmLabel">Eliminar ruta</h4>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                     </div>
                     <div class="modal-body">
@@ -133,23 +133,23 @@
             </div>
             <main class="ms-sm-auto px-md-4">
                 <div class="border-bottom py-2 mb-2">
-                    <h2>Planes activos</h2>
+                    <h2 class="my-0">Planes activos</h2>
+                    <p class="text-muted fs-6 mb-1">
+                        Estos son todos los planes que comienzan en el futuro o que aún no han terminado.
+                    </p>
                 </div>
                 <div id="activePlans">
                     <div class="text-center mt-2">
                         <div class="alert alert-primary w-md-75 d-inline-block" role="alert">
                             Sin planes activos
-                            <div class="w-100 text-center mt-2">
-                                <a class="btn btn-primary" href="/dashboard/">
-                                    <i class="mx-md-1 bi bi-plus-circle-fill"></i>
-                                    Crear un nuevo plan
-                                </a>
-                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="border-bottom py-2 mx-0 mt-5">
-                    <h2>Planes antiguos</h2>
+                    <h2 class="my-0">Planes antiguos</h2>
+                    <p class="text-muted fs-6 mb-1">
+                        Estos son todos los planes que ya has realizado.
+                    </p>
                 </div>
                 <div id="pastPlans">
                     <div class="text-center mt-2">
@@ -158,6 +158,16 @@
                 </div>
             </main>
         </div>
+
+        <a
+            href="/dashboard/"
+            class="btn btn-primary btn-lg shadow btn-float rounded-pill"
+            data-bs-toggle="modal"
+            data-bs-target="#searchModal"
+        >
+            <i class="me-md-2 fas fa-route"></i>
+            <span class="fs-5 d-none d-md-inline">Crear nuevo plan</span>
+        </a>
 
         <!-- Footer -->
         <footer class="mt-auto pt-5 text-center mb-md-5">
@@ -266,6 +276,10 @@
 
         <!-- Bootstrap -->
         <script src="/js/bootstrap.bundle.min.js"></script>
+
+        <!-- Fontawesome -->
+        <script src="/js/fontawesome.min.js"></script>
+        <script src="/js/fa-solid.min.js"></script>
 
         <!-- Hermes -->
         <script src="/js/common.js"></script>

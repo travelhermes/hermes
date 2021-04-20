@@ -49,6 +49,7 @@
                             placeholder="Nombre"
                             required
                             autofocus
+                            maxlength="127"
                         />
                         <label for="inputSurname" class="visually-hidden">Apellidos</label>
                         <input
@@ -57,6 +58,7 @@
                             class="form-control"
                             placeholder="Apellidos"
                             required
+                            maxlength="127"
                         />
                     </div>
 
@@ -69,6 +71,7 @@
                             class="form-control"
                             placeholder="Correo electrónico"
                             required
+                            maxlength="127"
                         />
                         <label for="inputPassword" class="visually-hidden">Contraseña</label>
                         <input
@@ -77,6 +80,7 @@
                             class="form-control"
                             placeholder="Contraseña"
                             required
+                            maxlength="127"
                         />
                         <p class="text-muted mt-2">
                             Te recomendamos una contraseña de entre 8 y 16 carácteres y que sea distinta a la que usas
@@ -1024,7 +1028,7 @@
                     <p class="text-muted mt-1 mb-3">Las recomendaciones se basan en tus puntuaciones y preferencias.</p>
 
                     <button
-                        class="w-100 btn btn-lg btn-primary"
+                        class="w-100 btn btn-lg btn-primary umami--click--signup-button"
                         type="submit"
                         id="inputSubmitStep2"
                         original-data="Crear cuenta"
@@ -1043,7 +1047,7 @@
                         Siempre puedes puntuar más adelante.
                     </p>
                     <p>Busca algún lugar</p>
-                    <input type="text" id="inputSearch" class="form-control" />
+                    <input type="text" id="inputSearch" class="form-control" maxlength="127"/>
                     <button
                         id="inputSubmitSearch"
                         type="button"
@@ -1103,12 +1107,15 @@
                 </h6>
                 <div class="categories my-1 text-muted text-start"></div>
                 <div class="card-body fs-5 pb-2 pt-0">
-                    <div class="stars text-warning">
+                    <div class="stars text-warning d-inline-block">
                         <i class="bi bi-star" data-index="1"></i>
                         <i class="bi bi-star" data-index="2"></i>
                         <i class="bi bi-star" data-index="3"></i>
                         <i class="bi bi-star" data-index="4"></i>
                         <i class="bi bi-star" data-index="5"></i>
+                    </div>
+                    <div class="spinner-border spinner-border-sm d-inline-block ms-2 mb-1 d-none" role="status">
+                        <span class="visually-hidden">Guardando...</span>
                     </div>
                 </div>
             </div>

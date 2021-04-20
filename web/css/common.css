@@ -180,3 +180,27 @@
         font-size: 1rem !important;
     }
 }
+
+/*
+ * Floating buttons
+ */
+.btn.btn-float {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    margin-right: 1rem;
+    margin-bottom: 1rem;
+    font-size: 2rem;
+    height: 64px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+@media (max-width: 768px) {
+    .btn.btn-float {
+        margin-bottom: calc(52px + 1rem);
+        width: 64px;
+    }
+}

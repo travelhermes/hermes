@@ -36,23 +36,34 @@
         </div>
 
         <div class="modal fade" id="searchModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="searchModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollabl">
+            <div class="modal-dialog modal-lg modal-dialog-scrollable modal-dialog-centered">
                 <form class="modal-content" id="searchForm">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="searchModalLabel">Añadir puntuación</h5>
+                        <h4 class="modal-title" id="searchModalLabel">Añadir puntuación</h4>
                         <button type="button" class="btn-close close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                     </div>
                     <div class="modal-body">
                         <p>Introduce un criterio y puntua los lugares que más se adapten a tu búsqueda</p>
-                        <input type="text" id="inputSearch" class="w-100" placeholder="Buscar lugar" />
-                        <div class="text-center">
-                            <div class="alert alert-primary w-100 mt-2 d-inline-block d-none" role="alert">
-                                Sin resultados. Prueba con otro criterio de búsqueda <br />
-                                ¿Te falta algún lugar?
-                                <a href="https://github.com/SrGMC/hermes">Háznoslo saber</a>
+                        <input type="text" id="inputSearch" class="w-100 fs-6" placeholder="Buscar lugar" maxlength="127" required/>
+                        <div id="searchItems" class="d-none">
+                            <p class="mt-4">
+                                <span class="fs-5">Resultados de la búsqueda</span>
+                            </p>
+                            <div class="text-center">
+                                <div class="alert alert-primary w-100 mt-2 d-inline-block d-none" role="alert">
+                                    Sin resultados. Prueba con otro criterio de búsqueda <br />
+                                    ¿Te falta algún lugar?
+                                    <a href="https://github.com/SrGMC/hermes">Háznoslo saber</a>
+                                </div>
                             </div>
+                            <div id="searchItemsList"></div>
                         </div>
-                        <div id="searchItems"></div>
+                        <div id="ratingSuggestions">
+                            <p class="mt-4">
+                                <span class="fs-5">¿Qué te parecen estos sitios para puntuar?</span> <a href="#" id="refreshSuggestions" class="ms-2"><i class="bi bi-arrow-clockwise me-1"></i>Refrescar</a>
+                            </p>
+                            <div id="ratingSuggestionsList"></div>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button
@@ -67,6 +78,7 @@
                             type="submit"
                             class="btn btn-primary"
                             original-data="Buscar"
+                            disabled
                         >
                             Buscar
                         </button>
@@ -147,7 +159,10 @@
             </div>
             <main class="ms-sm-auto px-md-4">
                 <div class="border-bottom py-2 mb-2">
-                    <h2>Puntuaciones pendientes</h2>
+                    <h2 class="my-0">Puntuaciones pendientes</h2>
+                    <p class="text-muted fs-6 mb-1">
+                        Estos son todos los sitios que has visitado o tienes pendiente de visitar y que aún no has puntuado.
+                    </p>
                 </div>
                 <div class="container">
                     <div id="pendingRatings" class="row">
@@ -162,30 +177,15 @@
                 </div>
                 <div class="border-bottom py-2 mx-0 mt-5 position-relative">
                     <h2 class="my-0">Puntuaciones realizadas</h2>
-                    <button
-                        class="btn btn-primary position-absolute end-0 top-0 mt-2"
-                        data-bs-toggle="modal"
-                        data-bs-target="#searchModal"
-                    >
-                        <i class="mx-md-1 bi bi-plus-circle-fill"></i>
-                        <span class="d-none d-lg-inline"> Añadir puntuación</span>
-                    </button>
+                    <p class="text-muted fs-6 mb-1">
+                        Estas son todas las puntuaciones que has creado
+                    </p>
                 </div>
                 <div class="container">
                     <div id="completedRatings" class="row">
                         <div class="text-center mt-2">
                             <div class="alert alert-success w-md-75 d-inline-block d-none" role="alert">
                                 Sin resultados. ¿Porqué no pruebas a puntuar un sitio?
-                                <div class="w-100 text-center mt-2">
-                                    <button
-                                        class="btn btn-primary"
-                                        data-bs-toggle="modal"
-                                        data-bs-target="#searchModal"
-                                    >
-                                        <i class="mx-md-1 bi bi-plus-circle-fill"></i>
-                                        Añadir puntuación
-                                    </button>
-                                </div>
                             </div>
                         </div>
                         <div class="col"></div>
@@ -194,6 +194,15 @@
                 </div>
             </main>
         </div>
+
+        <button
+            class="btn btn-primary btn-lg shadow btn-float rounded-pill"
+            data-bs-toggle="modal"
+            data-bs-target="#searchModal"
+        >
+            <i class="me-md-2 bi bi-star-fill"></i>
+            <span class="fs-5 d-none d-md-inline">Añadir nueva puntuación</span>
+        </button>
 
         <!-- Footer -->
         <footer class="mt-auto pt-5 text-center mb-md-5">
@@ -216,13 +225,13 @@
         <template id="templateCard">
             <div class="card my-2">
                 <div class="card-header">
-                    <h3 class="my-0">
+                    <h4 class="my-0">
                         <span class="title"> </span>
                         <a href="" target="_blank" class="wikipedia text-primary"><i class="fab fa-wikipedia-w"></i></a>
                         <a href="" target="_blank" class="url text-primary">
                             <i class="bi bi-link-45deg"></i>
                         </a>
-                    </h3>
+                    </h4>
                 </div>
                 <div class="row g-0">
                         <div class="col-md-4">
@@ -239,12 +248,17 @@
                         </div>
                     <div class="col-md-8">
                         <div class="card-body">
-                            <div class="stars active text-warning">
-                                <i class="bi bi-star" data-index="1"> </i>
-                                <i class="bi bi-star" data-index="2"> </i>
-                                <i class="bi bi-star" data-index="3"> </i>
-                                <i class="bi bi-star" data-index="4"> </i>
-                                <i class="bi bi-star" data-index="5"> </i>
+                            <div>
+                                <div class="stars active text-warning d-inline-block">
+                                    <i class="bi bi-star" data-index="1"> </i>
+                                    <i class="bi bi-star" data-index="2"> </i>
+                                    <i class="bi bi-star" data-index="3"> </i>
+                                    <i class="bi bi-star" data-index="4"> </i>
+                                    <i class="bi bi-star" data-index="5"> </i>
+                                </div>
+                                <div class="spinner-border spinner-border-sm d-inline-block ms-2 mb-1 d-none" role="status">
+                                    <span class="visually-hidden">Guardando...</span>
+                                </div>
                             </div>
                             <div class="btn-group mt-3" role="group" aria-label="Acciones">
                                 <!--<button type="button" class="btn btn-outline-primary">

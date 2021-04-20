@@ -161,6 +161,7 @@ async function setStars(element, index) {
         return;
     }
 
+    parent.parentElement.querySelector('.spinner-border').classList.remove('d-none');
     const id = element.closest('.card').getAttribute('id').replace('place-', '');
     try {
         await post(ENDPOINTS.ratingCreate, { placeId: parseInt(id), rating: index });
@@ -172,8 +173,12 @@ async function setStars(element, index) {
             id: parseInt(id),
             rating: index,
         });
+
+        parent.parentElement.querySelector('.spinner-border').classList.add('d-none');
+        umami('Rated ' + index + ' stars');
     } catch (err) {
         throwError(err);
+        parent.parentElement.querySelector('.spinner-border').classList.add('d-none');
     }
 }
 
