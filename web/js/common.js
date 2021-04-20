@@ -1,6 +1,7 @@
 /*jshint esversion: 8 */
-/* Map tiles server endpoint */
+/* Endpoints */
 const TILESERVER_ENDPOINT = '<your TILESERVER_ENDPOINT here>';
+const NOMINATIM_ENDPOINT = 'https://nominatim.openstreetmap.org';
 /* API endpoints
  * https://alvaro.galisteo.me/hermes/api/ */
 const ENDPOINTS = {
@@ -24,12 +25,14 @@ const ENDPOINTS = {
     placeInfo: '/api/places/info',
 
     ratingsGet: '/api/ratings/get',
+    ratingsRandom: '/api/ratings/random',
     ratingCreate: '/api/ratings/create',
     ratingDelete: '/api/ratings/delete',
     ratingUpdate: '/api/ratings/update',
     ratingsSearch: '/api/ratings/search',
 
     recommendationsGet: '/api/recommendations/get',
+    recommendationsRandom: '/api/recommendations/random',
     recommendationsRequest: '/api/recommendations/request',
 
     plannerLength: '/api/plans/length',
@@ -56,7 +59,7 @@ function throwError(err) {
         'Se ha producido un error inesperado mientras se procesaba la solicitud. Consulte la consola de su navegador para más información.\nSi el error persiste, contacte con nosotros.';
 
     if (err.logId) {
-        message += 'Al contactar, por favor, indique en el cuerpo del mensaje el siguiente identificador: ' + err.logId;
+        message += '\n\nAl contactar, por favor, indique en el cuerpo del mensaje el siguiente identificador: ' + err.logId;
     }
     console.log(err);
     alert(message);
@@ -107,20 +110,25 @@ function http(url, method, body) {
                 if (xhr.response.length > 0) {
                     try {
                         resolve(JSON.parse(xhr.response));
-                    } catch(err) {
+                    } catch (err) {
                         console.log(err);
-                        window.location = '/signin/?redirect=' + btoa(window.location.href.replace(window.location.origin, ''));
+                        window.location =
+                            '/signin/?redirect=' + btoa(window.location.href.replace(window.location.origin, ''));
                     }
                 } else {
                     resolve({});
                 }
-            } else if (xhr.status == 301){
+            } else if (xhr.status == 301) {
                 window.location = '/signin/?redirect=' + btoa(window.location.href.replace(window.location.origin, ''));
             } else {
-                reject({
-                    status: xhr.status,
-                    msg: xhr.statusText,
-                });
+                if (xhr.response.length > 0) {
+                    reject(JSON.parse(xhr.response));
+                } else {
+                    reject({
+                        status: xhr.status,
+                        msg: xhr.statusText,
+                    });
+                }
             }
         };
 
@@ -495,4 +503,11 @@ function drawCurve(start, end, map) {
     };
 
     return L.curve(['M', start, 'Q', midpointLatLng, end], pathOptions).addTo(map);
+}
+
+function scrollToMiddle(element) {
+    const elementRect = element.getBoundingClientRect();
+    const absoluteElementTop = elementRect.top + window.pageYOffset;
+    const middle = absoluteElementTop - (window.innerHeight / 2);
+    window.scrollTo(0, middle);
 }

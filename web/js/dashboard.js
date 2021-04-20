@@ -7,6 +7,7 @@ var places = [];
 
 var searchResults = [];
 var searchTimeout;
+var searchDropdown;
 
 var plan = {};
 var popupStart = null;
@@ -89,6 +90,11 @@ function createMarkerContent(place, added = false) {
             .insertBefore(item, carousel.querySelector('.carousel-inner').firstChild);
     }
 
+    if (!place.images || place.images == 1) {
+        carousel.querySelector('.carousel-control-prev').remove();
+        carousel.querySelector('.carousel-control-next').remove();
+    }
+
     const content = getTemplate('templatePopupContent');
     content.querySelector('.title').innerHTML = place.name;
     content.querySelector('.address').innerHTML += address.join(', ');
@@ -152,7 +158,7 @@ function createMarkerContent(place, added = false) {
         content.querySelector('.actions').querySelector('.remove-from-plan').classList.remove('d-none');
     }
 
-    const container = document.createElement("div");
+    const container = document.createElement('div');
     container.appendChild(carousel.firstElementChild);
     container.appendChild(content.firstElementChild);
     return container;
@@ -264,12 +270,17 @@ function searchPlaces(input) {
         return;
     }
 
+    document.querySelector('#noSearchResults').classList.add('d-none');
     clearTimeout(searchTimeout);
     searchTimeout = setTimeout(function () {
         get(ENDPOINTS.placesSearch + '/' + input.value)
             .then((res) => {
-                res = res.result.splice(0, 5);
+                res = res.result.splice(0, 25);
                 searchResults = res;
+
+                if (res.length == 0) {
+                    document.querySelector('#noSearchResults').classList.remove('d-none');
+                }
 
                 for (var i = 0; i < res.length; i++) {
                     var searchItem = getTemplate('templateSearchItem');
@@ -550,9 +561,38 @@ function onStartSet(e) {
         popupStart.setLatLng(e.latlng);
     }
     planStart = e.latlng;
+    startMap.flyTo(e.latlng);
     document.querySelector('#startNextButton').disabled = false;
 }
 startMap.on('click', onStartSet);
+
+/**
+ * Find an address through OSM Nominatim and display the location in the map
+ * @param {HTMLElement} button Button that triggered the function
+ */
+async function findAddress(button) {
+    setLoadButton(button);
+
+    const form = button.closest('#addressForm');
+    const query = form.querySelector('#addressInput').value;
+    try {
+        var res = await get(NOMINATIM_ENDPOINT + '/search?format=json&q=' + query);
+        console.log(res);
+        if (res.length == 0) {
+            form.querySelector('#noAddressResults').classList.remove('d-none');
+            setDoneButton(button);
+            return;
+        }
+        form.querySelector('#noAddressResults').classList.add('d-none');
+        onStartSet({
+            latlng: { lat: parseFloat(res[0].lat), lng: parseFloat(res[0].lon) },
+        });
+        setDoneButton(button);
+    } catch (err) {
+        throwError(err);
+        unsetLoadButton(button);
+    }
+}
 
 /**
  * Check if inputs in info tab are valid
@@ -634,8 +674,8 @@ function _getDayHeuristic() {
 
         post(ENDPOINTS.plannerLength, request)
             .then((res) => {
-                document.querySelector('#recommendedDayLength').innerHTML = res.days + ' días';
-                document.querySelector('#recommendedDayLengthValidate').innerHTML = res.days + ' días';
+                document.querySelector('#recommendedDayLength').innerHTML = plural(res.days, 'día');
+                document.querySelector('#recommendedDayLengthValidate').innerHTML = plural(res.days, 'día');
                 planLength = res.days;
                 resolve();
             })
@@ -692,7 +732,7 @@ function checkDays() {
             new Date(document.querySelector('#daysStart').value),
             new Date(document.querySelector('#daysEnd').value)
         ) +
-            2 <
+            1 <
             planLength
     ) {
         document.querySelector('#daysValidationLength').classList.remove('d-none');
@@ -731,6 +771,8 @@ function createPlan() {
 
     post(ENDPOINTS.plannerCreate, request)
         .then((res) => {
+            plan = {};
+            saveToLocalStorage();
             window.location = '/plans/plan/?id=' + res.id;
         })
         .catch((err) => {
@@ -742,6 +784,11 @@ function createPlan() {
 
 async function main() {
     setupMap();
+
+    searchDropdown = new bootstrap.Dropdown(document.querySelector('#searchInput'));
+    document.querySelector('#searchInput').addEventListener('click', (e) => {
+        searchDropdown.show();
+    });
 
     document.querySelector('#daysStart').min = getFormattedDate(new Date(), true);
     document.querySelector('#daysEnd').min = getFormattedDate(new Date(), true);
@@ -800,6 +847,9 @@ async function main() {
         checkInfo();
         checkTimes();
         checkDays();
+    });
+    document.querySelector('#addressSearch').addEventListener('click', (e) => {
+        findAddress(e.target.closest('.btn'));
     });
 
     try {

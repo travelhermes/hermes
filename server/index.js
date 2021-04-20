@@ -110,7 +110,13 @@ if (cluster.isMaster) {
         contentSecurityPolicy: {
             directives: {
                 'base-uri': ["'self'"],
-                'connect-src': ["'self'", 'travelhermes.com', '*.travelhermes.com'],
+                'connect-src': [
+                    "'self'",
+                    'travelhermes.com',
+                    '*.travelhermes.com',
+                    'openstreetmap.org',
+                    '*.openstreetmap.org',
+                ],
                 'default-src': ["'self'"],
                 'font-src': ["'self'"],
                 'frame-src': ["'self'", 'https://*.hcaptcha.com'],

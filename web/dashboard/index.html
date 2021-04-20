@@ -30,7 +30,7 @@
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="clearPlanModalLabel">Vaciar plan</h5>
+                        <h4 class="modal-title" id="clearPlanModalLabel">Vaciar plan</h4>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                     </div>
                     <div class="modal-body">
@@ -54,10 +54,10 @@
             aria-labelledby="createPlanModalLabel"
             aria-hidden="true"
         >
-            <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-dialog modal-dialog-centered modal-lg">
                 <form class="modal-content" id="createPlan">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="createPlanModalLabel">Crear plan</h5>
+                        <h4 class="modal-title" id="createPlanModalLabel">Crear plan</h4>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body px-0">
@@ -128,7 +128,7 @@
                                 aria-labelledby="info-tab"
                             >
                                 <label for="planName" class="form-label fs-5 mt-1">Nombre del plan</label>
-                                <input type="text" class="form-control" id="planName" required />
+                                <input type="text" class="form-control" id="planName" required maxlength="127"/>
                                 <div class="text-danger d-none mt-1" id="planNameValidation">
                                     Por favor, introduce un nombre
                                 </div>
@@ -153,28 +153,18 @@
                                 role="tabpanel"
                                 aria-labelledby="times-tab"
                             >
-                                <div class="fs-5 mt-2">¿Cuanto quieres que dure el día?</div>
+                                <div class="fs-5 mt-2">¿Cuanto tiempo quieres estar de visita cada día?</div>
                                 <div class="row mt-2">
                                     <div class="col col-6">
                                         <label for="timeStart" class="form-label">Hora de inicio</label>
                                         <div>
-                                            <input
-                                                type="time"
-                                                class="form-control"
-                                                id="timeStart"
-                                                required
-                                            />
+                                            <input type="time" class="form-control" id="timeStart" required />
                                         </div>
                                     </div>
                                     <div class="col col-6">
                                         <label for="timeEnd" class="form-label">Hora de fin</label>
                                         <div>
-                                            <input
-                                                type="time"
-                                                class="form-control"
-                                                id="timeEnd"
-                                                required
-                                            />
+                                            <input type="time" class="form-control" id="timeEnd" required />
                                         </div>
                                     </div>
                                 </div>
@@ -182,10 +172,12 @@
                                     La hora de inicio debe ocurrir antes de la hora de fin.
                                 </div>
                                 <div class="my-1 text-muted">
-                                    <b>Nota:</b> Una vez establecida la duración del día, no podrás cambiarla más adelante.
+                                    <b>Nota:</b> Una vez establecida la duración del día, no podrás cambiarla más
+                                    adelante.
                                 </div>
                                 <p class="text-muted mt-2">
-                                    Si deseas añadir descansos (por ejemplo, para comer), podrás añadirlos posteriormente al editar el plan generado.
+                                    Si deseas añadir descansos (por ejemplo, para comer), podrás añadirlos
+                                    posteriormente al editar el plan generado.
                                 </p>
                                 <div class="text-center mt-3">
                                     <button
@@ -206,7 +198,35 @@
                             >
                                 <div class="fs-5 mt-1 px-4">¿Donde te vas a alojar?</div>
                                 <div class="my-1 px-4 text-muted">
-                                    Selecciona en el mapa el lugar de inicio y fin de cada día
+                                    Puedes buscar una dirección con el buscador, o seleccionar en el mapa el lugar de
+                                    inicio y fin de cada día.
+                                </div>
+                                <div class="mt-3 mb-2 px-4">
+                                    <p class="text-muted mb-1">
+                                        Con la tecnología de
+                                        <a href="https://nominatim.openstreetmap.org" target="_blank"
+                                            >OpenStreetMap Nominatim</a
+                                        >
+                                    </p>
+                                    <div id="addressForm" class="container px-0 mb-2">
+                                        <div class="row">
+                                            <div class="col-9 pe-1">
+                                                <input
+                                                    class="form-control me-2 w-100"
+                                                    type="search"
+                                                    placeholder="Buscar dirección"
+                                                    id="addressInput"
+                                                    aria-label="Buscar dirección"
+                                                />
+                                            </div>
+                                            <div class="col-3 ps-1">
+                                                <button class="btn btn-outline-primary w-100" id="addressSearch" original-data="Buscar">Buscar</button>
+                                            </div>
+                                        </div>
+                                        <p class="text-danger d-block mt-1 mb-0 d-none" id="noAddressResults">
+                                            <i class="bi bi-patch-question-fill me-1"></i>Sin resultados
+                                        </p>
+                                    </div>
                                 </div>
                                 <div id="startMap"></div>
                                 <div class="text-center mt-3">
@@ -227,33 +247,24 @@
                                 aria-labelledby="days-tab"
                             >
                                 <div class="fs-5 mt-1">¿Qué días quieres realizar el plan?</div>
-                                <div class="my-1 text-muted">
+                                <div class="my-1">
                                     A partir de los lugares seleccionados, para poder generar un plan, debes seleccionar
                                     una duración mínima de
-                                    <b class="text-dark ms-1" id="recommendedDayLength"><div class="spinner-border spinner-border-sm" role="status"></div></b>.
+                                    <b class="text-dark ms-1" id="recommendedDayLength"
+                                        ><div class="spinner-border spinner-border-sm" role="status"></div></b
+                                    >.
                                 </div>
                                 <div class="my-1 text-muted">
-                                    Si no estás satisfecho con la duración mínima, elimina lugares del plan o reduce la
-                                    duración del descanso.
+                                    Si no estás satisfecho con la duración mínima, elimina lugares del plan o aumenta la duración de la visita diaria.
                                 </div>
                                 <div class="row mt-2">
                                     <div class="col col-6">
                                         <label for="daysStart" class="form-label">Día de inicio</label>
-                                        <input
-                                            type="date"
-                                            class="form-control"
-                                            id="daysStart"
-                                            required
-                                        />
+                                        <input type="date" class="form-control" id="daysStart" required />
                                     </div>
                                     <div class="col col-6">
                                         <label for="daysEnd" class="form-label">Día de fin</label>
-                                        <input
-                                            type="date"
-                                            class="form-control"
-                                            id="daysEnd"
-                                            required
-                                        />
+                                        <input type="date" class="form-control" id="daysEnd" required />
                                     </div>
                                 </div>
                                 <div class="text-danger d-none mt-1" id="daysValidation">
@@ -261,17 +272,25 @@
                                 </div>
                                 <div class="text-danger d-none mt-1" id="daysValidationLength">
                                     La cantidad de días seleccionados debe ser mayor o igual a
-                                    <span class="text-dark" id="recommendedDayLengthValidate">5 días</span>.
+                                    <span class="text-dark" id="recommendedDayLengthValidate"></span>.
                                 </div>
                                 <div class="my-1 text-muted">
-                                    <b>Nota:</b> Una vez establecida la duración del plan, no podrás cambiarla más adelante, aunque podrás adelantar o atrasar la fecha de inicio al editar el plan.
+                                    <b>Nota:</b> Una vez establecida la duración del plan, no podrás cambiarla más
+                                    adelante, aunque podrás adelantar o atrasar la fecha de inicio al editar el plan.
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                        <button type="submit" class="btn btn-primary" disabled id="createPlanButton">Crear plan</button>
+                        <button
+                            type="submit"
+                            class="btn btn-primary umami--click--create-plan"
+                            disabled
+                            id="createPlanButton"
+                        >
+                            Crear plan
+                        </button>
                     </div>
                 </form>
             </div>
@@ -299,25 +318,34 @@
                 <input
                     class="form-control form-control-dark w-100 dropdown-toggle"
                     type="text"
+                    maxlength="127"
                     placeholder="Buscar lugares"
                     aria-label="Buscar lugares"
                     id="searchInput"
                     data-bs-toggle="dropdown"
                     aria-expanded="false"
                 />
-                <ul class="dropdown-menu w-100" aria-labelledby="searchInput" id="searchDropdown" style="
-                    box-shadow: 0px 6px 16px 0px rgba(0,0,0,0.70);
-                    -webkit-box-shadow: 0px 6px 16px 0px rgba(0,0,0,0.70);
-                    -moz-box-shadow: 0px 6px 16px 0px rgba(0,0,0,0.70);
-                ">
+                <ul
+                    class="dropdown-menu w-100 overflow-scroll"
+                    aria-labelledby="searchInput"
+                    id="searchDropdown"
+                    style="
+                        box-shadow: 0px 6px 16px 0px rgba(0, 0, 0, 0.6);
+                        -webkit-box-shadow: 0px 6px 16px 0px rgba(0, 0, 0, 0.6);
+                        -moz-box-shadow: 0px 6px 16px 0px rgba(0, 0, 0, 0.6);
+                        overflow-x: hidden !important;
+                        max-height: 700px;
+                    "
+                >
                     <div
                         class="px-3 py-1 text-center"
                         id="searchPlaceholder"
                         original-data="<i>Introduce un nombre de lugar para buscar</i>"
                     >
-                        <i>Introduce un nombre de lugar para buscar</i>
+                        <i>Busca por nombres de lugar o por categorías</i>
                     </div>
                     <div id="searchItems"></div>
+                    <p id="noSearchResults" class="my-1 d-none text-center">Sin resultados</p>
                 </ul>
             </div>
 
@@ -382,16 +410,14 @@
                 <nav id="sidebarMenu" class="col-md-4 col-lg-3 d-md-block bg-light sidebar collapse">
                     <div class="sidebar-sticky pt-3 px-3">
                         <div class="row mx-0 border-bottom py-2">
-                            <div class="col-10">
-                                <h2 class="d-inline me-1" id="explore">Explorar</h2>
-                                (<span id="placeCount">0</span> lugares)
-                            </div>
+                            <h2 class="d-inline me-1" id="explore">Recomendado para ti</h2>
+                            <div class="col-10 fs-5"><span id="placeCount">0</span> lugares</div>
                             <div class="col-2 text-end">
                                 <a
                                     href="#"
                                     data-bs-toggle="modal"
                                     data-bs-target="#clearPlanModal"
-                                    class="fs-4 my-auto text-danger d-none"
+                                    class="fs-5 my-auto text-danger d-none"
                                     data-bs-toggle="tooltip"
                                     data-bs-placement="bottom"
                                     data-bs-original-title="Vaciar plan"
@@ -415,7 +441,7 @@
                             </a>
                             <button
                                 id="planButton"
-                                class="w-100 btn btn-md-sm btn-success d-inline-block text-center"
+                                class="w-100 btn btn-md-sm btn-success d-inline-block text-center umami--click--start-planner"
                                 disabled
                                 data-bs-toggle="modal"
                                 data-bs-target="#createPlanModal"
@@ -445,9 +471,7 @@
         <!-- Sidebar Card -->
         <template id="templateCard">
             <div class="card place-card">
-                <button
-                    class="btn btn-sm btn-outline-danger position-absolute end-0 me-3 mt-3 remove d-none"
-                >
+                <button class="btn btn-sm btn-outline-danger position-absolute end-0 me-3 mt-3 remove d-none">
                     <i class="bi bi-calendar2-x"></i>
                 </button>
                 <div class="card-body">
@@ -524,9 +548,7 @@
                 </div>
                 <div class="fs-6 my-3 text-center actions">
                     <button class="w-100 btn btn-primary add-to-plan">Añadir al plan</button>
-                    <button class="w-100 btn btn-danger remove-from-plan d-none">
-                        Eliminar del plan
-                    </button>
+                    <button class="w-100 btn btn-danger remove-from-plan d-none">Eliminar del plan</button>
                 </div>
             </div>
         </template>
@@ -557,6 +579,11 @@
         <!-- Hermes -->
         <script src="/js/common.js"></script>
         <script src="/js/dashboard.js"></script>
-        <script async defer data-website-id="0f73de68-9610-4a9c-a7a8-ab61ab30208a" src="https://data.travelhermes.com/umami.js"></script>
+        <script
+            async
+            defer
+            data-website-id="0f73de68-9610-4a9c-a7a8-ab61ab30208a"
+            src="https://data.travelhermes.com/umami.js"
+        ></script>
     </body>
 </html>
