@@ -658,6 +658,12 @@ const PlanItem = sequelize.define(
             type: DataTypes.INTEGER,
             allowNull: false,
         },
+        travelDist: {
+            // In meters
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            defaultValue: 0,
+        },
         travelMode: {
             type: DataTypes.STRING,
             allowNull: false,

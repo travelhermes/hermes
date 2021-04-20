@@ -173,8 +173,13 @@ function createProblem(planId, places, days, start, dayStart, dayEnd, quicker = 
         // Define days
         var dayObjs = [];
         var nextDay = [];
+        var goals = [];
+        var dayVisits = [];
         for (let i = 0; i < days.length; i++) {
             dayObjs.push(getDayObj(days[i]));
+
+            goals.push(`(> (visits ${getDayObj(days[i])}) 0)`);
+            dayVisits.push(`(= (visits ${getDayObj(days[i])}) 0)`);
 
             if (i + 1 < days.length) {
                 nextDay.push(`(next-day ${getDayObj(days[i])} ${getDayObj(days[i + 1])})`);
@@ -189,7 +194,6 @@ function createProblem(planId, places, days, start, dayStart, dayEnd, quicker = 
 
         var placeHours = [];
         var placeDistances = [];
-        var goals = [];
         for (let i = 0; i < places.length; i++) {
             const place = places[i];
 
@@ -273,6 +277,8 @@ function createProblem(planId, places, days, start, dayStart, dayEnd, quicker = 
                 (current-place start)
                 (= (heuristic) 0)
 
+                ${dayVisits.join('\n            ')}
+
                 ${nextDay.join('\n            ')}
 
                 ${placeHours.join('\n            ')}
@@ -304,6 +310,9 @@ exports.createProblem = createProblem;
  * @param  {Boolean}        quicker  If true, time spent is reduced by 1.2
  * @return {Promise}        Resolves with items, rejects with status where 1 = plan not found, and 2 = internal error
  */
+//
+// TODO: Fix starting point inserted in the middle of the plan
+//
 function parseSolution(planId, output, places, start, dayStart, quicker = false) {
     return new Promise(async (resolve, reject) => {
         if (output.indexOf('ff: found legal plan as follows') == -1) {
@@ -441,6 +450,7 @@ function parseSolution(planId, output, places, start, dayStart, quicker = false)
                             startTime: getTimeString(currentTime),
                             endTime: getTimeString(currentTime),
                             type: 2,
+                            travelDist: dist[0],
                             travelNext: dist[1],
                             travelMode: dist[2],
                         });
@@ -477,6 +487,7 @@ function parseSolution(planId, output, places, start, dayStart, quicker = false)
                         items[j].order = order;
                         items[j].day = currentDay;
                         currentTime += dist[1];
+                        items[j].travelDist = dist[0];
                         items[j].travelNext = dist[1];
                         items[j].travelMode = dist[2];
 
@@ -503,6 +514,7 @@ function parseSolution(planId, output, places, start, dayStart, quicker = false)
                         // Update place
                         items[j].order = order;
                         items[j].day = currentDay;
+                        items[j].travelDist = -1;
                         items[j].travelNext = -1;
                         items[j].travelMode = dist[2];
 
@@ -554,7 +566,9 @@ function parseSolution(planId, output, places, start, dayStart, quicker = false)
                 items[i + 1].startTime = items[i].startTime;
                 items[i + 1].endTime = items[i].startTime;
                 items[i].travelNext = items[i + 1].travelNext;
+                items[i].travelDist = items[i + 1].travelDist;
                 items[i + 1].travelNext = 0;
+                items[i + 1].travelDist = 0;
 
                 var swap = items[i + 1].order;
                 items[i + 1].order = items[i].order;
