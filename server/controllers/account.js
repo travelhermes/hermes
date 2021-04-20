@@ -60,6 +60,9 @@ class AccountController {
             request.body.user.name.length <= 0 ||
             request.body.user.surname.length <= 0 ||
             request.body.user.email.length <= 0 ||
+            request.body.user.name.length > 127 ||
+            request.body.user.surname.length > 127 ||
+            request.body.user.email.length > 127 ||
             !validator.isEmail(request.body.user.email) ||
             !request.body.preferences ||
             request.body.preferences.length < 3 ||

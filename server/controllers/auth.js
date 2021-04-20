@@ -177,7 +177,8 @@ class AuthController {
         fastify.get('/api/auth/logoutSessions', this.logoutSessions);
 
         // Password changes
-        fastify.post('/api/auth/password/request',
+        fastify.post(
+            '/api/auth/password/request',
             {
                 config: {
                     rateLimit: {
@@ -186,7 +187,8 @@ class AuthController {
                     },
                 },
             },
-            this.request);
+            this.request
+        );
         fastify.put('/api/auth/password/change', this.change);
         fastify.put('/api/auth/password/update', this.update);
 
@@ -227,8 +229,10 @@ class AuthController {
         if (
             !request.body ||
             !request.body.email ||
+            request.body.email > 127 ||
             !validator.isEmail(request.body.email) ||
             !request.body.password ||
+            request.body.password.length != 64 ||
             !validator.isHexadecimal(request.body.password)
         ) {
             reply.status(400).send();
@@ -370,11 +374,16 @@ class AuthController {
             !request.body.email ||
             request.body.name.length <= 0 ||
             request.body.surname.length <= 0 ||
+            request.body.name.length > 127 ||
+            request.body.surname.length > 127 ||
             request.body.email.length <= 0 ||
             !validator.isEmail(request.body.email) ||
+            request.body.email > 127 ||
             !request.body.password ||
             !validator.isHexadecimal(request.body.password) ||
+            request.body.password.length != 64 ||
             !request.body.country ||
+            request.body.country.length != 2 ||
             !request.body.preferences ||
             request.body.preferences.length < 3 ||
             hasDuplicates(request.body.preferences) ||
@@ -587,7 +596,7 @@ class AuthController {
      * @param  {Reply}   reply   HTTP reply
      */
     async request(request, reply) {
-        if (!request.body || !request.body.email || !validator.isEmail(request.body.email)) {
+        if (!request.body || !request.body.email || request.body.email > 127 || !validator.isEmail(request.body.email)) {
             reply.status(400).send();
             return;
         }
@@ -638,6 +647,7 @@ class AuthController {
             !request.body.token ||
             request.body.token.length <= 0 ||
             !request.body.password ||
+            request.body.password.length != 64 ||
             !validator.isHexadecimal(request.body.password)
         ) {
             reply.status(400).send();
@@ -735,7 +745,12 @@ class AuthController {
      * @param  {Reply}   reply   HTTP Reply
      */
     async update(request, reply) {
-        if (!request.body || !request.body.password || !validator.isHexadecimal(request.body.password)) {
+        if (
+            !request.body ||
+            !request.body.password ||
+            request.body.password.length != 64 ||
+            !validator.isHexadecimal(request.body.password)
+        ) {
             reply.status(400).send();
             return;
         }
@@ -794,7 +809,12 @@ class AuthController {
      * @param  {Reply}   reply   HTTP Reply
      */
     async del(request, reply) {
-        if (!request.body || !request.body.password || !validator.isHexadecimal(request.body.password)) {
+        if (
+            !request.body ||
+            !request.body.password ||
+            request.body.password.length != 64 ||
+            !validator.isHexadecimal(request.body.password)
+        ) {
             reply.status(400).send();
             return;
         }

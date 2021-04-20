@@ -23,6 +23,30 @@ class RatingsController {
             },
             this.search
         );
+        fastify.get(
+            '/api/ratings/random',
+            {
+                config: {
+                    rateLimit: {
+                        max: 300,
+                        timeWindow: '10m',
+                    },
+                },
+            },
+            this.random
+        );
+        fastify.post(
+            '/api/ratings/random',
+            {
+                config: {
+                    rateLimit: {
+                        max: 300,
+                        timeWindow: '10m',
+                    },
+                },
+            },
+            this.random
+        );
     }
 
     /**
@@ -267,15 +291,23 @@ class RatingsController {
         }
     }
 
-    /**
-     * REQUIRES SESSION!
-     * Search places excluding already rated by the user
-     * @param  {Request} request HTTP Request
-     * @param  {Reply}   reply   HTTP Reply
-     */
-    async search(request, reply) {
-        const query = sanitize(request.params.q).replace(' ', '%');
+    async random(request, reply) {
         const userId = await Session.getSessionUserId(request);
+        const ignores = request.body && request.body.ignores ? request.body.ignores : [];
+
+        if (!userId) {
+            reply.status(403).send();
+            return;
+        }
+
+        var maxCount = 5;
+        if(request.body && request.body.max) {
+            if(request.body.max <= 0) {
+                reply.status(400).send();
+                return;
+            }
+            maxCount = Math.min(request.body.max, 5);
+        }
 
         const rated = (
             await db.Rating.findAll({
@@ -288,43 +320,105 @@ class RatingsController {
             return item.PlaceId;
         });
 
-        if (userId) {
-            reply.status(200).send({
-                result: (
-                    await db.Place.findAll({
-                        attributes: ['id', 'name', 'description', 'wikipedia', 'placeUrl', 'images'],
-                        where: {
-                            name: {
-                                [Op.like]: '%' + query + '%',
-                            },
-                            id: {
-                                [Op.notIn]: rated,
-                            },
+        reply.status(200).send({
+            result: (
+                await db.Place.findAll({
+                    attributes: ['id', 'name', 'description', 'wikipedia', 'placeUrl', 'images'],
+                    where: {
+                        id: {
+                            [Op.notIn]: ignores,
+                            [Op.notIn]: rated,
                         },
-                        include: [
-                            {
-                                model: db.Category,
-                                attributes: ['name'],
-                            },
-                        ],
-                    })
-                ).map((item) => {
-                    return {
-                        id: item.id,
-                        name: item.name,
-                        description: item.description,
-                        wikipedia: item.wikipedia,
-                        placeUrl: item.placeUrl,
-                        images: item.images,
-                        categories: item.Categories.map((category) => {
-                            return category.name;
-                        }),
-                    };
-                }),
-            });
-        } else {
-            reply.status(403).send();
+                    },
+                    include: [
+                        {
+                            model: db.Category,
+                            attributes: ['name'],
+                        },
+                    ],
+                    order: db.sequelize.random(),
+                    limit: maxCount,
+                })
+            ).map((item) => {
+                return {
+                    id: item.id,
+                    name: item.name,
+                    description: item.description,
+                    wikipedia: item.wikipedia,
+                    placeUrl: item.placeUrl,
+                    images: item.images,
+                    categories: item.Categories.map((category) => {
+                        return category.name;
+                    }),
+                };
+            }),
+        });
+    }
+
+    /**
+     * REQUIRES SESSION!
+     * Search places excluding already rated by the user
+     * @param  {Request} request HTTP Request
+     * @param  {Reply}   reply   HTTP Reply
+     */
+    async search(request, reply) {
+        const query = sanitize(request.params.q).replace(' ', '%');
+        if(query.length <= 0 || query.length > 127) {
+            reply.status(400).send();
+            return;
         }
+        
+        const userId = await Session.getSessionUserId(request);
+
+        if (!userId) {
+            reply.status(403).send();
+            return;
+        }
+
+        const rated = (
+            await db.Rating.findAll({
+                attributes: ['PlaceId'],
+                where: {
+                    UserId: userId,
+                },
+            })
+        ).map(function (item) {
+            return item.PlaceId;
+        });
+
+        reply.status(200).send({
+            result: (
+                await db.Place.findAll({
+                    attributes: ['id', 'name', 'description', 'wikipedia', 'placeUrl', 'images'],
+                    where: {
+                        name: {
+                            [Op.like]: '%' + query + '%',
+                        },
+                        id: {
+                            [Op.notIn]: rated,
+                        },
+                    },
+                    include: [
+                        {
+                            model: db.Category,
+                            attributes: ['name'],
+                        },
+                    ],
+                })
+            ).map((item) => {
+                return {
+                    id: item.id,
+                    name: item.name,
+                    description: item.description,
+                    wikipedia: item.wikipedia,
+                    placeUrl: item.placeUrl,
+                    images: item.images,
+                    categories: item.Categories.map((category) => {
+                        return category.name;
+                    }),
+                };
+            }),
+        });
     }
 }
 

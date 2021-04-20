@@ -10,7 +10,32 @@ const Recommender = require('../recommender/index.js');
 class RecommenderController {
     constructor(fastify) {
         fastify.get('/api/recommendations/get', this.get);
+        fastify.post('/api/recommendations/get', this.get);
         fastify.get('/api/recommendations/request', this.request);
+        fastify.get(
+            '/api/recommendations/random',
+            {
+                config: {
+                    rateLimit: {
+                        max: 300,
+                        timeWindow: '10m',
+                    },
+                },
+            },
+            this.random
+        );
+        fastify.post(
+            '/api/recommendations/random',
+            {
+                config: {
+                    rateLimit: {
+                        max: 300,
+                        timeWindow: '10m',
+                    },
+                },
+            },
+            this.random
+        );
     }
 
     /**
@@ -21,6 +46,7 @@ class RecommenderController {
      */
     async get(request, reply) {
         const userId = await Session.getSessionUserId(request);
+        const ignores = request.body && request.body.ignores ? request.body.ignores : [];
         if (!userId) {
             reply.status(403).send();
             return;
@@ -31,6 +57,9 @@ class RecommenderController {
                 attributes: { exclude: ['createdAt', 'deletedAt', 'updatedAt', 'from'] },
                 where: {
                     UserId: userId,
+                    PlaceId: {
+                        [Op.notIn]: ignores,
+                    },
                 },
                 include: [
                     {
@@ -88,6 +117,7 @@ class RecommenderController {
                         [Op.notIn]: places.map((place) => {
                             return place.id;
                         }),
+                        [Op.notIn]: ignores,
                     },
                 },
                 include: [
@@ -136,6 +166,87 @@ class RecommenderController {
         reply.status(200).send({
             places: places,
             random: random,
+        });
+    }
+
+    async random(request, reply) {
+        const userId = await Session.getSessionUserId(request);
+        const ignores = request.body && request.body.ignores ? request.body.ignores : [];
+        if (!userId) {
+            reply.status(403).send();
+            return;
+        }
+
+        var maxCount = 5;
+        if(request.body && request.body.max) {
+            if(request.body.max <= 0) {
+                reply.status(400).send();
+                return;
+            }
+            maxCount = Math.min(request.body.max, 5);
+        }
+
+        const places = (
+            await db.Recommendation.findAll({
+                attributes: { exclude: ['createdAt', 'deletedAt', 'updatedAt', 'from'] },
+                where: {
+                    UserId: userId,
+                    PlaceId: {
+                        [Op.notIn]: ignores,
+                    },
+                },
+                include: [
+                    {
+                        model: db.Place,
+                        include: [
+                            {
+                                model: db.Category,
+                                attributes: ['name'],
+                            },
+                        ],
+                    },
+                ],
+                order: db.sequelize.random(),
+                limit: maxCount
+            })
+        ).map(function (item) {
+            if (item) {
+                return {
+                    address: item.Place.address,
+                    city: item.Place.city,
+                    country: item.Place.country,
+                    description: item.Place.description,
+                    facebook: item.Place.facebook,
+                    fsqId: item.Place.fsqId,
+                    gmapsUrl: item.Place.gmapsUrl,
+                    id: item.Place.id,
+                    images: item.Place.images,
+                    instagram: item.Place.instagram,
+                    lat: item.Place.lat,
+                    lon: item.Place.lon,
+                    name: item.Place.name,
+                    osmId: item.Place.osmId,
+                    phone: item.Place.phone,
+                    placeUrl: item.Place.placeUrl,
+                    postalCode: item.Place.postalCode,
+                    state: item.Place.state,
+                    timeSpent: item.Place.timeSpent,
+                    tripadvisorUrl: item.Place.tripadvisorUrl,
+                    twitter: item.Place.twitter,
+                    wheelchair: item.Place.wheelchair,
+                    wikidata: item.Place.wikidata,
+                    wikipedia: item.Place.wikipedia,
+                    categories: item.Place.Categories.map((category) => {
+                        return category.name;
+                    }),
+                    probability: item.probability,
+                    rating: item.Place.rating,
+                };
+            }
+        });
+
+        reply.status(200).send({
+            result: places,
         });
     }
 

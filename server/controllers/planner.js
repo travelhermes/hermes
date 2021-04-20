@@ -196,6 +196,7 @@ class PlannerController {
             !request.body ||
             !request.body.name ||
             request.body.name.length <= 0 ||
+            request.body.name.length > 127 ||
             !request.body.places ||
             hasDuplicates(request.body.places) ||
             request.body.places.length < 3 ||
@@ -487,6 +488,7 @@ class PlannerController {
                         type: item.type,
                         timeSpent: item.timeSpent,
                         travelNext: item.travelNext,
+                        travelDist: item.travelDist,
                         travelMode: item.travelMode,
                         notes: item.description,
                     };
@@ -549,10 +551,18 @@ class PlannerController {
             typeof request.body.plan.id != 'number' ||
             !request.body.plan.name ||
             request.body.plan.name.length <= 0 ||
+            request.body.plan.name.length > 127 ||
             typeof request.body.plan.name != 'string' ||
             !request.body.plan.startDate
         ) {
             reply.status(400).send();
+            return;
+        }
+
+        // Get user
+        var user = await Session.getSessionUser(request);
+        if (!user) {
+            reply.status(403).send();
             return;
         }
 
@@ -591,16 +601,9 @@ class PlannerController {
                 return;
             }
         }
-
+        
         if (request.body.plan.startDate < today) {
             reply.status(400).send();
-            return;
-        }
-
-        // Get user
-        var user = await Session.getSessionUser(request);
-        if (!user) {
-            reply.status(403).send();
             return;
         }
 
@@ -722,6 +725,7 @@ class PlannerController {
                     timeSpent: item.timeSpent,
                     type: 1,
                     travelNext: next && request.body.items[i + 1].day == item.day ? dist[1] : -1,
+                    travelDist: next && request.body.items[i + 1].day == item.day ? dist[0] : -1,
                     travelMode: dist[2],
                     description: item.notes,
                 });
@@ -749,6 +753,7 @@ class PlannerController {
                     timeSpent: 0,
                     type: 2,
                     travelNext: next && request.body.items[i + 1].day == item.day ? dist[1] : -1,
+                    travelDist: next && request.body.items[i + 1].day == item.day ? dist[0] : -1,
                     travelMode: dist[2],
                     description: item.notes,
                 });
@@ -776,6 +781,7 @@ class PlannerController {
                     timeSpent: item.timeSpent,
                     type: item.type,
                     travelNext: next && request.body.items[i + 1].day == item.day ? dist[1] : -1,
+                    travelDist: next && request.body.items[i + 1].day == item.day ? dist[0] : -1,
                     travelMode: dist[2],
                     description: item.notes,
                 });

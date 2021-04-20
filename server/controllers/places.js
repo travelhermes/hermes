@@ -67,6 +67,15 @@ class PlacesController {
      */
     async random(request, reply) {
         const ignores = request.body && request.body.ignores ? request.body.ignores : [];
+        var maxCount = 5;
+        if(request.body && request.body.max) {
+            if(request.body.max <= 0) {
+                reply.status(400).send();
+                return;
+            }
+            maxCount = Math.min(request.body.max, 5);
+        }
+
         reply.status(200).send({
             places: (
                 await db.Place.findAll({
@@ -81,7 +90,7 @@ class PlacesController {
                         },
                     ],
                     order: db.sequelize.random(),
-                    limit: 5,
+                    limit: maxCount,
                 })
             ).map(function (item) {
                 return {
@@ -216,64 +225,156 @@ class PlacesController {
     /**
      * REQUIRES SESSION!
      * Search a place by name
-     * If `ignores` body param is set, returns 5 random places, excluding places in `ignores`.
+     * If `ignores` body param is set, returns excluding places in `ignores`.
+     * If `max` body param is set, return the specified number of results, with a maximum of 25
      * @param  {Request} request HTTP Request
      * @param  {Reply}   reply   HTTP Reply
      */
     async search(request, reply) {
         const query = sanitize(request.params.q).replace(' ', '%');
+        if(query.length <= 0 || query.length > 127) {
+            reply.status(400).send();
+            return;
+        }
+
         const ignores = request.body ? request.body.ignores || [] : [];
-        reply.status(200).send({
-            result: (
-                await db.Place.findAll({
+        var maxCount = 25;
+        if(request.body && request.body.max) {
+            if(request.body.max <= 0) {
+                reply.status(400).send();
+                return;
+            }
+            maxCount = Math.min(request.body.max, 25);
+        }
+
+        // Find places
+        var result = (
+            await db.Place.findAll({
+                where: {
+                    name: {
+                        [Op.like]: '%' + query + '%',
+                    },
+                    id: {
+                        [Op.notIn]: ignores,
+                    },
+                },
+                include: [
+                    {
+                        model: db.Category,
+                        attributes: ['name'],
+                    },
+                ],
+                limit: maxCount,
+            })
+        ).map(function (item) {
+            return {
+                address: item.address,
+                city: item.city,
+                country: item.country,
+                description: item.description,
+                facebook: item.facebook,
+                fsqId: item.fsqId,
+                gmapsUrl: item.gmapsUrl,
+                id: item.id,
+                images: item.images,
+                instagram: item.instagram,
+                lat: item.lat,
+                lon: item.lon,
+                name: item.name,
+                osmId: item.osmId,
+                phone: item.phone,
+                placeUrl: item.placeUrl,
+                postalCode: item.postalCode,
+                state: item.state,
+                timeSpent: item.timeSpent,
+                tripadvisorUrl: item.tripadvisorUrl,
+                twitter: item.twitter,
+                wheelchair: item.wheelchair,
+                wikidata: item.wikidata,
+                wikipedia: item.wikipedia,
+                categories: item.Categories.map((category) => {
+                    return category.name;
+                }),
+                rating: item.rating,
+            };
+        });
+
+        // Find places in categories
+        var places = await db.Place.findAll({
+            attributes: ['id'],
+            where: {
+                id: {
+                    [Op.notIn]: ignores,
+                    [Op.notIn]: result.map((place) => {
+                        return place.id;
+                    }),
+                },
+            },
+            limit: maxCount,
+            include: [
+                {
+                    model: db.Category,
                     where: {
                         name: {
                             [Op.like]: '%' + query + '%',
                         },
-                        id: {
-                            [Op.notIn]: ignores,
-                        },
                     },
-                    include: [
-                        {
-                            model: db.Category,
-                            attributes: ['name'],
-                        },
-                    ],
-                    limit: 20,
-                })
-            ).map(function (item) {
-                return {
-                    address: item.address,
-                    city: item.city,
-                    country: item.country,
-                    description: item.description,
-                    facebook: item.facebook,
-                    fsqId: item.fsqId,
-                    gmapsUrl: item.gmapsUrl,
-                    id: item.id,
-                    images: item.images,
-                    instagram: item.instagram,
-                    lat: item.lat,
-                    lon: item.lon,
-                    name: item.name,
-                    osmId: item.osmId,
-                    phone: item.phone,
-                    placeUrl: item.placeUrl,
-                    postalCode: item.postalCode,
-                    state: item.state,
-                    timeSpent: item.timeSpent,
-                    tripadvisorUrl: item.tripadvisorUrl,
-                    twitter: item.twitter,
-                    wheelchair: item.wheelchair,
-                    wikidata: item.wikidata,
-                    wikipedia: item.wikipedia,
-                    categories: item.Categories.map((category) => {
-                        return category.name;
-                    }),
-                    rating: item.rating,
-                };
-            }),
+                },
+            ],
+        });
+
+        for (var i = 0; i < places.length; i++) {
+            if(result.length >= maxCount) {
+                break;
+            }
+
+            const place = places[i];
+            const item = await db.Place.findOne({
+                where: {
+                    id: place.id,
+                },
+                include: [
+                    {
+                        attributes: ['name'],
+                        model: db.Category,
+                    },
+                ],
+            });
+
+            result.push({
+                address: item.address,
+                city: item.city,
+                country: item.country,
+                description: item.description,
+                facebook: item.facebook,
+                fsqId: item.fsqId,
+                gmapsUrl: item.gmapsUrl,
+                id: item.id,
+                images: item.images,
+                instagram: item.instagram,
+                lat: item.lat,
+                lon: item.lon,
+                name: item.name,
+                osmId: item.osmId,
+                phone: item.phone,
+                placeUrl: item.placeUrl,
+                postalCode: item.postalCode,
+                state: item.state,
+                timeSpent: item.timeSpent,
+                tripadvisorUrl: item.tripadvisorUrl,
+                twitter: item.twitter,
+                wheelchair: item.wheelchair,
+                wikidata: item.wikidata,
+                wikipedia: item.wikipedia,
+                categories: item.Categories.map((category) => {
+                    return category.name;
+                }),
+                rating: item.rating,
+            });
+        }
+
+        reply.status(200).send({
+            result: result,
         });
     }
 }
