@@ -14,6 +14,8 @@ var dates;
 var currentDay = 0;
 
 var searchPlaces = [];
+var suggestionPlaces = [];
+var searchMode = 'suggestions';
 
 var layers = [];
 
@@ -133,7 +135,12 @@ function renderPoints(plan, day) {
         }
     };
 
-    layers.push(L.marker(coords[0].coords).addTo(map).bindPopup(getMarkerContent(coords[0])));
+    try {
+        layers.push(L.marker(coords[0].coords).addTo(map).bindPopup(getMarkerContent(coords[0])));
+    } catch (err) {
+        coords[0] = { coords: [plan.startLat, plan.startLon] };
+        layers.push(L.marker(coords[0].coords).addTo(map).bindPopup(getMarkerContent(coords[0].coords)));
+    }
     for (var i = 0; i < coords.length - 1; i++) {
         layers.push(drawCurve(coords[i].coords, coords[i + 1].coords, map));
         layers.push(
@@ -153,7 +160,7 @@ function renderPoints(plan, day) {
  * @param  {string} name Name to set
  */
 function renderHeaderName(name) {
-    if(name.length > 22) {
+    if (name.length > 22) {
         name = name.substring(0, 22) + '...';
     }
     document.querySelector('#headerName').innerHTML = name;
@@ -185,6 +192,9 @@ function resolveState(state) {
  * @param  {HTMLElement} button Next day button
  */
 function nextDay(button) {
+    if (!checkTimes()) {
+        return;
+    }
     document.querySelector('#prev').disabled = false;
     if (currentDay <= dates.length - 1) {
         currentDay++;
@@ -203,6 +213,9 @@ function nextDay(button) {
  * @param  {HTMLElement} button Previous day button
  */
 function prevDay(button) {
+    if (!checkTimes()) {
+        return;
+    }
     document.querySelector('#next').disabled = false;
     if (currentDay >= 0) {
         currentDay--;
@@ -384,17 +397,17 @@ function renderPlan(plan, day) {
             card.querySelector('.time-start').remove();
         }
 
-        if(card.querySelector('.time')) {
+        if (card.querySelector('.time')) {
             card.querySelector('.time').addEventListener('change', (e) => {
                 updateCustomTime(e.target);
             });
         }
-        if(card.querySelector('.remove')) {
+        if (card.querySelector('.remove')) {
             card.querySelector('.remove').addEventListener('click', (e) => {
                 removeItem(e.target.closest('.btn'));
             });
         }
-        if(card.querySelector('.notes')) {
+        if (card.querySelector('.notes')) {
             card.querySelector('.notes').addEventListener('change', (e) => {
                 updateNotes(e.target);
             });
@@ -433,6 +446,14 @@ function renderPlan(plan, day) {
                 travel.querySelector('.fa-walking').classList.add('d-none');
             }
             travel.querySelector('.time').innerHTML = plural(item.travelNext, 'minuto');
+            if (item.travelDist < 1000) {
+                travel.querySelector('.distance').innerHTML = plural(item.travelDist, 'metro');
+            } else {
+                travel.querySelector('.distance').innerHTML = plural(
+                    parseInt((item.travelDist / 1000).toFixed(2)),
+                    'kilómetro'
+                );
+            }
             document.querySelector('#planning').appendChild(travel);
         }
     }
@@ -477,9 +498,7 @@ function startIntervalStatus() {
                 document.querySelector('#planStatus').querySelector('#planningStatus').classList.add('d-none');
                 statusModal.show();
             } else {
-                statusModal.hide();
-                clearInterval(statusInterval);
-                loadPlan(res);
+                window.location.reload();
             }
         } catch (err) {
             throwError(err);
@@ -621,7 +640,7 @@ function loadPlan(data, parse = true) {
         document.querySelector('#prev').disabled = true;
     }
 
-    if(dates[0] < new Date()) {
+    if (dates[0] < new Date()) {
         document.querySelector('#start-date').classList.remove('edit-mode-disable');
     }
 
@@ -721,6 +740,9 @@ function updateDates(element) {
 function openInsertPlace(button) {
     var index = parseInt(button.closest('.item').getAttribute('routeIndex'));
     document.querySelector('#searchModal').setAttribute('insertIndex', index);
+    document.querySelector('#searchItems').classList.add('d-none');
+    document.querySelector('#suggestions').classList.remove('d-none');
+    searchMode = 'suggestions';
 }
 
 /**
@@ -729,14 +751,18 @@ function openInsertPlace(button) {
  */
 async function search(button) {
     setLoadButton(button);
+    console.log(button);
     const modal = button.closest('.modal');
     const query = modal.querySelector('#inputSearch').value;
     modal.querySelector('.alert').classList.add('d-none');
+    document.querySelector('#suggestions').classList.add('d-none');
 
     try {
         var res = (await get(ENDPOINTS.placesSearch + '/' + query)).result;
+        searchMode = 'search';
         searchPlaces = res;
-        renderInsertPlaces(res, document.querySelector('#searchItems'), false, false);
+        renderInsertPlaces(res, document.querySelector('#searchItemsList'));
+        document.querySelector('#searchItems').classList.remove('d-none');
         setDoneButton(button);
     } catch (err) {
         unsetLoadButton(button);
@@ -748,14 +774,17 @@ async function search(button) {
  * Given a place list and a container, renders the places into the (search) container
  * @param  {Array<object>}  places  Places array
  * @param  {HTMLElement}  container Parent container
+ * @param  {Boolean} alert     (default: true) If true, shows or hides the 'No results' alert
  */
-function renderInsertPlaces(places, container) {
+function renderInsertPlaces(places, container, alert = true) {
     container.innerHTML = '';
 
-    if (!places || places.length == 0) {
-        container.parentElement.querySelector('.alert').classList.remove('d-none');
-    } else {
-        container.parentElement.querySelector('.alert').classList.add('d-none');
+    if (alert) {
+        if (!places || places.length == 0) {
+            container.parentElement.querySelector('.alert').classList.remove('d-none');
+        } else {
+            container.parentElement.querySelector('.alert').classList.add('d-none');
+        }
     }
 
     for (let i = 0; i < places.length; i++) {
@@ -800,7 +829,12 @@ function renderInsertPlaces(places, container) {
 function insertPlace(button) {
     var index = parseInt(button.closest('#searchModal').getAttribute('insertIndex'));
     var id = parseInt(button.closest('.search-card').getAttribute('id'));
-    var place = getElementByKey(searchPlaces, 'id', id);
+    var place;
+    if(searchMode == 'search') {
+        place = getElementByKey(searchPlaces, 'id', id);
+    } else {
+        place = getElementByKey(suggestionPlaces, 'id', id);
+    }
     plan.days[currentDay].route.splice(index + 1, 0, {
         id: -1,
         place: {
@@ -830,7 +864,6 @@ function insertPlace(button) {
         lat: place.lat,
         lon: place.lon,
     });
-    document.querySelector('#searchItems').innerHTML = '';
     document.querySelector('#searchModal').setAttribute('insertIndex', -1);
     searchPlaces = [];
     renderPlan(plan, currentDay);
@@ -918,10 +951,34 @@ function updateCustomTime(input) {
 }
 
 /**
+ * Check if time spent inputs are valid
+ */
+function checkTimes() {
+    var timeInputs = document.querySelectorAll('input[type="number"].time');
+    var unset;
+    for (var i = 0; i < timeInputs.length; i++) {
+        if (timeInputs[i].value < 15 || timeInputs[i].value % 1 != 0) {
+            timeInputs[i].classList.add('border-danger');
+            if (!unset) unset = timeInputs[i];
+        } else {
+            timeInputs[i].classList.remove('border-danger');
+        }
+    }
+    if (unset) {
+        scrollToMiddle(unset);
+        return false;
+    }
+
+    return true;
+}
+
+/**
  * Saves a plan, sending data to the server
  * @param  {HTMLElement} button Button that triggered the action
  */
 function savePlan(button) {
+    if (!checkTimes()) return;
+
     setLoadButton(button);
     var request = {
         plan: {
@@ -936,6 +993,9 @@ function savePlan(button) {
     for (var i = 0; i < dates.length; i++) {
         var route = plan.days[i].route;
         for (var j = 0; j < route.length; j++) {
+            if (route[j].type == 2 && j != 0) {
+                continue;
+            }
             request.items.push({
                 order: j,
                 day: i,
@@ -955,6 +1015,31 @@ function savePlan(button) {
             throwError(err);
             unsetLoadButton(button);
         });
+}
+
+/**
+ * Load random suggestions
+ * @param {Array<Place>} places Places to render
+ */
+async function getRandomSuggestions(places) {
+    var ignores = [];
+    for (var i = 0; i < dates.length; i++) {
+        var route = plan.days[i].route;
+        for (var j = 0; j < route.length; j++) {
+            if (route[j].type != 1) {
+                continue;
+            }
+            ignores.push(route[j].place.id);
+        }
+    }
+
+    try {
+        const rand = (await post(ENDPOINTS.recommendationsRandom, { ignores: ignores, max: 3 })).result;
+        suggestionPlaces = rand;
+        renderInsertPlaces(rand, document.querySelector('#suggestionsList'), false);
+    } catch (err) {
+        throwError(err);
+    }
 }
 
 async function main() {
@@ -991,11 +1076,11 @@ async function main() {
         return false;
     });
     document.querySelector('#editButtonHeader').addEventListener('click', (e) => {
-        edit = true; 
+        edit = true;
         editMode();
     });
     document.querySelector('#editButton').addEventListener('click', (e) => {
-        edit = true; 
+        edit = true;
         editMode();
     });
     document.querySelector('#saveButtonHeader').addEventListener('click', (e) => {
@@ -1005,11 +1090,11 @@ async function main() {
         savePlan(e.target.closest('.btn'));
     });
     document.querySelector('#cancelButtonHeader').addEventListener('click', (e) => {
-        edit = false; 
+        edit = false;
         cancelEdit();
     });
     document.querySelector('#cancelButton').addEventListener('click', (e) => {
-        edit = false; 
+        edit = false;
         cancelEdit();
     });
     document.querySelector('#start-date').addEventListener('change', (e) => {
@@ -1019,10 +1104,24 @@ async function main() {
         renderHeaderName(e.target.value);
     });
     document.querySelector('#prev').addEventListener('click', (e) => {
-        prevDay(e.target);
+        prevDay(e.target.closest('.btn'));
     });
     document.querySelector('#next').addEventListener('click', (e) => {
-        nextDay(e.target);
+        nextDay(e.target.closest('.btn'));
+    });
+    document.querySelector('#refreshSuggestions').addEventListener('click', (e) => {
+        e.preventDefault();
+        getRandomSuggestions();
+    });
+    document.querySelector('#inputSearch').addEventListener('keyup', (e) => {
+        if (e.target.value.length == 0) {
+            document.querySelector('#suggestions').classList.remove('d-none');
+            document.querySelector('#searchItems').classList.add('d-none');
+            document.querySelector('#searchButton').disabled = true;
+            searchMode = 'suggestions';
+        } else {
+            document.querySelector('#searchButton').disabled = false;
+        }
     });
 
     document.querySelector('#loader').addEventListener('shown.bs.modal', async function (event) {
@@ -1053,6 +1152,9 @@ async function main() {
                     statusModal.hide();
                     setupMap([res.plan.startLat, res.plan.startLon]);
                     loadPlan(res);
+                    getRandomSuggestions();
+                    // 2 min.
+                    setInterval(getRandomSuggestions, 120000);
                 }
             })
             .catch((err) => {
@@ -1062,4 +1164,6 @@ async function main() {
     });
 }
 
-window.onload = () => { main(); };
+window.onload = () => {
+    main();
+};

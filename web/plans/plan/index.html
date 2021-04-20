@@ -86,7 +86,7 @@
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="deleteConfirmLabel">Eliminar ruta</h5>
+                        <h4 class="modal-title" id="deleteConfirmLabel">Eliminar ruta</h4>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                     </div>
                     <div class="modal-body">
@@ -95,12 +95,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                        <button
-                            type="button"
-                            class="btn btn-danger"
-                            id="deletePlan"
-                            original-data="Sí, estoy seguro"
-                        >
+                        <button type="button" class="btn btn-danger" id="deletePlan" original-data="Sí, estoy seguro">
                             Sí, estoy seguro
                         </button>
                     </div>
@@ -109,32 +104,38 @@
         </div>
 
         <div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="searchModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollabl">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
                 <form class="modal-content" id="searchForm">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="searchModalLabel">Insertar lugar</h5>
+                        <h4 class="modal-title" id="searchModalLabel">Añadir lugar</h4>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                     </div>
                     <div class="modal-body">
                         <p>Introduce un criterio de búsqueda</p>
-                        <input type="text" id="inputSearch" class="w-100" placeholder="Buscar lugar" />
-                        <div class="text-center">
-                            <div class="alert alert-primary w-100 mt-2 d-inline-block d-none" role="alert">
-                                Sin resultados. Prueba con otro criterio de búsqueda <br />
-                                ¿Te falta algún lugar?
-                                <a href="https://github.com/SrGMC/hermes">Háznoslo saber</a>
+                        <input type="text" id="inputSearch" class="w-100 fs-6" placeholder="Buscar lugar" maxlength="127" required/>
+                        <div id="searchItems" class="d-none">
+                            <p class="mt-4">
+                                <span class="fs-5">Resultados de la búsqueda</span>
+                            </p>
+                            <div class="text-center">
+                                <div class="alert alert-primary w-100 mt-2 d-inline-block d-none" role="alert">
+                                    Sin resultados. Prueba con otro criterio de búsqueda <br />
+                                    ¿Te falta algún lugar?
+                                    <a href="https://github.com/SrGMC/hermes">Háznoslo saber</a>
+                                </div>
                             </div>
+                            <div id="searchItemsList"></div>
                         </div>
-                        <div id="searchItems"></div>
+                        <div id="suggestions">
+                            <p class="mt-4">
+                                <span class="fs-5">¿Qué te parecen estos sitios para puntuar?</span> <a href="#" id="refreshSuggestions" class="ms-2"><i class="bi bi-arrow-clockwise me-1"></i>Refrescar</a>
+                            </p>
+                            <div id="suggestionsList"></div>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                        <button
-                            type="submit"
-                            id="searchButton"
-                            class="btn btn-primary"
-                            original-data="Buscar"
-                        >
+                        <button type="submit" id="searchButton" class="btn btn-primary" original-data="Buscar" disabled>
                             Buscar
                         </button>
                     </div>
@@ -142,7 +143,13 @@
             </div>
         </div>
 
-        <a href="#" class="position-fixed bottom-0 end-0 btn btn-dark mx-3 my-3 d-none" id="goToTop" style="z-index: 1001;" title="Subir al inicio de la página">
+        <a
+            href="#"
+            class="position-fixed bottom-0 end-0 btn btn-dark mx-3 my-3 d-none"
+            id="goToTop"
+            style="z-index: 1001"
+            title="Subir al inicio de la página"
+        >
             <i class="bi bi-arrow-up"></i>
         </a>
 
@@ -151,9 +158,15 @@
                 <img class="logo" src="/assets/logo_light_256.png" alt="" width="28" height="28" />
                 Hermes
             </a>
-            <div class="w-100 text-white px-3 py-2 d-none" id="headerInfo" style="min-height: 52px;">
+            <div class="w-100 text-white px-3 py-2 d-none" id="headerInfo" style="min-height: 52px">
                 <div class="fs-4 d-inline-block" id="headerName"></div>
-                <div class="ms-3 btn-group edit-mode-hide" role="group" aria-label="Acciones" id="actions" style="margin-top: -15px;">
+                <div
+                    class="ms-3 btn-group edit-mode-hide"
+                    role="group"
+                    aria-label="Acciones"
+                    id="actions"
+                    style="margin-top: -15px"
+                >
                     <button type="button" class="btn btn-sm btn-secondary" id="editButtonHeader">
                         <i class="mx-md-1 bi bi-pencil-fill"></i>
                     </button>
@@ -167,7 +180,13 @@
                         <i class="mx-md-1 bi bi-trash-fill"></i>
                     </button>
                 </div>
-                <div class="ms-3 btn-group d-none edit-mode-show" role="group" aria-label="Acciones" id="actions" style="margin-top: -15px;">
+                <div
+                    class="ms-3 btn-group d-none edit-mode-show"
+                    role="group"
+                    aria-label="Acciones"
+                    id="actions"
+                    style="margin-top: -15px"
+                >
                     <button
                         type="button"
                         id="saveButtonHeader"
@@ -261,12 +280,14 @@
             <input
                 type="text"
                 name="name"
+                maxlength="127"
                 id="name"
                 class="form-control fs-1 w-75 text-center d-inline-block mb-1 mx-2 edit-mode-disable"
                 disabled
             />
             <textarea
                 type="text"
+                maxlength="127"
                 name="description"
                 id="description"
                 class="form-control fs-5 w-75 text-center d-inline-block mb-1 mx-1 edit-mode-disable"
@@ -310,23 +331,15 @@
                 </button>
             </div>
         </div>
-        <div id="map" class="w-100" style="min-height: 50vh;"></div>
+        <div id="map" class="w-100" style="min-height: 50vh"></div>
         <div class="container-fluid main w-md-75 text-center my-4">
             <main class="ms-sm-auto px-md-4 d-none" id="mainPlan">
                 <div class="btn-group mt-1" role="group" aria-label="Cambiar día">
-                    <button
-                        id="prev"
-                        type="button"
-                        class="btn btn-outline-secondary"
-                    >
+                    <button id="prev" type="button" class="btn btn-outline-secondary">
                         <i class="mx-md-1 bi bi-arrow-left"></i>
                         <span class="d-none d-lg-inline"> Anterior día </span>
                     </button>
-                    <button
-                        id="next"
-                        type="button"
-                        class="btn btn-outline-secondary"
-                    >
+                    <button id="next" type="button" class="btn btn-outline-secondary">
                         <span class="d-none d-lg-inline"> Siguiente día </span>
                         <i class="mx-md-1 bi bi-arrow-right"></i>
                     </button>
@@ -345,10 +358,9 @@
             <p>
                 Creado por
                 <a href="https://galisteo.me">Álvaro Galisteo</a><br />
-                <a href="/attributions/">Atribuciones</a> -
-                <a href="/help/">Ayuda</a> -
+                <a href="/attributions/">Atribuciones</a> - <a href="/help/">Ayuda</a> -
 
-                <a href="https://status.travelhermes.com">Estado</a><br>
+                <a href="https://status.travelhermes.com">Estado</a><br />
                 <a href="/terms/">Terminos y condiciones</a> -
                 <a href="/privacy/">Política de privacidad</a>
             </p>
@@ -386,6 +398,11 @@
                                         style="width: 80px"
                                         disabled
                                         min="15"
+                                        data-bs-toggle="tooltip"
+                                        data-bs-placement="bottom"
+                                        data-bs-original-title="La duración de la visita debe ser igual o superior a 15 min."
+                                        title="La duración de la visita debe ser igual o superior a 15 min."
+                                        value="15"
                                         step="1"
                                     />
                                     minutos
@@ -395,7 +412,9 @@
                                     <a href="#" target="_blank" class="btn btn-outline-success phone">
                                         <i class="bi bi-telephone-fill"></i>
                                     </a>
-                                    <a href="#" target="_blank" class="btn btn-outline-secondary wiki"><i class="fab fa-wikipedia-w"></i></a>
+                                    <a href="#" target="_blank" class="btn btn-outline-secondary wiki"
+                                        ><i class="fab fa-wikipedia-w"></i
+                                    ></a>
                                     <a href="#" target="_blank" class="btn btn-outline-success link">
                                         <i class="bi bi-link-45deg"></i>
                                     </a>
@@ -436,16 +455,16 @@
                         data-bs-toggle="modal"
                         data-bs-target="#searchModal"
                     >
-                        <i class="bi bi-geo-alt-fill me-1"></i>Insertar lugar
+                        <i class="bi bi-geo-alt-fill me-1"></i>Añadir lugar
                     </button>
                     <button class="btn btn-primary my-1 insert-custom">
-                        <i class="bi bi-plus-circle me-1"></i>Insertar personalizado
+                        <i class="bi bi-plus-circle me-1"></i>Añadir personalizado
                     </button>
                     <button class="btn btn-primary my-1 insert-rest">
-                        <i class="bi bi-tree-fill me-1"></i>Insertar descanso
+                        <i class="bi bi-tree-fill me-1"></i>Añadir descanso
                     </button>
                     <button class="btn btn-primary my-1 insert-wait">
-                        <i class="bi bi-hourglass-split me-1"></i>Insertar espera
+                        <i class="bi bi-hourglass-split me-1"></i>Añadir espera
                     </button>
                 </div>
             </div>
@@ -478,16 +497,16 @@
                         data-bs-toggle="modal"
                         data-bs-target="#searchModal"
                     >
-                        <i class="bi bi-geo-alt-fill me-1"></i>Insertar lugar
+                        <i class="bi bi-geo-alt-fill me-1"></i>Añadir lugar
                     </button>
                     <button class="btn btn-primary my-1 insert-custom">
-                        <i class="bi bi-plus-circle me-1"></i>Insertar personalizado
+                        <i class="bi bi-plus-circle me-1"></i>Añadir personalizado
                     </button>
                     <button class="btn btn-primary my-1 insert-rest">
-                        <i class="bi bi-tree-fill me-1"></i>Insertar descanso
+                        <i class="bi bi-tree-fill me-1"></i>Añadir descanso
                     </button>
                     <button class="btn btn-primary my-1 insert-wait">
-                        <i class="bi bi-hourglass-split me-1"></i>Insertar espera
+                        <i class="bi bi-hourglass-split me-1"></i>Añadir espera
                     </button>
                 </div>
             </div>
@@ -512,6 +531,11 @@
                                         style="width: 80px"
                                         disabled
                                         min="15"
+                                        data-bs-toggle="tooltip"
+                                        data-bs-placement="bottom"
+                                        data-bs-original-title="La duración de la visita debe ser igual o superior a 15 min."
+                                        title="La duración de la visita debe ser igual o superior a 15 min."
+                                        value="15"
                                         step="1"
                                     />
                                     minutos
@@ -530,6 +554,12 @@
                                         <span class="d-none d-lg-inline"> Eliminar </span>
                                     </button>
                                 </div>
+                                <textarea
+                                    placeholder="Notas"
+                                    class="edit-mode-disable notes w-100 d-block form-control"
+                                    disabled
+                                    style="height: 80px"
+                                ></textarea>
                             </div>
                         </div>
                     </div>
@@ -541,16 +571,16 @@
                         data-bs-toggle="modal"
                         data-bs-target="#searchModal"
                     >
-                        <i class="bi bi-geo-alt-fill me-1"></i>Insertar lugar
+                        <i class="bi bi-geo-alt-fill me-1"></i>Añadir lugar
                     </button>
                     <button class="btn btn-primary my-1 insert-custom">
-                        <i class="bi bi-plus-circle me-1"></i>Insertar personalizado
+                        <i class="bi bi-plus-circle me-1"></i>Añadir personalizado
                     </button>
                     <button class="btn btn-primary my-1 insert-rest">
-                        <i class="bi bi-tree-fill me-1"></i>Insertar descanso
+                        <i class="bi bi-tree-fill me-1"></i>Añadir descanso
                     </button>
                     <button class="btn btn-primary my-1 insert-wait">
-                        <i class="bi bi-hourglass-split me-1"></i>Insertar espera
+                        <i class="bi bi-hourglass-split me-1"></i>Añadir espera
                     </button>
                 </div>
             </div>
@@ -575,6 +605,11 @@
                                         style="width: 80px"
                                         disabled
                                         min="15"
+                                        data-bs-toggle="tooltip"
+                                        data-bs-placement="bottom"
+                                        data-bs-original-title="La duración de la visita debe ser igual o superior a 15 min."
+                                        title="La duración de la visita debe ser igual o superior a 15 min."
+                                        value="15"
                                         step="1"
                                     />
                                     minutos
@@ -609,16 +644,16 @@
                         data-bs-toggle="modal"
                         data-bs-target="#searchModal"
                     >
-                        <i class="bi bi-geo-alt-fill me-1"></i>Insertar lugar
+                        <i class="bi bi-geo-alt-fill me-1"></i>Añadir lugar
                     </button>
                     <button class="btn btn-primary my-1 insert-custom">
-                        <i class="bi bi-plus-circle me-1"></i>Insertar personalizado
+                        <i class="bi bi-plus-circle me-1"></i>Añadir personalizado
                     </button>
                     <button class="btn btn-primary my-1 insert-rest">
-                        <i class="bi bi-tree-fill me-1"></i>Insertar descanso
+                        <i class="bi bi-tree-fill me-1"></i>Añadir descanso
                     </button>
                     <button class="btn btn-primary my-1 insert-wait">
-                        <i class="bi bi-hourglass-split me-1"></i>Insertar espera
+                        <i class="bi bi-hourglass-split me-1"></i>Añadir espera
                     </button>
                 </div>
             </div>
@@ -651,6 +686,11 @@
                                         style="width: 80px"
                                         disabled
                                         min="15"
+                                        data-bs-toggle="tooltip"
+                                        data-bs-placement="bottom"
+                                        data-bs-original-title="La duración de la visita debe ser igual o superior a 15 min."
+                                        title="La duración de la visita debe ser igual o superior a 15 min."
+                                        value="15"
                                         step="1"
                                     />
                                     minutos
@@ -682,16 +722,16 @@
                         data-bs-toggle="modal"
                         data-bs-target="#searchModal"
                     >
-                        <i class="bi bi-geo-alt-fill me-1"></i>Insertar lugar
+                        <i class="bi bi-geo-alt-fill me-1"></i>Añadir lugar
                     </button>
                     <button class="btn btn-primary my-1 insert-custom">
-                        <i class="bi bi-plus-circle me-1"></i>Insertar personalizado
+                        <i class="bi bi-plus-circle me-1"></i>Añadir personalizado
                     </button>
                     <button class="btn btn-primary my-1 insert-rest">
-                        <i class="bi bi-tree-fill me-1"></i>Insertar descanso
+                        <i class="bi bi-tree-fill me-1"></i>Añadir descanso
                     </button>
                     <button class="btn btn-primary my-1 insert-wait">
-                        <i class="bi bi-hourglass-split me-1"></i>Insertar espera
+                        <i class="bi bi-hourglass-split me-1"></i>Añadir espera
                     </button>
                 </div>
             </div>
@@ -746,12 +786,15 @@
 
         <!-- Travel time template -->
         <template id="templateTravel">
-            <div class="my-3 edit-mode-hide">
+            <div class="my-3 edit-mode-hide d-flex align-items-center justify-content-center">
                 <div class="fs-3 d-inline-block">
                     <i class="fas fa-walking"></i>
                     <i class="fas fa-car d-none"></i>
                 </div>
-                <span class="mx-3 my-auto fs-5 time"></span>
+                <div class="mx-3 fs-5 d-inline-block text-start">
+                    <span class="time"></span><br />
+                    <span class="distance"></span>
+                </div>
             </div>
         </template>
 
@@ -759,13 +802,13 @@
         <template id="templateSearchCard">
             <div class="card search-card my-2">
                 <div class="card-header">
-                    <h3 class="my-0">
+                    <h4 class="my-0">
                         <span class="title"> </span>
                         <a href="" target="_blank" class="wikipedia text-primary"><i class="fab fa-wikipedia-w"></i></a>
                         <a href="" target="_blank" class="url text-primary">
                             <i class="bi bi-link-45deg"></i>
                         </a>
-                    </h3>
+                    </h4>
                 </div>
                 <div class="row g-0">
                     <div class="col-md-4">
@@ -782,13 +825,9 @@
                     <div class="col-md-8">
                         <div class="card-body">
                             <div class="btn-group" role="group" aria-label="Acciones">
-                                <button
-                                    type="button"
-                                    class="btn btn-primary insert-button"
-                                    data-bs-dismiss="modal"
-                                >
+                                <button type="button" class="btn btn-primary insert-button" data-bs-dismiss="modal">
                                     <i class="bi bi-plus-circle me-1"></i>
-                                    Insertar lugar
+                                    Añadir lugar
                                 </button>
                             </div>
                         </div>
@@ -836,11 +875,9 @@
         <!-- Popup start item -->
         <template id="templatePopupStart">
             <div class="leaflet-custom-content">
-                <img src="/assets/start.png" class="w-100">
+                <img src="/assets/start.png" class="w-100" />
                 <h5 class="mb-2 mt-2 title">Inicio</h5>
-                <p class="fs-6 my-0 mb-3">
-                    Este es tu punto de inicio y fin.
-                </p>
+                <p class="fs-6 my-0 mb-3">Este es tu punto de inicio y fin.</p>
             </div>
         </template>
 
@@ -859,6 +896,11 @@
         <!-- Hermes -->
         <script src="/js/common.js"></script>
         <script src="/js/plan.js"></script>
-        <script async defer data-website-id="0f73de68-9610-4a9c-a7a8-ab61ab30208a" src="https://data.travelhermes.com/umami.js"></script>
+        <script
+            async
+            defer
+            data-website-id="0f73de68-9610-4a9c-a7a8-ab61ab30208a"
+            src="https://data.travelhermes.com/umami.js"
+        ></script>
     </body>
 </html>
