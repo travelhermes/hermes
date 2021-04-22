@@ -13,6 +13,9 @@
         "url": "https://github.com/SrGMC/hermes-issues/issues"
     },
     "homepage": "https://github.com/SrGMC/hermes#readme",
+    "scripts": {
+        "test": "node test/api/test.js"
+    },
     "dependencies": {
         "@types/tough-cookie": "^4.0.0",
         "axios": "^0.21.1",
@@ -29,6 +32,8 @@
         "mariadb": "^2.5.3",
         "nodemailer": "^6.5.0",
         "ora": "^5.4.0",
+        "pg": "^8.6.0",
+        "pg-hstore": "^2.3.3",
         "pug": "^3.0.2",
         "sequelize": "^6.5.0",
         "tough-cookie": "^4.0.0"

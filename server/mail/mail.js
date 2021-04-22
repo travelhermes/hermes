@@ -1,6 +1,5 @@
 /* jshint esversion: 8 */
 const cluster = require('cluster');
-const CONFIG = require('../config.json');
 const { ApplicationLogger, LogLevel } = require('../logger/logger.js');
 const nodemailer = require('nodemailer');
 const pug = require('pug');
@@ -28,13 +27,9 @@ const MailSubject = [
 ];
 
 class MailServer {
-    constructor(host, port, auth = {}, service = null, secure = true, tls = {}, worker = 0) {
-        this.host = host;
-        this.port = port;
+    constructor(auth = {}, service = null, worker = 0) {
         this.auth = auth;
         this.service = service;
-        this.secure = secure;
-        this.tls = tls;
         this.messages = [];
         this.transport = null;
         this.worker = worker;
@@ -46,20 +41,10 @@ class MailServer {
     send() {
         // Create transport singleton on first email
         if (this.transport == null) {
-            if (this.service) {
-                this.transport = nodemailer.createTransport({
-                    service: this.service,
-                    auth: this.auth,
-                });
-            } else {
-                this.transport = nodemailer.createTransport({
-                    host: this.host,
-                    port: this.port,
-                    auth: this.auth,
-                    secure: this.secure,
-                    tls: this.tls,
-                });
-            }
+            this.transport = nodemailer.createTransport({
+                service: this.service,
+                auth: this.auth,
+            });
 
             this.transport.verify(function (err) {
                 if (err) {
@@ -106,7 +91,7 @@ class MailServer {
      * @param {object}      dictionary  Content to add to the message.
      */
     add(address, messageType, dictionary) {
-        dictionary.host = CONFIG.host;
+        dictionary.host = process.env.SERVER_HOST;
 
         // Get message body
         var body;
@@ -119,7 +104,7 @@ class MailServer {
 
         // Create message
         const message = {
-            from: CONFIG.mail.from,
+            from: process.env.MAIL_FROM,
             to: address,
             subject: MailSubject[messageType],
             html: body,

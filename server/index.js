@@ -41,18 +41,11 @@ if (cluster.isMaster) {
      * Mail Server
      */
     global.mailServer = new MailServer(
-        CONFIG.mail.host,
-        CONFIG.mail.port,
         {
-            user: CONFIG.mail.user,
-            pass: CONFIG.mail.password,
+            user: process.env.MAIL_USER,
+            pass: process.env.MAIL_PASSWORD,
         },
-        CONFIG.mail.service,
-        CONFIG.mail.secure,
-        {
-            rejectUnauthorized: !CONFIG.mail.selfSigned,
-        },
-        cluster.worker.id
+        process.env.MAIL_SERVICE
     );
     mailServer.interval = setInterval(function () {
         //mailServer.messages = [];
@@ -142,7 +135,7 @@ if (cluster.isMaster) {
         methods: ['GET', 'PUT', 'POST'],
     });
     fastify.register(fastifyCookie, {
-        secret: CONFIG.secret,
+        secret: process.env.SECRET,
     });
     fastify.register(fastifyRateLimit, {
         global: false,
@@ -151,7 +144,7 @@ if (cluster.isMaster) {
         keyGenerator: function (request) {
             return request.realIp;
         },
-        redis: CONFIG.redis ? new Redis({ host: CONFIG.redis }) : null,
+        redis: process.env.REDIS ? new Redis({ host: process.env.REDIS }) : null,
     });
     fastify.register(fastifyStripHtml, {
         stripFromResponse: true,

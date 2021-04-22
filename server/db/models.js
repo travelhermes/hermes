@@ -1,5 +1,5 @@
 /* jshint esversion: 8 */
-const CONNECTION_STRING = require('../config.json').database;
+const CONNECTION_STRING = process.env.DATABASE;
 const { Sequelize, DataTypes } = require('sequelize');
 
 const sequelize = new Sequelize(CONNECTION_STRING);

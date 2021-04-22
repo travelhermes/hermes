@@ -1,7 +1,6 @@
 /*jshint esversion: 8 */
 const axios = require('axios');
 const bcrypt = require('bcrypt');
-const CONFIG = require('../config.json');
 const db = require('../db/models.js');
 const validator = require('validator');
 const { ApplicationLogger, LogLevel } = require('../logger/logger.js');
@@ -423,8 +422,8 @@ class AuthController {
 
         const params = new URLSearchParams();
         params.append('response', request.body.hCaptcha);
-        params.append('secret', CONFIG.hCaptcha.secret);
-        params.append('sitekey', CONFIG.hCaptcha.sitekey);
+        params.append('secret', process.env.HCAPTCHA_SECRET);
+        params.append('sitekey', process.env.HCAPTCHA_SITEKEY);
 
         const config = {
             headers: {

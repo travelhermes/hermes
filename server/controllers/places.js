@@ -86,7 +86,7 @@ class PlacesController {
                     include: [
                         {
                             model: db.Category,
-                            attributes: ['name'],
+                            attributes: ['name', 'id'],
                         },
                     ],
                     order: db.sequelize.random(),
@@ -101,6 +101,9 @@ class PlacesController {
                     placeUrl: item.placeUrl,
                     categories: item.Categories.map((category) => {
                         return category.name;
+                    }),
+                    categoriesId: item.Categories.map((category) => {
+                        return category.id;
                     }),
                 };
             }),
@@ -120,7 +123,7 @@ class PlacesController {
                     include: [
                         {
                             model: db.Category,
-                            attributes: ['name'],
+                            attributes: ['name', 'id'],
                         },
                     ],
                 })
@@ -153,6 +156,9 @@ class PlacesController {
                     categories: item.Categories.map((category) => {
                         return category.name;
                     }),
+                    categoriesId: item.Categories.map((category) => {
+                        return category.id;
+                    }),
                     rating: item.rating,
                 };
             }),
@@ -178,7 +184,7 @@ class PlacesController {
             include: [
                 {
                     model: db.Category,
-                    attributes: ['name'],
+                    attributes: ['name', 'id'],
                 },
             ],
         });
@@ -216,6 +222,9 @@ class PlacesController {
                 wikipedia: place.wikipedia,
                 categories: place.Categories.map((category) => {
                     return category.name;
+                }),
+                categoriesId: place.Categories.map((category) => {
+                    return category.id;
                 }),
                 rating: place.rating,
             },
@@ -261,7 +270,7 @@ class PlacesController {
                 include: [
                     {
                         model: db.Category,
-                        attributes: ['name'],
+                        attributes: ['name', 'id'],
                     },
                 ],
                 limit: maxCount,
@@ -294,6 +303,9 @@ class PlacesController {
                 wikipedia: item.wikipedia,
                 categories: item.Categories.map((category) => {
                     return category.name;
+                }),
+                categoriesId: item.Categories.map((category) => {
+                    return category.id;
                 }),
                 rating: item.rating,
             };
@@ -335,7 +347,7 @@ class PlacesController {
                 },
                 include: [
                     {
-                        attributes: ['name'],
+                        attributes: ['name', 'id'],
                         model: db.Category,
                     },
                 ],
@@ -368,6 +380,9 @@ class PlacesController {
                 wikipedia: item.wikipedia,
                 categories: item.Categories.map((category) => {
                     return category.name;
+                }),
+                categoriesId: item.Categories.map((category) => {
+                    return category.id;
                 }),
                 rating: item.rating,
             });

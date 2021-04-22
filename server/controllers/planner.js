@@ -67,7 +67,7 @@ function getTime(time) {
  * @return {string}      Converted value
  */
 function getTimeString(time) {
-    var hours = Math.floor(time / 60);
+    var hours = Math.floor(time / 60) % 24;
     var minutes = Math.ceil((time / 60 - hours) * 60);
     while (minutes >= 60) {
         minutes -= 60;
@@ -432,6 +432,11 @@ class PlannerController {
                     include: [
                         {
                             model: db.Place,
+                            include: [
+                                {
+                                    model: db.Category,
+                                },
+                            ],
                         },
                     ],
                     order: [
@@ -477,6 +482,12 @@ class PlannerController {
                                   state: item.Place.state,
                                   twitter: item.Place.twitter,
                                   wikipedia: item.Place.wikipedia,
+                                  categories: item.Place.Categories.map((category) => {
+                                      return category.name;
+                                  }),
+                                  categoriesId: item.Place.Categories.map((category) => {
+                                      return category.id;
+                                  }),
                               }
                             : null,
                         lat: item.type == 2 ? plan.startLat : item.Place ? item.Place.lat : null,
@@ -601,11 +612,6 @@ class PlannerController {
                 return;
             }
         }
-        
-        if (request.body.plan.startDate < today) {
-            reply.status(400).send();
-            return;
-        }
 
         // Get and validate plan
         var plan = await db.Plan.findOne({
@@ -617,6 +623,15 @@ class PlannerController {
 
         if (!plan) {
             reply.status(403).send();
+            return;
+        }
+
+        // If date to be updated is different of the current date,
+        if (
+            plan.startDate.toDateString() != request.body.plan.startDate.toDateString() &&
+            request.body.plan.startDate < today
+        ) {
+            reply.status(400).send();
             return;
         }
 

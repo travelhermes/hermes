@@ -1,18 +1,5 @@
 {
-    "host": "",
-    "database": "mariadb://username:password@address:port/database",
     "graphhopper": "",
-    "secret": "random 32 char string",
-    "hCaptcha": {
-        "secret": "",
-        "sitekey": ""
-    },
-    "mail": {
-        "service": "gmail",
-        "user": "email address",
-        "password": "password",
-        "from": "Hermes <email address>"
-    },
     "foursquare": {
         "categories": [
             {

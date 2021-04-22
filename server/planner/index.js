@@ -61,7 +61,7 @@ function getTime(time) {
  * @return {string}      Converted value
  */
 function getTimeString(time) {
-    var hours = Math.floor(time / 60);
+    var hours = Math.floor(time / 60) % 24;
     var minutes = Math.ceil((time / 60 - hours) * 60);
     while (minutes >= 60) {
         minutes -= 60;

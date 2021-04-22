@@ -17,14 +17,16 @@ RUN rm -rf /var/lib/apt/lists/*
 
 # Copy files and install app
 WORKDIR /usr/src/app
-COPY ./package*.json ./
+COPY ./server/package*.json ./
 RUN npm install
 
-COPY . /usr/src/app
+COPY ./server /usr/src/app
+COPY ./web /usr/src/app/web
 
 # Install hermes-rust package
 WORKDIR /usr/src/app/hermes-rust
 RUN npm i
+RUN rm -rf native/target node_modules
 
 WORKDIR /usr/src/app
 

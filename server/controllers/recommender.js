@@ -67,7 +67,7 @@ class RecommenderController {
                         include: [
                             {
                                 model: db.Category,
-                                attributes: ['name'],
+                                attributes: ['name', 'id'],
                             },
                         ],
                     },
@@ -104,6 +104,9 @@ class RecommenderController {
                     categories: item.Place.Categories.map((category) => {
                         return category.name;
                     }),
+                    categoriesId: item.Place.Categories.map((category) => {
+                        return category.id;
+                    }),
                     probability: item.probability,
                     rating: item.Place.rating,
                 };
@@ -123,7 +126,7 @@ class RecommenderController {
                 include: [
                     {
                         model: db.Category,
-                        attributes: ['name'],
+                        attributes: ['name', 'id'],
                     },
                 ],
                 order: db.sequelize.random(),
@@ -157,6 +160,9 @@ class RecommenderController {
                 wikipedia: item.wikipedia,
                 categories: item.Categories.map((category) => {
                     return category.name;
+                }),
+                categoriesId: item.Categories.map((category) => {
+                    return category.id;
                 }),
                 probability: null,
                 rating: item.rating,
@@ -201,7 +207,7 @@ class RecommenderController {
                         include: [
                             {
                                 model: db.Category,
-                                attributes: ['name'],
+                                attributes: ['name', 'id'],
                             },
                         ],
                     },
@@ -238,6 +244,9 @@ class RecommenderController {
                     wikipedia: item.Place.wikipedia,
                     categories: item.Place.Categories.map((category) => {
                         return category.name;
+                    }),
+                    categoriesId: item.Place.Categories.map((category) => {
+                        return category.id;
                     }),
                     probability: item.probability,
                     rating: item.Place.rating,

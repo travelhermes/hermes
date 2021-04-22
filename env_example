@@ -1,0 +1,24 @@
+# Server config
+# This is the base url where the server will be hosted
+SERVER_HOST=https://<your domain here>
+# This is the name of the server
+SERVER=<name>
+
+# Database connection string
+DATABASE=<mariadb or postgres>://<username>:<password>@<address>:<port>/<db name>
+
+# 32 char random string
+SECRET=<32 char random string>
+
+# hCaptcha config
+HCAPTCHA_SECRET=0x1234...
+HCAPTCHA_SITEKEY=f1ece9d4-...
+
+# Email config
+MAIL_SERVICE=gmail
+MAIL_USER=<email username>
+MAIL_PASSWORD=<email password>
+MAIL_FROM=Hermes <<email username>>
+
+# Redis host (optional)
+# REDIS=<redis host>

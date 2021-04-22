@@ -81,17 +81,11 @@ db.sequelize.options.logging = false;
  * Mail Server
  */
 const mailServer = new MailServer(
-    CONFIG.mail.host,
-    CONFIG.mail.port,
     {
-        user: CONFIG.mail.user,
-        pass: CONFIG.mail.password,
+        user: process.env.MAIL_USER,
+        pass: process.env.MAIL_PASSWORD,
     },
-    CONFIG.mail.service,
-    CONFIG.mail.secure,
-    {
-        rejectUnauthorized: !CONFIG.mail.selfSigned,
-    }
+    process.env.MAIL_SERVICE
 );
 
 function sendEmails() {
