@@ -19,6 +19,172 @@
         <link href="/css/leaflet.css" rel="stylesheet" />
     </head>
     <body>
+        <!-- Tutorial Modals -->
+        <div class="modal fade" id="tutorialModal" tabindex="-1" aria-labelledby="tutorialModal" aria-hidden="true" data-tutorial="dashboard">
+            <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable text-white">
+                <div class="modal-content bg-dark">
+                    <div class="modal-header border-0 text-center d-block">
+                        <h2 class="modal-title" id="tutorialModalLabel">¡Bienvenida/o a Hermes!</h2>
+                        <p class="my-0">Vamos a guiarte por todas las funcionalidades de Hermes</p>
+                    </div>
+                    <div class="modal-body border-0 px-0">
+                        <p class="mx-4">Hermes es un sistema recomendador y planificador turístico <b>adaptado para tí</b>, a partir de tus puntuaciones y preferencias. En Hermes, solo te tienes que preocupar de <b>explorar</b>, <b>añadir</b> y pensar <b>cuando quieres descansar</b>.</p>
+                        <p class="mx-4 fs-5">Nosotros nos encargamos del resto.</p>
+                        <p class="mx-4"><i class="bi bi-exclamation-circle me-1"></i> <b>Nota</b>: Hermes solo recomienda lugares para visitar, por lo que no incluye restaurantes o lugares comerciales. Si has encontrado un lugar para visitar que no está en Hermes, podrás añadirlo al plan al editar este.</p>
+                        <hr>
+                        <p class="mx-4">Estos son los botones del menú principal. Pulsando en ellos, podrás navegar entre las distintas páginas de Hermes. Si tienes dudas, no olvides consultar la ayuda.</p>
+                        <div class="container d-inline-block mb-2 text-center">
+                            <div class="row">
+                                <div class="col">
+                                    <span>
+                                        <i
+                                            class="bi bi-compass"
+                                            style="font-size: 1.75rem"
+                                            data-bs-toggle="tooltip"
+                                            data-bs-placement="bottom"
+                                            data-bs-original-title="Recomendaciones"
+                                            title="Recomendaciones"
+                                        ></i> </span
+                                    ><br />
+                                    Recomendado para tí
+                                </div>
+                                <div class="col">
+                                    <span>
+                                        <i
+                                            class="bi bi-journals"
+                                            style="font-size: 1.75rem"
+                                            data-bs-toggle="tooltip"
+                                            data-bs-placement="bottom"
+                                            data-bs-original-title="Planes"
+                                            title="Planes"
+                                        ></i> </span
+                                    ><br />
+                                    Planes
+                                </div>
+                                <div class="col">
+                                    <span>
+                                        <i
+                                            class="bi bi-star-fill"
+                                            style="font-size: 1.75rem"
+                                            data-bs-toggle="tooltip"
+                                            data-bs-placement="bottom"
+                                            data-bs-original-title="Puntuaciones"
+                                            title="Puntuaciones"
+                                        ></i> </span
+                                    ><br />
+                                    Puntuaciones
+                                </div>
+                                <div class="col">
+                                    <span>
+                                        <i
+                                            class="bi bi-person-square"
+                                            style="font-size: 1.75rem"
+                                            data-bs-toggle="tooltip"
+                                            data-bs-placement="bottom"
+                                            data-bs-original-title="Perfil"
+                                            title="Perfil"
+                                        ></i> </span
+                                    ><br />
+                                    Perfil
+                                </div>
+                                <div class="col">
+                                    <span>
+                                        <i
+                                            class="bi bi-question-circle"
+                                            style="font-size: 1.75rem"
+                                            data-bs-toggle="tooltip"
+                                            data-bs-placement="bottom"
+                                            data-bs-original-title="Ayuda"
+                                            title="Ayuda"
+                                        ></i> </span
+                                    ><br />
+                                    Ayuda
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer border-0">
+                        <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#tutorial2Modal" data-bs-dismiss="modal">Siguiente</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="tutorial2Modal" tabindex="-1" aria-labelledby="tutorial2ModalLabel" aria-hidden="true" data-tutorial="dashboard">
+            <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable text-white">
+                <div class="modal-content bg-dark">
+                    <div class="modal-header border-0 text-center d-block">
+                        <h2 class="modal-title" id="tutorial2ModalLabel">Tutorial</h2>
+                    </div>
+                    <div class="modal-body border-0 px-0">
+                        <p class="px-4">En <b>Recomendado para tí</b>, aparecen los lugares que más te pueden interesar. Todos estos lugares aparecerán en dos secciones distintas</p>
+                        <hr>
+                        <p class="px-4 fs-5">Mapa</p>
+                        <p class="px-4">Cada punto en el mapa representa un lugar recomendado. Al hacer click sobre uno de ellos, verás más información sobre esté, así como fotografías del lugar.</p>
+                        <div class="w-100">
+                            <img src="/assets/help/dashboard_tutorial_map.png" class="w-100">
+                        </div>
+                        <div class="container pt-3 mb-2 text-center">
+                            <div class="row">
+                                <div class="col-6">
+                                    <img src="/assets/map/categories/water_2x.png" width="24px"><br>
+                                    Los puntos con fondo blanco son recomendaciones
+                                </div>
+                                <div class="col-6">
+                                    <img src="/assets/map/categories/water_selected_2x.png" width="24px"><br>
+                                    Mientras que los puntos con fondo de color indican que el lugar se ha añadido al plan
+                                </div>
+                            </div>
+                        </div>
+                        <p class="px-4 fs-5">Listado de lugares</p>
+                        <p class="px-4">En el listado de lugares, podrás ver, ordenado según la recomendación, los lugares que se muestran en el mapa.</p>
+                        <div class="container px-5">
+                            <div class="row d-block d-md-flex">
+                                <div class="col-md-6 d-block d-md-flex text-end">
+                                    <div class="card place-card text-dark d-inline-block text-start">
+                                        <div class="card-body">
+                                            <div class="fs-md-4 fs-5 card-title mb-0 w-75">Puerta de Alcalá</div>
+                                            <div class="card-categories text-muted mb-2">Monumentos, Lugares históricos</div>
+                                            <div class="card-text">Arco de triunfo cerca del Parque del Buen Retiro, con ornamentación tallada en piedra y refinadas esculturas.</div>
+                                        </div>
+                                        <ul class="list-group list-group-flush text-center">
+                                            <li class="list-group-item">
+                                                <div class="d-inline-block time"><i class="mx-md-1 bi bi-clock-fill text-muted"></i> 30min</div>
+                                                <div class="d-inline-block rating"><i class="mx-md-1 bi bi-star-fill text-warning"></i> 4.0</div>
+                                                <div class="d-inline-block prediction">
+                                                    <i class="mx-md-1 bi bi-hand-thumbs-up-fill text-success"></i>
+                                                 75%</div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 d-block d-md-flex">
+                                    <ul class="text-start">
+                                        <li class="mt-1">
+                                            <div class="d-inline-block bg-light text-dark rounded px-1 py-1"><i class="mx-md-1 bi bi-clock-fill text-muted"></i> 30min</div>: Esta es la duración de la visita</li>
+                                        <li class="mt-1">
+                                            <div class="d-inline-block bg-light text-dark rounded px-1 py-1"><i class="mx-md-1 bi bi-star-fill text-warning"></i> 4.0</div>: Esta es la puntuación media del lugar</li>
+                                        <li class="mt-1">
+                                            <div class="d-inline-block bg-light text-dark rounded px-1 py-1"><i class="mx-md-1 bi bi-hand-thumbs-up-fill text-success"></i> 75%</div>: Cuanto cree Hermes que te puede gustar</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                        <p class="px-4 fs-5">Planificar</p>
+                        <p class="px-4">Los sitios que añadas al plan, se marcarán en verde, en el mapa y en el listado. Una vez hayas seleccionado un minimo de 3 lugares, podrás crear un nuevo plan siguiendo los pasos</p>
+                        <p class="px-4">Hermes te pedirá una serie de datos, y después creará de forma algorítmica. Una vez termine, podrás añadir descansos (por ejemplo, para comer) u otros sitios al plan.</p>
+                    </div>
+                    <div class="modal-footer border-0" id="tutorialFooter">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
+                            <label class="form-check-label" for="flexCheckDefault"> No volver a mostrar </label>
+                        </div>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
         <!-- Clear plan modal -->
         <div
             class="modal fade"
@@ -201,13 +367,7 @@
                                     Puedes buscar una dirección con el buscador, o seleccionar en el mapa el lugar de
                                     inicio y fin de cada día.
                                 </div>
-                                <div class="mt-3 mb-2 px-4">
-                                    <p class="text-muted mb-1">
-                                        Con la tecnología de
-                                        <a href="https://nominatim.openstreetmap.org" target="_blank"
-                                            >OpenStreetMap Nominatim</a
-                                        >
-                                    </p>
+                                <div class="mt-2 mb-2 px-4">
                                     <div id="addressForm" class="container px-0 mb-2">
                                         <div class="row">
                                             <div class="col-9 pe-1">
@@ -225,6 +385,12 @@
                                         </div>
                                         <p class="text-danger d-block mt-1 mb-0 d-none" id="noAddressResults">
                                             <i class="bi bi-patch-question-fill me-1"></i>Sin resultados
+                                        </p>
+                                        <p class="text-muted mb-1">
+                                            Con la tecnología de
+                                            <a href="https://nominatim.openstreetmap.org" target="_blank"
+                                                >OpenStreetMap Nominatim</a
+                                            >
                                         </p>
                                     </div>
                                 </div>

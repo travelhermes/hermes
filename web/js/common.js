@@ -50,6 +50,16 @@ Date.prototype.addDays = function (days) {
     return date;
 };
 
+if(document.querySelector('#tutorialFooter')) {
+    document.querySelector('#tutorialFooter').querySelector('.btn').addEventListener('click', (e) => {
+        var doNotShowAgain = e.target.closest('#tutorialFooter').querySelector('input');
+        var name = e.target.closest('.modal').getAttribute('data-tutorial');
+        if(doNotShowAgain.checked) {
+            localStorage.setItem('hideTutorial' + name, true);
+        }
+    });
+}
+
 /**
  * Display an error message to the user, while logging it to console.
  * @param  {string} err Error message
@@ -435,7 +445,7 @@ function getTime(time) {
  * @return {string}      Converted value
  */
 function getTimeString(time) {
-    var hours = Math.floor(time / 60);
+    var hours = Math.floor(time / 60) % 24;
     var minutes = Math.ceil((time / 60 - hours) * 60);
     while (minutes >= 60) {
         minutes -= 60;
@@ -510,4 +520,49 @@ function scrollToMiddle(element) {
     const absoluteElementTop = elementRect.top + window.pageYOffset;
     const middle = absoluteElementTop - (window.innerHeight / 2);
     window.scrollTo(0, middle);
+}
+
+
+var name = document.querySelector('#tutorialModal').getAttribute('data-tutorial');
+if(localStorage.getItem('hideTutorial' + name) != 'true') {
+    var tutorial = new bootstrap.Modal(document.getElementById('tutorialModal'));
+    tutorial.show();
+}
+
+/**
+ * Get the corresponding map icon marker for a place
+ * @param  {Array<number>}  categoryIds ID for every category of the place
+ * @param  {Boolean}        selected    (default: false) If icon should be selected variant or not
+ * @return {Icon}                       Map marker icon
+ */
+function getMarker(categoryIds, selected = false) {
+    var categoryId = categoryIds[0];
+    var cat = '';
+    if ([45, 24, 16].includes(categoryId)) {
+        cat = 'water';
+    } else if ([39, 35, 10].includes(categoryId)) {
+        cat = 'animals';
+    } else if ([18, 12, 4].includes(categoryId)) {
+        cat = 'public_art';
+    } else if ([50, 29, 1, 6, 51].includes(categoryId)) {
+        cat = 'theater';
+    } else if ([17].includes(categoryId)) {
+        cat = 'sports';
+    } else if ([22, 27, 42].includes(categoryId)) {
+        cat = 'government';
+    } else if ([3, 31, 9].includes(categoryId)) {
+        cat = 'gardens';
+    } else if ([21, 41, 2, 30, 34, 26, 32, 47].includes(categoryId)) {
+        cat = 'church';
+    } else if ([40, 11, 49, 5, 37].includes(categoryId)) {
+        cat = 'public';
+    } else if ([19, 15].includes(categoryId)) {
+        cat = 'lookout';
+    } else if ([23, 14, 36, 43, 33, 20].includes(categoryId)) {
+        cat = 'museums';
+    } else if ([28, 7, 13, 44, 25, 38, 48].includes(categoryId)) {
+        cat = 'monuments';
+    }
+
+    return selected ? categoryIcons[cat].selected : categoryIcons[cat].default;
 }

@@ -9,6 +9,7 @@ var searchResults = [];
 var searchTimeout;
 var searchDropdown;
 
+// True if recommended, false if not
 var plan = {};
 var popupStart = null;
 var planStart;
@@ -186,6 +187,7 @@ function renderPlaces(places) {
                 const id = parseInt(e.target.options.placeId);
                 selectPlaceById(id);
             });
+        places[i].marker.setIcon(getMarker(places[i].categoriesId));
 
         // Add place to list
         const card = getTemplate('templateCard');
@@ -492,7 +494,15 @@ async function removeFromPlan(button) {
     }
 
     // Unmark in UI
-    unmarkPlaceInPlanById(placeId, getElementByKey(places, 'id', placeId));
+    var place = getElementByKey(places, 'id', placeId);
+    unmarkPlaceInPlanById(placeId, place);
+
+    if (place.recommended == false) {
+        document.querySelector('#placeCard' + placeId).remove();
+        map.removeLayer(place.marker);
+        places.splice(places.indexOf(place), 1);
+        document.querySelector('#placeCount').innerHTML = places.length;
+    }
 
     // Remove from plan and save to localStorage
     delete plan[placeId];
@@ -517,7 +527,7 @@ function clearPlan() {
     var ids = Object.keys(plan);
     map.closePopup();
     for (var i = 0; i < ids.length; i++) {
-        unmarkPlaceInPlanById(ids[i], getElementByKey(places, 'id', ids[i]));
+        removeFromPlan(document.querySelector('#placeCard' + ids[i]).querySelector('.remove'));
     }
     plan = {};
     saveToLocalStorage();
@@ -534,7 +544,7 @@ function markPlaceInPlanById(id, place) {
         .querySelector('.remove')
         .classList.remove('d-none');
     place.marker._popup._content = createMarkerContent(place, true);
-    place.marker.setIcon(greenIcon);
+    place.marker.setIcon(getMarker(place.categoriesId, true));
 }
 
 function unmarkPlaceInPlanById(id, place) {
@@ -544,7 +554,7 @@ function unmarkPlaceInPlanById(id, place) {
         .querySelector('.remove')
         .classList.add('d-none');
     place.marker._popup._content = createMarkerContent(place, false);
-    place.marker.setIcon(blueIcon);
+    place.marker.setIcon(getMarker(place.categoriesId));
 }
 
 /*
@@ -867,7 +877,7 @@ async function main() {
 
         loadFromLocalStorage();
     } catch (err) {
-        throwError(e);
+        throwError(err);
     }
 }
 

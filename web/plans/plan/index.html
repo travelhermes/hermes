@@ -36,6 +36,99 @@
             </div>
         </div>
 
+        <!-- Tutorial modal -->
+        <div class="modal fade" id="tutorialModal" tabindex="-1" aria-labelledby="tutorialModalLabel" aria-hidden="true" data-tutorial="plan">
+            <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable text-white">
+                <div class="modal-content bg-dark">
+                    <div class="modal-header border-0 text-center d-block">
+                        <h2 class="modal-title" id="tutorialModalLabel">Tutorial</h2>
+                    </div>
+                    <div class="modal-body border-0 px-0">
+                        <p class="mx-4 mb-0"><i class="bi bi-exclamation-circle me-1"></i> <b>Nota</b>: Las planificaciones se generan de forma algorítmica. Aunque intentamos ser lo más precisos posible basándonos en los datos de que disponemos, se aconseja la discreción del usuario, por lo tanto:</p>
+                        <ul class="mx-4 mb-3">
+                            <li>Los horarios pueden no estar actualizados e incluso puede que algún lugar haya sido cerrado permanentemente.</li>
+                            <li>No podemos predecir cuando deseas realizar descansos (p. ejemplo, para comer), por lo tanto, tendrás que establecerlo manualmente.</li>
+                            <li>No sabemos si has reservado transportes de ida y vuelta a la ciudad, por lo que tendrás que tenerlo en cuenta.</li>
+                            <li>Los precios de las visitas pueden variar y no ajustarse a tus preferencias para el viaje.</li>
+                            <li>Las se estiman en base a los datos geográficos disponibles. Las condiciones sobre el terreno pueden ser diferentes.</li>
+                            <li>La información provista a la base de datos de Hermes puede contener errores.</li>
+                        </ul>
+                        <hr>
+                        <p class="mx-4 fs-5">Tu plan</p>
+                        <p class="mx-4 mb-2">Aquí podrás ver el plan que se ha generado para tu viaje, junto a la ruta en el mapa. Los lugares se clasifican en 5 tipos distintos:</p>
+                        <div class="container d-inline-block mb-2 text-center px-4">
+                            <div class="row">
+                                <div class="col">
+                                    <span>
+                                        <i
+                                            class="bi bi-house-door-fill"
+                                            style="font-size: 1.75rem"
+                                        ></i> </span
+                                    ><br />
+                                    Inicio
+                                </div>
+                                <div class="col">
+                                    <span>
+                                        <i
+                                            class="bi bi-building"
+                                            style="font-size: 1.75rem"
+                                        ></i> </span
+                                    ><br />
+                                    Lugar
+                                </div>
+                                <div class="col">
+                                    <span>
+                                        <i
+                                            class="bi bi-plus-circle"
+                                            style="font-size: 1.75rem"
+                                        ></i> </span
+                                    ><br />
+                                    Personalizado
+                                </div>
+                                <div class="col">
+                                    <span>
+                                        <i
+                                            class="bi bi-hourglass-split"
+                                            style="font-size: 1.75rem"
+                                        ></i> </span
+                                    ><br />
+                                    Descanso
+                                </div>
+                                <div class="col">
+                                    <span>
+                                        <i
+                                            class="bi bi-tree-fill"
+                                            style="font-size: 1.75rem"
+                                        ></i> </span
+                                    ><br />
+                                    Espera
+                                </div>
+                            </div>
+                        </div>
+                        <p class="mx-4">En cada uno de ellos, podrás ver la duración de la visita, información sobre el lugar y el tiempo y la distancia de viaje entre lugares</p>
+                        <hr>
+                        <p class="mx-4 fs-5">Editar el plan</p>
+                        <p class="mx-4 mb-0">Además de ver el plan, podrás editar el plan. En el modo edición, podrás:</p>
+                        <ul class="mx-4">
+                            <li>Adelantar o atrasar la fecha de inicio del plan, si este no ha comenzado</li>
+                            <li>Cambiar el nombre y la descripción del plan</li>
+                            <li>Añadir lugares, descansos, esperas o lugares personalizados</li>
+                            <li>Cambiar duraciones de las visitas</li>
+                            <li>Eliminar elementos del plan</li>
+                            <li>Añadir notas</li>
+                        </ul>
+                    </div>
+                    <div class="modal-footer border-0" id="tutorialFooter">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
+                            <label class="form-check-label" for="flexCheckDefault"> No volver a mostrar </label>
+                        </div>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div
             class="modal fade"
             id="planStatus"
@@ -114,7 +207,7 @@
                         <p>Introduce un criterio de búsqueda</p>
                         <input type="text" id="inputSearch" class="w-100 fs-6" placeholder="Buscar lugar" maxlength="127" required/>
                         <div id="searchItems" class="d-none">
-                            <p class="mt-4">
+                            <p class="mt-3 mb-1">
                                 <span class="fs-5">Resultados de la búsqueda</span>
                             </p>
                             <div class="text-center">
@@ -127,7 +220,7 @@
                             <div id="searchItemsList"></div>
                         </div>
                         <div id="suggestions">
-                            <p class="mt-4">
+                            <p class="mt-3 mb-1">
                                 <span class="fs-5">¿Qué te parecen estos sitios para puntuar?</span> <a href="#" id="refreshSuggestions" class="ms-2"><i class="bi bi-arrow-clockwise me-1"></i>Refrescar</a>
                             </p>
                             <div id="suggestionsList"></div>
@@ -892,6 +985,7 @@
         <!-- Leaflet -->
         <script src="/js/leaflet.js"></script>
         <script src="/js/leaflet.curve.js"></script>
+        <script src="/js/leaflet-icons.js"></script>
 
         <!-- Hermes -->
         <script src="/js/common.js"></script>

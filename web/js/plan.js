@@ -127,29 +127,25 @@ function renderPoints(plan, day) {
         }
     }
 
-    var getMarkerContent = function (item) {
+    var getMarkerPopup = function (item) {
+        var marker = L.marker(item.coords).addTo(map);
         if (item.place) {
-            return createMarkerContent(item.place);
+            marker.bindPopup(createMarkerContent(item.place));
+            marker.setIcon(getMarker(item.place.categoriesId));
         } else {
-            return getTemplate('templatePopupStart').firstElementChild.outerHTML;
+            marker.bindPopup(getTemplate('templatePopupStart').firstElementChild.outerHTML);
         }
+
+        return marker;
     };
 
-    try {
-        layers.push(L.marker(coords[0].coords).addTo(map).bindPopup(getMarkerContent(coords[0])));
-    } catch (err) {
-        coords[0] = { coords: [plan.startLat, plan.startLon] };
-        layers.push(L.marker(coords[0].coords).addTo(map).bindPopup(getMarkerContent(coords[0].coords)));
-    }
+    coords[0] = { coords: [plan.startLat, plan.startLon] };
+    layers.push(getMarkerPopup(coords[0]));
     for (var i = 0; i < coords.length - 1; i++) {
         layers.push(drawCurve(coords[i].coords, coords[i + 1].coords, map));
-        layers.push(
-            L.marker(coords[i + 1].coords)
-                .addTo(map)
-                .bindPopup(getMarkerContent(coords[i + 1]))
-        );
+        layers.push(getMarkerPopup(coords[i + 1]));
     }
-    // Assumes first item is start, which should be as plan is sorted
+    // Assumes first item is start, which should be, as plan is sorted
 }
 
 /*
@@ -830,7 +826,7 @@ function insertPlace(button) {
     var index = parseInt(button.closest('#searchModal').getAttribute('insertIndex'));
     var id = parseInt(button.closest('.search-card').getAttribute('id'));
     var place;
-    if(searchMode == 'search') {
+    if (searchMode == 'search') {
         place = getElementByKey(searchPlaces, 'id', id);
     } else {
         place = getElementByKey(suggestionPlaces, 'id', id);
@@ -852,6 +848,8 @@ function insertPlace(button) {
             state: place.state,
             twitter: place.twitter,
             wikipedia: place.wikipedia,
+            categories: place.categories,
+            categoriesId: place.categoriesId,
         },
         name: place.name,
         description: place.description,

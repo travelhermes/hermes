@@ -94,7 +94,7 @@ function startIntervalStatus() {
             }
         }
         for (let i = 0; i < plans.past.length; i++) {
-            if (plans.active[i].status != 1) {
+            if (plans.past[i].status != 1) {
                 continue;
             }
             try {
