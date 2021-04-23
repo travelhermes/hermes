@@ -333,7 +333,7 @@ class RatingsController {
                     include: [
                         {
                             model: db.Category,
-                            attributes: ['name'],
+                            attributes: ['name', 'id'],
                         },
                     ],
                     order: db.sequelize.random(),
@@ -349,6 +349,9 @@ class RatingsController {
                     images: item.images,
                     categories: item.Categories.map((category) => {
                         return category.name;
+                    }),
+                    categoriesId: item.Categories.map((category) => {
+                        return category.id;
                     }),
                 };
             }),
