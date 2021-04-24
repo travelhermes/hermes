@@ -1,7 +1,6 @@
 /*jshint esversion: 8 */
 /* Imports */
 const cluster = require('cluster');
-const CONFIG = require('./config.json');
 const cpus = Math.floor(require('os').cpus().length / 2);
 const db = require('./db/models.js');
 const fastify = require('fastify')({ logger: false });
@@ -51,6 +50,7 @@ if (cluster.isMaster) {
         //mailServer.messages = [];
         mailServer.send();
     }, 5000);
+    global.fastify = fastify;
 
     /*
      * REST API Server config

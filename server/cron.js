@@ -159,7 +159,7 @@ async function main() {
                 sessions[i].destroy();
                 count++;
             }
-            if (sessions[i].deletedAt != null && sessions[i].deletedAt < new Date(today).addDays(-14)) {
+            if (sessions[i].deletedAt != null && sessions[i].deletedAt < new Date(today).addDays(-7)) {
                 sessions[i].destroy({ force: true });
             }
         }
