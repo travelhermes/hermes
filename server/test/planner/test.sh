@@ -1,6 +1,7 @@
 #!/bin/bash
 
-FILES=("base_1_day.pddl" "base_m1_day.pddl" "big.pddl" "restrictive.pddl")
+#FILES=("base_1_day.pddl" "base_m1_day.pddl" "big.pddl" "restrictive.pddl")
+FILES=("big.pddl" "restrictive.pddl")
 METRIC_CONF=("5" "4" "3")
 CBP_HEURISTIC=("1" "2" "3" "4" "5" "6" "7" "8" "9" "10")
 CBP_ALGORITHM=("2" "3" "4" "6" "7" "9" "10" "11" "12" "13" "14" "15" "16" "17" "18" "19" "20")
@@ -13,15 +14,15 @@ mkdir results/cbp
 #
 # Metric-FF
 #
-for problem in "${FILES[@]}"
-do
-	for conf in "${METRIC_CONF[@]}"
-	do
-		echo "Running ${problem}_conf_${conf}.txt"
-		timeout 5m ./metric-ff -o domain.pddl -f $problem -s $conf > "results/metric-ff/${problem}_conf_${conf}.txt" &
-	done
-	wait
-done
+#for problem in "${FILES[@]}"
+#do
+#	for conf in "${METRIC_CONF[@]}"
+#	do
+#		echo "Running ${problem}_conf_${conf}.txt"
+#		timeout 5m ./metric-ff -o domain.pddl -f $problem -s $conf > "results/metric-ff/${problem}_conf_${conf}.txt" &
+#	done
+#	wait
+#done
 
 #
 # CBP
