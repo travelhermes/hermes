@@ -14,7 +14,10 @@
     },
     "homepage": "https://github.com/SrGMC/hermes#readme",
     "scripts": {
-        "test": "node test/api/test.js"
+        "test-api": "cd test/api/ && node test.js",
+        "test-recommender": "cd test/recommender/ && node --max-old-space-size=4096 test.js",
+        "test-planner": "cd test/planner/ && ./test.sh",
+        "start": "node index.js"
     },
     "dependencies": {
         "@types/tough-cookie": "^4.0.0",
@@ -37,5 +40,8 @@
         "pug": "^3.0.2",
         "sequelize": "^6.5.0",
         "tough-cookie": "^4.0.0"
+    },
+    "devDependencies": {
+        "csv-parser": "^3.0.0"
     }
 }
