@@ -1,6 +1,10 @@
 # Server config
 # This is the base url where the server will be hosted
 SERVER_HOST=https://<your domain here>
+
+# Server port (optional, default: 80)
+PORT=80
+
 # This is the name of the server
 SERVER=<name>
 
