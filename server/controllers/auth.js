@@ -150,7 +150,8 @@ class AuthMiddleware {
                 !request.url.includes('/help') &&
                 (request.url.includes('/signin') || request.url.includes('/signup') || request.url.includes('/recover'))
             ) {
-                reply.redirect('/dashboard/');
+                reply.header('Cache-Control', 'no-store');
+                reply.status(302).redirect('/dashboard/');
                 return;
             }
             return;

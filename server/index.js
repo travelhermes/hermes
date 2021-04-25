@@ -20,6 +20,46 @@ const { PlannerController } = require('./controllers/planner.js');
 const { RatingsController } = require('./controllers/ratings.js');
 const { RecommenderController } = require('./controllers/recommender.js');
 
+// Check env vars
+if (!process.env.SERVER_HOST) {
+    console.error("Error: Missing SERVER_HOST env var");
+    process.exit(1);
+}
+if (!process.env.SERVER) {
+    console.error("Error: Missing SERVER env var");
+    process.exit(1);
+}
+if (!process.env.SECRET) {
+    console.error("Error: Missing SECRET env var");
+    process.exit(1);
+}
+if (!process.env.HCAPTCHA_SECRET) {
+    console.error("Error: Missing HCAPTCHA_SECRET env var");
+    process.exit(1);
+}
+if (!process.env.HCAPTCHA_SITEKEY) {
+    console.error("Error: Missing HCAPTCHA_SITEKEY env var");
+    process.exit(1);
+}
+if (!process.env.MAIL_SERVICE) {
+    console.error("Error: Missing MAIL_SERVICE env var");
+    process.exit(1);
+}
+if (!process.env.MAIL_USER) {
+    console.error("Error: Missing MAIL_USER env var");
+    process.exit(1);
+}
+if (!process.env.MAIL_PASSWORD) {
+    console.error("Error: Missing MAIL_PASSWORD env var");
+    process.exit(1);
+}
+if (!process.env.MAIL_FROM) {
+    console.error("Error: Missing MAIL_FROM env var");
+    process.exit(1);
+}
+
+
+
 if (cluster.isMaster) {
     console.log(`Master with PID ${process.pid} is running`);
 
@@ -168,7 +208,7 @@ if (cluster.isMaster) {
     /*
      * Start server
      */
-    fastify.listen(80, '0.0.0.0', function (err) {
+    fastify.listen(process.env.PORT || 80, '0.0.0.0', function (err) {
         if (err) {
             fastify.log.error(err);
             process.exit(1);

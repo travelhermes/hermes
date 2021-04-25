@@ -2,6 +2,11 @@
 const CONNECTION_STRING = process.env.DATABASE;
 const { Sequelize, DataTypes } = require('sequelize');
 
+if (!process.env.DATABASE) {
+    console.error("Error: Missing DATABASE env var");
+    process.exit(1);
+}
+
 const sequelize = new Sequelize(CONNECTION_STRING);
 
 /*
