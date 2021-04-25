@@ -62,7 +62,7 @@ async function setStars(element, index, send = true) {
     try {
         if (send) {
             await post(ENDPOINTS.ratingCreate, { placeId: parseInt(id), rating: index });
-            umami('Rated ' + index + ' stars');
+            umami.trackEvent('Rated ' + index + ' stars', 'click');
         }
         fillStar(element, index);
         parent.classList.remove('active');

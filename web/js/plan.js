@@ -828,8 +828,10 @@ function insertPlace(button) {
     var place;
     if (searchMode == 'search') {
         place = getElementByKey(searchPlaces, 'id', id);
-    } else {
+        umami.trackEvent('Insert searched place', 'click');
+    } else if (searchMode == 'suggestions'){
         place = getElementByKey(suggestionPlaces, 'id', id);
+        umami.trackEvent('Insert suggested place', 'click');
     }
     plan.days[currentDay].route.splice(index + 1, 0, {
         id: -1,

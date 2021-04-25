@@ -175,7 +175,7 @@ async function setStars(element, index) {
         });
 
         parent.parentElement.querySelector('.spinner-border').classList.add('d-none');
-        umami('Rated ' + index + ' stars on signup');
+        umami.trackEvent('Rated ' + index + ' stars on signup', 'click');
     } catch (err) {
         throwError(err);
         parent.parentElement.querySelector('.spinner-border').classList.add('d-none');
