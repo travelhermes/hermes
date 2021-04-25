@@ -159,8 +159,9 @@ async function main() {
                 sessions[i].destroy();
                 count++;
             }
-            if (sessions[i].deletedAt != null && sessions[i].deletedAt < new Date(today).addDays(-7)) {
+            if (sessions[i].deletedAt != null && sessions[i].deletedAt < new Date(today).addDays(-15)) {
                 sessions[i].destroy({ force: true });
+                count++;
             }
         }
         ApplicationLogger.logBase(
@@ -179,6 +180,38 @@ async function main() {
             null,
             null,
             'cronjob/sessions',
+            null,
+            'Errored @ ' + new Date() + ': ' + err
+        );
+    }
+
+    // Clean old, deleted plans
+    console.log(`[${new Date().toLocaleString()}] (cron.js) - Cleaning old, deleted plans`);
+    try {
+        let count = 0;
+        const plans = await db.Plan.findAll();
+        for (let i = 0; i < plans.length; i++) {
+            if (plans[i].deletedAt != null && plans[i].deletedAt < new Date(today).addDays(-15)) {
+                plans[i].destroy({ force: true });
+                count++;
+            }
+        }
+        ApplicationLogger.logBase(
+            LogLevel.INFO,
+            0,
+            null,
+            null,
+            'cronjob/plans',
+            null,
+            'Cleaned ' + count + ' plans'
+        );
+    } catch (err) {
+        ApplicationLogger.logBase(
+            LogLevel.FATAL,
+            0,
+            null,
+            null,
+            'cronjob/plans',
             null,
             'Errored @ ' + new Date() + ': ' + err
         );
