@@ -3,29 +3,29 @@ const db = require('../db/models.js');
 const { Op } = require('sequelize');
 const { mpipUsers, cfPrediction, cbPrediction } = require('../hermes-rust/index.js');
 
-const N = 10;
-const RANDOM_SIZE = N * 5;
 const CF_THRESHOLD = 3;
 const CB_THRESHOLD = 0.5;
 
 /**
  * Finds a user's nearest neighbors based on PSS, and ratings
  * @param  {number} userId User to find neighbors for
+ * @param  {number} n      Size of Top-N
+ * @param  {number} r      Number of users in DB to lookup
  */
-exports.findNeighbors = async function (user) {
+exports.findNeighbors = async function (user, n = 10, r = 5) {
     const userId = user.id;
 
     // Get user's rated places
     const rated = {};
-    (
-        await db.Rating.findAll({
-            where: {
-                UserId: userId,
-            },
-        })
-    ).forEach((rating) => {
-        rated[rating.PlaceId] = rating.rating;
+    const ratings = await db.Rating.findAll({
+        where: {
+            UserId: userId,
+        },
     });
+    for (let i = 0; i < ratings.length; i++) {
+        const rating = ratings[i];
+        rated[rating.PlaceId] = rating.rating;
+    }
 
     // Get random users along with coinciding places
     const users = await db.User.findAll({
@@ -52,17 +52,17 @@ exports.findNeighbors = async function (user) {
             },
         ],
         order: db.sequelize.random(),
-        limit: RANDOM_SIZE,
+        limit: n * r,
     });
 
     // Compute similarity for every random user, excluding users with
     // less than THRESHOLD similarity
     var similarity = [];
-    for (var i = 0; i < users.length; i++) {
+    for (let i = 0; i < users.length; i++) {
         const neighborRatings = [];
         const userRatings = [];
         const averageRatings = [];
-        for (var j = 0; j < users[i].Ratings.length; j++) {
+        for (let j = 0; j < users[i].Ratings.length; j++) {
             const rating = users[i].Ratings[j];
             neighborRatings.push(rating.rating);
             userRatings.push(rated[rating.PlaceId]);
@@ -80,7 +80,7 @@ exports.findNeighbors = async function (user) {
     similarity.sort((a, b) => {
         return b.similarity - a.similarity;
     });
-    similarity = similarity.slice(0, N);
+    similarity = similarity.slice(0, n);
 
     await db.Neighbor.destroy({
         where: {
@@ -265,22 +265,34 @@ exports.generateCBRecommendations = async function (user) {
     });
 
     // Get UserViews
-    (
-        await db.UserView.findAll({
-            where: {
-                UserId: user.id,
-            },
-        })
-    ).forEach((userView) => {
-        if(!userViews[userView.CategoryId]) {
+    var dbUserViews = await db.UserView.findAll({
+        where: {
+            UserId: user.id,
+        },
+    });
+    for (var i = 0; i < dbUserViews.length; i++) {
+        const userView = dbUserViews[i];
+        if (!userViews[userView.CategoryId]) {
             userViews[userView.CategoryId] = 0;
         }
-        if(user.views != 0) {
+        if (user.views != 0) {
             userViews[userView.CategoryId] = Math.max(userView.views / user.views, userViews[userView.CategoryId] || 0);
         } else {
             userViews[userView.CategoryId] = userViews[userView.CategoryId] || 0;
         }
-    });
+    }
+
+    // Normalize values
+    var categories = Object.keys(userViews);
+    var maxViews = 0;
+    var minViews = 1;
+    for (let i = 0; i < categories.length; i++) {
+        maxViews = Math.max(userViews[categories[i]], maxViews);
+        minViews = Math.min(userViews[categories[i]], minViews);
+    }
+    for (let i = 0; i < categories.length; i++) {
+        userViews[categories[i]] = (userViews[categories[i]] - minViews) / (maxViews - minViews);
+    }
 
     // Get Places and Categories
     // For each place, create an array of UserView percentage
@@ -306,7 +318,7 @@ exports.generateCBRecommendations = async function (user) {
         };
     });
 
-    for (var i = 0; i < places.length; i++) {
+    for (let i = 0; i < places.length; i++) {
         const s = cbPrediction(places[i].percentages);
         if (s > CB_THRESHOLD) {
             similarity.push({

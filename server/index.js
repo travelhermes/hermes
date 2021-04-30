@@ -109,6 +109,7 @@ if (cluster.isMaster) {
     // Declare error handling
     fastify.addHook('onSend', async (request, reply, payload) => {
         reply.header('X-Worker', cluster.worker.id);
+        reply.header('Permissions-Policy', 'interest-cohort=()');
 
         request.endTime = new Date();
 
@@ -118,7 +119,7 @@ if (cluster.isMaster) {
             AccessLogger.warning(request, reply);
         } else {
             AccessLogger.fatal(request, reply);
-            ApplicationLogger.fatal(request, reply, { msg: payload });
+            //ApplicationLogger.fatal(request, reply, { msg: payload });
         }
 
         console.log(
