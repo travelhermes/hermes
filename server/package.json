@@ -39,6 +39,7 @@
         "pg-hstore": "^2.3.3",
         "pug": "^3.0.2",
         "sequelize": "^6.5.0",
+        "sqlite3": "^5.0.2",
         "tough-cookie": "^4.0.0"
     },
     "devDependencies": {
