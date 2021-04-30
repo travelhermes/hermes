@@ -414,7 +414,7 @@ async function main() {
     // Find neighbors again and regenerate recommendations
     console.log(`[${new Date().toLocaleString()}] (cron.js) - Finding users that need new neighbors`);
     var users = (await db.User.findAll({})).filter((user) => {
-        if (today - user.lastNeighbor > 3600 * 24 * 1000) {
+        if (today - user.lastNeighbor > 3600 * 24 * 1000 - 10) {
             return user;
         }
     });
