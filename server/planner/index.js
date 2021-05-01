@@ -202,7 +202,7 @@ function createProblem(planId, places, days, start, dayStart, dayEnd, quicker = 
                 for (let j = 0; j < days.length; j++) {
                     let dayObj = getDayObj(days[j]);
                     placeHours.push(`(= (opens place${place.id} ${dayObj}) 0)`);
-                    placeHours.push(`(= (closes place${place.id} ${dayObj}) 1440)`);
+                    placeHours.push(`(= (closes place${place.id} ${dayObj}) 2879)`);
                 }
             } else {
                 for (let j = 0; j < place.hours.length; j++) {
