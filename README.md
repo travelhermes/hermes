@@ -1,76 +1,34 @@
 # Hermes
 
+## Español
+
+Bienvenida/o al repositorio de Hermes:
+
 Hermes es un sistema recomendador y planificador turístico, para facilitar la tarea más tediosa de todo viaje: **planificarlo**.
 
-## Issues
+- Descubrir que es Hermes
+- [Contribuir a Hermes](docs/es/CONTRIBUTE.md)
+- [Reportar errores en Hermes](https://github.com/SrGMC/hermes-issues/issues/new?assignees=SrGMC&labels=bug&template=es_bug_report.md&title=%5BBUG%5D+)
+- Solicitar nuevos lugares
+    - [Solicitud de nuevo lugar](https://github.com/SrGMC/hermes-issues/issues/new?assignees=SrGMC&labels=place+request&template=es_place_request.md&title=%5BLUGAR%5D+) 
+    - [Solicitud de nueva ciudad](https://github.com/SrGMC/hermes-issues/issues/new?assignees=SrGMC&labels=city+request&template=es_city_request.md&title=%5BCIUDAD%5D+)
+- [Proponer nuevas características](https://github.com/SrGMC/hermes-issues/issues/new?assignees=SrGMC&labels=enhancement&template=es_feature_request.md&title=%5BFEATURE%5D+)
 
-- [Español](#español)
-- [English](#english)
+## English
 
-### Español
+Hermes is a system of recommendations and tour planner, to facilitate the most tedious task of any trip: **planning it**.
 
-Bienvenida/o al repositorio de incidencias de Hermes. Aquí puedes informar de cualquier error que encuentres o sugerir ediciones y nuevos lugares y ciudades a la plataforma.
+Welcome to Hermes' repository:
 
-Empieza con las siguientes plantillas:
+- Discover Hermes
+- [Contribute to Hermes](docs/en/CONTRIBUIR.md)
+- [Report bugs in Hermes](https://github.com/SrGMC/hermes-issues/issues/new?assignees=SrGMC&labels=bug&template=en_bug_report.md&title=%5BBUG%5D+)
+- Request new places
+    - [New place request](https://github.com/SrGMC/hermes-issues/issues/new?assignees=SrGMC&labels=place+request&template=en_place_request.md&title=%5BPLACE%5D+)
+    - [New city request](https://github.com/SrGMC/hermes-issues/issues/new?assignees=SrGMC&labels=city+request&template=en_city_request.md&title=%5BCITY%5D+)
+- [Request new features](https://github.com/SrGMC/hermes-issues/issues/new?assignees=SrGMC&labels=enhancement&template=en_feature_request.md&title=%5BFEATURE%5D+)
 
-- [Informe de errores](https://github.com/SrGMC/hermes-issues/issues/new?assignees=SrGMC&labels=bug&template=es_bug_report.md&title=%5BBUG%5D+): Informe de errores en la plataforma.
-- [Solicitud de características](https://github.com/SrGMC/hermes-issues/issues/new?assignees=SrGMC&labels=enhancement&template=es_feature_request.md&title=%5BFEATURE%5D+): Sugerir una nueva característica
-- [Solicitud de nueva ciudad](https://github.com/SrGMC/hermes-issues/issues/new?assignees=SrGMC&labels=city+request&template=es_city_request.md&title=%5BCIUDAD%5D+): Sugerir una nueva ciudad.
-- [Solicitud de lugar](https://github.com/SrGMC/hermes-issues/issues/new?assignees=SrGMC&labels=place+request&template=es_place_request.md&title=%5BLUGAR%5D+): Sugiere una edición o un nuevo lugar.
-
-### English
-
-Welcome to the hermes issues repository. Here, you can report any bug that you find or suggest edits and new places and cities to the platform.
-
-Get started with the following templates:
-- [Bug report](https://github.com/SrGMC/hermes-issues/issues/new?assignees=SrGMC&labels=bug&template=en_bug_report.md&title=%5BBUG%5D+): Report bugs.
-- [Feature request](https://github.com/SrGMC/hermes-issues/issues/new?assignees=SrGMC&labels=enhancement&template=en_feature_request.md&title=%5BFEATURE%5D+): Suggest a new feature
-- [City request](https://github.com/SrGMC/hermes-issues/issues/new?assignees=SrGMC&labels=city+request&template=en_city_request.md&title=%5BCITY%5D+): Suggest a new city.
-- [Place request](https://github.com/SrGMC/hermes-issues/issues/new?assignees=SrGMC&labels=place+request&template=en_place_request.md&title=%5BPLACE%5D+): Suggest an edit or a new place.
-
-## Directorios
-
-Este repositorio está dividido en dos directorios distintos:
-
-- [`web`](web/): Contiene el _frontend_ de la plataforma.
-- [`server`](server/): Contiene el _backend_ de la plataforma
-- [`data`](data/): Scripts para extraer datos para añadir a la base de datos.
-
-## Despliegue
-
-Para desplegar Hermes, se recomienda utilizar Docker y `docker-compose`.
-
-Se provee un archivo de `docker-compose` como punto de inicio.
-
-Los pasos de despligue son los siguientes:
-
-1. Preparación de la web
-    1. `js/common.js`: Cambie la constante `TILESERVER_ENDPOINT` para que apunte al servidor de tiles para los mapas.
-    2. Reemplace, si lo desea, los términos y condiciones y la política de privacidad que se ofrecen como ejemplo.
-        - **Nota**: Tenga en cuenta que Hermes está bajo la licencia GPL-3.0 
-    3. Añada la carpeta `places` en `assets`. Esta contiene todas las imágenes de los lugares en el formato `{idLugar}/{numeroImagen}.jpg`.
-2. Preparación del servidor
-    1. `config.json`: Cree un archivo llamado `config.json`. Se muestra un ejemplo en la raíz de este repositorio. Añada este archivo en el directorio `server/`
-        - Graphhopper: Para extraer distancias, es necesario una instancia de Graphhopper. Puede crear una instancia de [Graphhopper en su máquina](https://github.com/graphhopper/graphhopper) o utilizar la [API de Graphhopper](https://www.graphhopper.com/pricing/).
-        - Foursquare:
-            + Para añadir categorias en la base de datos, es necesario tener una lista de [categorias de Foursquare](https://developer.foursquare.com/docs/build-with-foursquare/categories/)
-    2. `db.json`: Este archivo contiene los lugares que se almacenarán en la base de datos. Añada este archivo en el directorio `server/db/db.json`. Se muestra un ejemplo en la raíz de este repositorio.
-    3. Metric-FF: Compile el código fuente de [Metric-FF 1.2](https://fai.cs.uni-saarland.de/hoffmann/metric-ff.html) acorde a la arquitectura de su máquina. Mueva el ejecutable `ff` generado a  `server/planner/ff`.
-    4. `hermes.env`: El resto de la configuración de Hermes se realiza mediante _SECRETS_ o variables de entorno. A partir del archivo `env_example`, cree un archivo `hermes.env` donde configure todas las variables necesarias
-3. Genere la imagen del servidor: Desde `server/`, ejecute `docker build -t srgmc/hermes .`
-4. Configure  `docker-compose.yaml` para que las rutas sean las correctas.
-    - La variable `SERVER` es necesaria en el caso de usar logs en producción, ya que determina el nombre del servidor en el que se ejecuta.
-5. Creación de la base de datos: 
-    1. Exporte la variable de entorno `DATABASE`: `export "DATABASE=<mariadb or postgres>://<username>:<password>@<address>:<port>/<db name>"`. Este valor debe de ser el mismo que el configurado en el paso 2.4.
-    2. Inicie el contenedor de la base de datos que va a utilizar para Hermes con `docker-compose up mariadb`.
-    3. Inicie la instancia de Graphhopper.
-    4. Dirígase a `server/db` y ejecute el comando `node init.js && addPlaces.js`. 
-        - Esto añadirá todas las tablas a la base de datos y posteriormente añadirá todos los lugares de `db.json`. Puede generar este archivo con los scripts del directorio `data/`.
-6. Iniciar el servidor: Inicie el servidor con `docker-compose up -d`
-7. Configuración de cron: En el archivo `crontab`, se muestra un ejemplo de una tarea períodica.
-    - Tenga en cuenta que las fechas están en formato UTC.
-
-## Licencia
+## License
 
 Copyright (C) 2021  Álvaro Galisteo
 
