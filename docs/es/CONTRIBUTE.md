@@ -1,6 +1,64 @@
 # Contribuir a Hermes
 
+## Contribuir nuevas ciudades
+
+Crea un [nuevo Issue con la plantilla correspondiente](https://github.com/SrGMC/hermes-issues/issues/new?assignees=SrGMC&labels=city+request&template=es_city_request.md&title=%5BCIUDAD%5D+).
+
 ## Contribuir con lugares
+
+Puedes contribuir a Hermes añadiendo nuevos lugares a la base de datos. Los archivos de la base de datos se encuentran en formato JSON en el directorio `data`.
+
+Para añadir un nuevo lugar, crea un nuevo _pull request_ en el que añadas el nuevo lugar en el archivo de base de datos correspondiente. Las propiedades del objeto del lugar son las siguientes:
+
+```
+{
+    "osmId": ID de OpenStreetMap (relation/XXXX, way/XXXXX, ...)
+    "fsqId": ID de FourSquare
+    "gmapsUrl": URL del lugar en Google Maps
+    "lat": Latitud
+    "lon": Longitud
+    "name": Nombre
+    "description": Descripción
+    "timeSpent": Duración de la visita (en minutos)
+    "wikidata": ID de Wikidata (opcional)
+    "wheelchair": Si tiene acceso para discapacitados (true) o no (false)
+    "images": Número de imágenes del lugar
+    "address": Calle y número
+    "postalCode": Código postal
+    "city": Ciudad
+    "zone": Zona (ver más abajo)
+    "state": Estado o comunidad autónoma
+    "country": País
+    "placeUrl": Página web del lugar (opcional)
+    "phone": Teléfono del lugar (opcional, ver más abajo),
+    "twitter": Usuario de Twitter del lugar (opcional),
+    "facebook": ID de usuario o usuario de Facebook del lugar (opcional)
+    "instagram": Usuario de Instagram del lugar (opcional)
+    "categories": [
+        ID de la categoría 1 (ver más abajo)
+        ID de la categoría 2
+        ...
+    ]
+    "hours": [
+        Horario 1 (ver más abajo)
+        Horario 2
+        ...
+    ],
+    "popular": [
+        Horas más populares 1 (ver más abajo)
+        Horas más populares 2
+        ...
+    ]
+}
+```
+
+Las ciudades (zonas) actualmente disponibles son las siguientes:
+
+| ID     | Ciudad | Archivo                                 |
+| ------ | ------ | --------------------------------------- |
+| Madrid | Madrid | [`madrid.json`](../../data/madrid.json) |
+
+Las categorías actualmente disponible son las siguientes:
 
 | ID  | Nombre                   | ID de Foursquare         |
 | --- | ------------------------ | ------------------------ |
@@ -54,4 +112,83 @@
 | 50  | Anfiteatros              | 56aa371be4b08b9a8d5734db |
 | 51  | Teatros                  | 4bf58dd8d48988d137941735 |
 
+Los números de teléfono deben seguir el formato regional del país del lugar, incluyendo siempre el [prefijo del país](https://en.wikipedia.org/wiki/List_of_country_calling_codes) en formato `+XXX`.
+
+Los horarios del lugar y las horas más populares tienen las siguientes propiedades:
+
+```
+{
+    "day": Día de la semana
+    "monthStart": Primer mes en el que se cumple este horario,
+    "monthEnd": Ultimo mes en el que se cumple este horario,
+    "timeStart": Horario de apertura. Debe ser inferior al horario de cierre
+    "timeEnd": Horario de cierre. Debe ser inferior al horario de apertura
+},
+```
+
+Los formatos son los siguientes:
+
+-   Día de la semana: 1 = Lunes ... 7 = Domingo.
+-   Mes: 0 = Enero ... 11 = Diciembre.
+    -   Si no hay restricciones de meses, su valor debe ser `-1`.
+-   Horario:
+    -   `"HHMM"`: `"1000"` indica que el lugar abre a las 10:00 AM.
+    -   `"+HHMM"`: `"+0400"` indica que el lugar cierra a las 04:00 AM del día siguiente.
+
+Por ejemplo:
+
+```
+...
+hours: [
+    {
+        "day": 1
+        "monthStart": 8,
+        "monthEnd": 3,
+        "timeStart": "1000"
+        "timeEnd": "2200"
+    },
+    {
+        "day": 1
+        "monthStart": 4,
+        "monthEnd": 7,
+        "timeStart": "0800"
+        "timeEnd": "+0200"
+    },
+]
+```
+
+Este horario indica que el lugar:
+
+-   Entre septiembre y abril, el lugar estará abierto los lunes de 10:00 AM a 10:00 PM.
+-   Entre mayo y agosto, el lugar estará abierto los lunes de 08:00 AM a 02:00 AM del día siguiente.
+
+### _Pull request_
+
+Una vez hayas añadido los lugares al archivo de base de datos correspondiente, crea un _pull request_.
+
+En caso de que el lugar tenga imágenes, crea un archivo `.zip` con estas imágenes con la extensión `.jpg` y adjunta el archivo comprimido al pull request.
+
+Por favor, no modifiques lugares existentes. Si deseas modificar un lugar existente, crea un _pull request_ distinto en el que **expliques que has cambiado y porqué**.
+
 ## Contribuir con código
+
+Las versiones son nombradas mediante [SemVer](https://semver.org/).
+
+Este proyecto usa el programa CLI [`prettier`](https://prettier.io/) con la siguiente configuración:
+
+-   Print width: 120.
+-   Tab width: 4.
+-   Single quotes: `true`.
+
+Puedes formatear las nuevas contribuciones con `prettier --tab-width 4 --print-width 120 --single-quote --write <file>`.
+
+Asímismo, se usan los comentarios en formato [JSDoc](https://jsdoc.app/).
+
+Cuando contribuyas código a este proyecto, ten en cuenta lo siguiente:
+
+-   Intenta escribir código que sea eficiente y rápido.
+-   Escribe código que sea entendible y fácil de leer.
+-   Evita escribir código complejo y que anide muchos bloques dentro de otros.
+-   Comenta todo el código que añadas, cambies o modifiques.
+    -   Si creas nuevas funciones o clases, recuerda usar el formato [JSDoc](https://jsdoc.app/).
+    -   Comenta todo el código que pienses que sea relevante.
