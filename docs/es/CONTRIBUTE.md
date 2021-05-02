@@ -191,4 +191,4 @@ Cuando contribuyas código a este proyecto, ten en cuenta lo siguiente:
 -   Evita escribir código complejo y que anide muchos bloques dentro de otros.
 -   Comenta todo el código que añadas, cambies o modifiques.
     -   Si creas nuevas funciones o clases, recuerda usar el formato [JSDoc](https://jsdoc.app/).
-    -   Comenta todo el código que pienses que sea relevante.
+    -   Comenta todo el código que sea relevante.
