@@ -50,14 +50,24 @@ Date.prototype.addDays = function (days) {
     return date;
 };
 
-if(document.querySelector('#tutorialFooter')) {
-    document.querySelector('#tutorialFooter').querySelector('.btn').addEventListener('click', (e) => {
-        var doNotShowAgain = e.target.closest('#tutorialFooter').querySelector('input');
-        var name = e.target.closest('.modal').getAttribute('data-tutorial');
-        if(doNotShowAgain.checked) {
-            localStorage.setItem('hideTutorial' + name, true);
-        }
-    });
+if (document.querySelector('#tutorialFooter')) {
+    document
+        .querySelector('#tutorialFooter')
+        .querySelector('.btn')
+        .addEventListener('click', (e) => {
+            var doNotShowAgain = e.target.closest('#tutorialFooter').querySelector('input');
+            var name = e.target.closest('.modal').getAttribute('data-tutorial');
+            if (doNotShowAgain.checked) {
+                localStorage.setItem('hideTutorial' + name, true);
+            }
+        });
+}
+if (document.querySelector('#tutorialModal')) {
+    var name = document.querySelector('#tutorialModal').getAttribute('data-tutorial');
+    if (localStorage.getItem('hideTutorial' + name) != 'true') {
+        var tutorial = new bootstrap.Modal(document.getElementById('tutorialModal'));
+        tutorial.show();
+    }
 }
 
 /**
@@ -69,7 +79,8 @@ function throwError(err) {
         'Se ha producido un error inesperado mientras se procesaba la solicitud. Consulte la consola de su navegador para más información.\nSi el error persiste, contacte con nosotros.';
 
     if (err.logId) {
-        message += '\n\nAl contactar, por favor, indique en el cuerpo del mensaje el siguiente identificador: ' + err.logId;
+        message +=
+            '\n\nAl contactar, por favor, indique en el cuerpo del mensaje el siguiente identificador: ' + err.logId;
     }
     console.log(err);
     alert(message);
@@ -518,15 +529,8 @@ function drawCurve(start, end, map) {
 function scrollToMiddle(element) {
     const elementRect = element.getBoundingClientRect();
     const absoluteElementTop = elementRect.top + window.pageYOffset;
-    const middle = absoluteElementTop - (window.innerHeight / 2);
+    const middle = absoluteElementTop - window.innerHeight / 2;
     window.scrollTo(0, middle);
-}
-
-
-var name = document.querySelector('#tutorialModal').getAttribute('data-tutorial');
-if(localStorage.getItem('hideTutorial' + name) != 'true') {
-    var tutorial = new bootstrap.Modal(document.getElementById('tutorialModal'));
-    tutorial.show();
 }
 
 /**
