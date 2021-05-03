@@ -3,8 +3,9 @@ const db = require('../db/models.js');
 const { Op } = require('sequelize');
 const { mpipUsers, cfPrediction, cbPrediction } = require('../hermes-rust/index.js');
 
-const CF_THRESHOLD = 3;
-const CB_THRESHOLD = 0.5;
+const CF_THRESHOLD = 3.4;
+const CB_THRESHOLD = 0.6;
+const DEFAULT_PREFERENCES = 1;
 
 /**
  * Finds a user's nearest neighbors based on PSS, and ratings
@@ -249,20 +250,7 @@ exports.generateCFRecommendations = async function (user) {
 exports.generateCBRecommendations = async function (user) {
     var similarity = [];
     const userId = user.id;
-
-    // Get preferences
     const userViews = {};
-    (
-        await db.UserCategory.findAll({
-            attributes: ['CategoryId'],
-            where: {
-                UserId: user.id,
-            },
-        })
-    ).map((preference) => {
-        userViews[preference.CategoryId] = 0.75;
-        return preference.CategoryId;
-    });
 
     // Get UserViews
     var dbUserViews = await db.UserView.findAll({
@@ -272,13 +260,10 @@ exports.generateCBRecommendations = async function (user) {
     });
     for (var i = 0; i < dbUserViews.length; i++) {
         const userView = dbUserViews[i];
-        if (!userViews[userView.CategoryId]) {
-            userViews[userView.CategoryId] = 0;
-        }
         if (user.views != 0) {
-            userViews[userView.CategoryId] = Math.max(userView.views / user.views, userViews[userView.CategoryId] || 0);
+            userViews[userView.CategoryId] = userView.views / user.views;
         } else {
-            userViews[userView.CategoryId] = userViews[userView.CategoryId] || 0;
+            userViews[userView.CategoryId] = 0;
         }
     }
 
@@ -287,11 +272,31 @@ exports.generateCBRecommendations = async function (user) {
     var maxViews = 0;
     var minViews = 1;
     for (let i = 0; i < categories.length; i++) {
+        // Skip views with 0%
+        if(userViews[categories[i]] == 0) {
+            continue;
+        }
         maxViews = Math.max(userViews[categories[i]], maxViews);
         minViews = Math.min(userViews[categories[i]], minViews);
     }
     for (let i = 0; i < categories.length; i++) {
+        // Skip views with 0%
+        if(userViews[categories[i]] == 0) {
+            continue;
+        }
         userViews[categories[i]] = (userViews[categories[i]] - minViews) / (maxViews - minViews);
+    }
+
+    // Get preferences
+    var preferences = await db.UserCategory.findAll({
+        attributes: ['CategoryId'],
+        where: {
+            UserId: user.id,
+        },
+    });
+    // Set userViews that are preferences to 1 
+    for (let i = 0; i < preferences.length; i++) {
+        userViews[preferences[i].CategoryId] = DEFAULT_PREFERENCES;
     }
 
     // Get Places and Categories
@@ -320,7 +325,7 @@ exports.generateCBRecommendations = async function (user) {
 
     for (let i = 0; i < places.length; i++) {
         const s = cbPrediction(places[i].percentages);
-        if (s > CB_THRESHOLD) {
+        if (s >= CB_THRESHOLD) {
             similarity.push({
                 UserId: userId,
                 PlaceId: places[i].id,
