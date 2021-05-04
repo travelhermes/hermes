@@ -191,7 +191,7 @@ async function main() {
         let count = 0;
         const plans = await db.Plan.findAll();
         for (let i = 0; i < plans.length; i++) {
-            if (plans[i].deletedAt != null && plans[i].deletedAt < new Date(today).addDays(-15)) {
+            if (plans[i].deletedAt != null && plans[i].deletedAt < new Date(today).addDays(-62)) {
                 plans[i].destroy({ force: true });
                 count++;
             }
