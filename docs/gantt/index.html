@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Diagrama de Gantt</title>
+        <link rel="stylesheet" type="text/css" href="frappe-gantt.css" />
+        <style type="text/css">
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+                            Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', Helvetica, Arial,
+                            sans-serif;
+            }
+            .bar-label {
+                fill: #000 !important;
+                font-weight: normal !important;
+            }
+            .main-phase .bar-progress {
+                fill:  #9ec5fe;
+            }
+            .sub-phase .bar-progress {
+                fill:  #fecba1;
+            }
+            .arrow {
+                display: none;
+            }
+            .gantt .tick {
+                stroke: #b0b0b0;
+                stroke-width: 0.4;
+            }
+            .gantt .tick.thick {
+                stroke-width: 0.8;
+            }
+        </style>
+    </head>
+    <body>
+        <svg id="gantt"></svg>
+
+        <script src="moment.min.js"></script>
+        <script src="snap.svg-min.js"></script>
+        <script src="frappe-gantt.min.js"></script>
+        <script>
+        // 1 sept 2020 - 21 sept 2020: Propuesta de proyecto
+        // 15 dic 2020 - 28 ene 2021: Estado del arte
+        // 28 ene 2021 - 10 feb 2021: Análisis de la solución
+        // 10 feb 2021 - 13 abr 2021: Implementación
+        //     10 feb 2021 - 23 feb 2021: Obtención de datos
+        //     23 feb 2021 - 22 mar 2021: Interfaz de usuario
+        //     01 mar 2021 - 02 mar 2021: Diseño de base de datos
+        //     02 mar 2021 - 10 mar 2021: API REST
+        //     04 mar 2021 - 05 mar 2021: Cronjobs
+        //     10 mar 2021 - 23 mar 2021: Sistema recomendador
+        //     23 mar 2021 - 29 mar 2021: Sistema planificador
+        //     30 mar 2021 - 30 mar 2021: Primer despliegue
+        //     30 mar 2021 - 13 abr 2021: Mejoras y arreglos
+        // 13 abr 2021 - 27 abr 2021: Experimentación y pruebas
+        //     19 abr 2021 - 25 abr 2021: Experimentación interfaz de usuario
+        //     18 abr 2021 - 19 abr 2021: Pruebas unitarias
+        //     20 abr 2021 - 25 abr 2021: Pruebas recomendador (5 días)
+        //     26 abr 2021 - 27 abr 2021: Pruebas planificador 
+        // 27 abr 2021 - 10 may 2021: Memoria
+        var tasks = [
+                {
+                    id: 'estado-del-arte',
+                    name: 'Estado del arte',
+                    start: '2020-12-15',
+                    end: '2021-01-28',
+                    progress: 100,
+                    dependencies: 'propuesta',
+                    custom_class: "main-phase"
+                },
+                {
+                    id: 'analisis-solucion',
+                    name: 'Análisis de la solución',
+                    start: '2021-01-29',
+                    end: '2021-02-10',
+                    progress: 100,
+                    dependencies: 'estado-del-arte',
+                    custom_class: "main-phase"
+                },
+                {
+                    id: 'implementacion',
+                    name: 'Implementación',
+                    start: '2021-02-11',
+                    end: '2021-04-12',
+                    progress: 100,
+                    dependencies: 'analisis-solucion',
+                    custom_class: "main-phase"
+                },
+                    {
+                        id: 'datos',
+                        name: 'Obtención de datos',
+                        start: '2021-02-11',
+                        end: '2021-02-23',
+                        progress: 100,
+                        dependencies: 'implementacion',
+                        custom_class: "sub-phase"
+                    },
+                    {
+                        id: 'interfaz',
+                        name: 'Interfaz de usuario',
+                        start: '2021-02-24',
+                        end: '2021-03-29',
+                        progress: 100,
+                        dependencies: 'implementacion',
+                        custom_class: "sub-phase"
+                    },
+                    {
+                        id: 'base-de-datos',
+                        name: 'Diseño de base de datos',
+                        start: '2021-03-01',
+                        end: '2021-03-02',
+                        progress: 100,
+                        dependencies: 'implementacion',
+                        custom_class: "sub-phase"
+                    },
+                    {
+                        id: 'api',
+                        name: 'API REST',
+                        start: '2021-03-03',
+                        end: '2021-03-10',
+                        progress: 100,
+                        dependencies: 'implementacion',
+                        custom_class: "sub-phase"
+                    },
+                    {
+                        id: 'cronjobs',
+                        name: 'Cronjobs',
+                        start: '2021-03-04',
+                        end: '2021-03-05',
+                        progress: 100,
+                        dependencies: 'implementacion',
+                        custom_class: "sub-phase"
+                    },
+                    {
+                        id: 'recomendador',
+                        name: 'Sistema recomendador',
+                        start: '2021-03-11',
+                        end: '2021-03-23',
+                        progress: 100,
+                        dependencies: 'implementacion',
+                        custom_class: "sub-phase"
+                    },
+                    {
+                        id: 'planificador',
+                        name: 'Sistema planificador',
+                        start: '2021-03-24',
+                        end: '2021-03-29',
+                        progress: 100,
+                        dependencies: 'implementacion',
+                        custom_class: "sub-phase"
+                    },
+                    {
+                        id: 'despliegue',
+                        name: 'Primer despliegue',
+                        start: '2021-03-30',
+                        end: '2021-03-30',
+                        progress: 100,
+                        dependencies: 'implementacion',
+                        custom_class: "sub-phase"
+                    },
+                    {
+                        id: 'mejoras',
+                        name: 'Mejoras y arreglos',
+                        start: '2021-03-30',
+                        end: '2021-04-12',
+                        progress: 100,
+                        dependencies: 'implementacion',
+                        custom_class: "sub-phase"
+                    },
+                {
+                    id: 'experimentacion',
+                    name: 'Experimentación y pruebas',
+                    start: '2021-04-13',
+                    end: '2021-04-27',
+                    progress: 100,
+                    dependencies: 'implementacion',
+                    custom_class: "main-phase"
+                },
+                    {
+                        id: 'pruebas-unitarias',
+                        name: 'Pruebas unitarias',
+                        start: '2021-04-14',
+                        end: '2021-04-18',
+                        progress: 100,
+                        dependencies: 'experimentacion',
+                        custom_class: "sub-phase"
+                    },
+                    {
+                        id: 'exp-interfaz',
+                        name: 'Experimentación IU',
+                        start: '2021-04-19',
+                        end: '2021-04-25',
+                        progress: 100,
+                        dependencies: 'experimentacion',
+                        custom_class: "sub-phase"
+                    },
+                    {
+                        id: 'pruebas-recomendador',
+                        name: 'Pruebas recomendador',
+                        start: '2021-04-21',
+                        end: '2021-04-27',
+                        progress: 100,
+                        dependencies: 'experimentacion',
+                        custom_class: "sub-phase"
+                    },
+                    {
+                        id: 'pruebas-planificador',
+                        name: 'Pruebas planificador',
+                        start: '2021-04-26',
+                        end: '2021-04-27',
+                        progress: 100,
+                        dependencies: 'experimentacion',
+                        custom_class: "sub-phase"
+                    },
+                {
+                    id: 'memoria',
+                    name: 'Memoria',
+                    start: '2021-04-28',
+                    end: '2021-05-10',
+                    progress: 100,
+                    dependencies: 'experimentacion',
+                    custom_class: "main-phase"
+                }
+            ];
+            var gantt = new Gantt("#gantt", tasks, {
+                on_click: function (task) {
+                    console.log(task);
+                },
+                on_date_change: function(task, start, end) {
+                    console.log(task, start, end);
+                },
+                on_progress_change: function(task, progress) {
+                    console.log(task, progress);
+                },
+                on_view_change: function(mode) {
+                    console.log(mode);
+                },
+                view_mode: 'Week',
+                language: 'es'
+            });
+        </script>
+    </body>
+</html>
