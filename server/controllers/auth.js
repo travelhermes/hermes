@@ -301,6 +301,8 @@ class AuthController {
                                     signed: true,
                                     maxAge: request.body.remember ? 1209600 : 86400,
                                     sameSite: true,
+                                    httpOnly: true,
+                                    secure: true,
                                 })
                                 .status(200)
                                 .send();
@@ -508,6 +510,8 @@ class AuthController {
                         signed: true,
                         maxAge: request.body.remember ? 1209600 : 86400,
                         sameSite: true,
+                        httpOnly: true,
+                        secure: true,
                     })
                     .status(200)
                     .send();
