@@ -290,10 +290,11 @@ function renderPlace(item) {
     }
 
     if (item.place.images > 0) {
-        card.querySelector('.img').style.background = "url('/assets/places/" + item.place.id + "/0.jpg')";
-        card.querySelector('.img').style.backgroundRepeat = 'no-repeat';
-        card.querySelector('.img').style.backgroundSize = 'cover';
-        card.querySelector('.img').style.backgroundPosition = 'center';
+        card.querySelector('img').setAttribute("data-src", '/assets/places/' + item.place.id + '/0.jpg');
+        card.querySelector('img').setAttribute("alt", `Imagen de ${item.place.name}`);
+    } else {
+        card.querySelector('img').setAttribute("data-src", '/assets/default_image.png');
+        card.querySelector('img').setAttribute("alt", `Imagen de ${item.place.name}`);
     }
 
     return card;
@@ -456,6 +457,9 @@ function renderPlan(plan, day) {
 
     // Render places in map
     renderPoints(plan, day);
+
+    // Lazyload images
+    yall();
 }
 
 /**
@@ -747,7 +751,6 @@ function openInsertPlace(button) {
  */
 async function search(button) {
     setLoadButton(button);
-    console.log(button);
     const modal = button.closest('.modal');
     const query = modal.querySelector('#inputSearch').value;
     modal.querySelector('.alert').classList.add('d-none');
@@ -760,6 +763,7 @@ async function search(button) {
         renderInsertPlaces(res, document.querySelector('#searchItemsList'));
         document.querySelector('#searchItems').classList.remove('d-none');
         setDoneButton(button);
+        yall();
     } catch (err) {
         unsetLoadButton(button);
         throwError(err);
@@ -789,10 +793,11 @@ function renderInsertPlaces(places, container, alert = true) {
         card.querySelector('.card').setAttribute('id', place.id);
 
         if (place.images > 0) {
-            card.querySelector('.img').style.background = "url('/assets/places/" + place.id + "/0.jpg')";
-            card.querySelector('.img').style.backgroundRepeat = 'no-repeat';
-            card.querySelector('.img').style.backgroundSize = 'cover';
-            card.querySelector('.img').style.backgroundPosition = 'center';
+            card.querySelector('img').setAttribute("data-src", '/assets/places/' + place.id + '/0.jpg');
+            card.querySelector('img').setAttribute("alt", `Imagen de ${place.name}`);
+        } else {
+            card.querySelector('img').setAttribute("data-src", '/assets/default_image.png');
+            card.querySelector('img').setAttribute("alt", `Imagen de ${place.name}`);
         }
 
         card.querySelector('.title').innerHTML = place.name;
@@ -1037,6 +1042,7 @@ async function getRandomSuggestions(places) {
         const rand = (await post(ENDPOINTS.recommendationsRandom, { ignores: ignores, max: 3 })).result;
         suggestionPlaces = rand;
         renderInsertPlaces(rand, document.querySelector('#suggestionsList'), false);
+        yall();
     } catch (err) {
         throwError(err);
     }
@@ -1165,5 +1171,6 @@ async function main() {
 }
 
 window.onload = () => {
+    document.addEventListener("DOMContentLoaded", yall);
     main();
 };

@@ -76,7 +76,8 @@ function createMarkerContent(place, added = false) {
                 item.querySelector('.carousel-item').classList.add('active');
             }
             item.querySelector('.carousel-item');
-            item.querySelector('img').src = '/assets/places/' + place.id + '/' + j + '.jpg';
+            item.querySelector('img').setAttribute("data-src", '/assets/places/' + place.id + '/' + j + '.jpg');
+            item.querySelector('img').setAttribute("alt", `Imagen ${j+1} de ${place.name}`);
             carousel
                 .querySelector('.carousel-inner')
                 .insertBefore(item, carousel.querySelector('.carousel-inner').firstChild);
@@ -84,8 +85,12 @@ function createMarkerContent(place, added = false) {
     } else {
         carousel = getTemplate('templatePopupCarousel');
         carousel.firstElementChild.setAttribute('id', 'carouselPopup' + place.id);
+        
         const item = getTemplate('templatePopupCarouselItem');
+        item.querySelector('img').setAttribute("data-src", '/assets/default_image.png');
+        item.querySelector('img').setAttribute("alt", `Imagen de ${place.name}`);
         item.querySelector('.carousel-item').classList.add('active');
+        
         carousel
             .querySelector('.carousel-inner')
             .insertBefore(item, carousel.querySelector('.carousel-inner').firstChild);
@@ -232,6 +237,7 @@ function selectPlaceById(id) {
     document.querySelector('#placeCard' + id).classList.add('border-primary');
     document.querySelector('#placeCard' + id).scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'nearest' });
     selectedPlace = id;
+    yall();
 }
 
 /**

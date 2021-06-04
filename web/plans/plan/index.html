@@ -17,7 +17,9 @@
         <link href="/css/common.css" rel="stylesheet" />
         <link href="/css/plans.css" rel="stylesheet" />
         <link href="/css/leaflet.css" rel="stylesheet" />
-    </head>
+
+<link rel="prefetch" href="/assets/placeholder.gif" />
+</head>
     <body class="d-flex flex-column min-vh-100">
         <div
             class="modal fade show"
@@ -469,16 +471,10 @@
                 <div class="card my-3 text-start item-card">
                     <div class="row g-0">
                         <div class="col-md-4">
-                            <div
-                                class="w-100 h-100 img"
-                                style="
-                                    background: url('/assets/default_image.png');
-                                    background-repeat: no-repeat;
-                                    background-size: cover;
-                                    background-position: center;
-                                    min-height: 200px;
-                                "
-                            ></div>
+                            <img
+                                class="w-100 h-100 card-img lazy"
+                                src="/assets/placeholder.gif"
+                            >
                         </div>
                         <div class="col-md-8">
                             <div class="card-body">
@@ -757,15 +753,11 @@
                 <div class="card my-3 text-start item-card">
                     <div class="row g-0">
                         <div class="col-md-4 d-none d-md-block">
-                            <div
-                                class="w-100 h-100 img"
-                                style="
-                                    background: url('/assets/default_image.png');
-                                    background-repeat: no-repeat;
-                                    background-size: cover;
-                                    background-position: center;
-                                "
-                            ></div>
+                            <img
+                                class="w-100 h-100 card-img lazy"
+                                src="/assets/placeholder.gif"
+                                data-src="/assets/default_image.png"
+                            >
                         </div>
                         <div class="col-md-8">
                             <div class="card-body">
@@ -905,15 +897,10 @@
                 </div>
                 <div class="row g-0">
                     <div class="col-md-4">
-                        <div
-                            class="w-100 h-100 img"
-                            style="
-                                background: url('/assets/default_image.png');
-                                background-repeat: no-repeat;
-                                background-size: cover;
-                                background-position: center;
-                            "
-                        ></div>
+                        <img
+                            class="w-100 h-100 card-img lazy"
+                            src="/assets/placeholder.gif"
+                        >
                     </div>
                     <div class="col-md-8">
                         <div class="card-body">
@@ -986,6 +973,9 @@
         <script src="/js/leaflet.js"></script>
         <script src="/js/leaflet.curve.js"></script>
         <script src="/js/leaflet-icons.js"></script>
+
+        <!-- yall -->
+        <script src="/js/yall.min.js"></script>
 
         <!-- Hermes -->
         <script src="/js/common.js"></script>

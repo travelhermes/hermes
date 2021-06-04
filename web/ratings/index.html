@@ -16,7 +16,9 @@
         <link href="/css/bootstrap-icons.css" rel="stylesheet" />
         <link href="/css/common.css" rel="stylesheet" />
         <link href="/css/ratings.css" rel="stylesheet" />
-    </head>
+
+<link rel="prefetch" href="/assets/placeholder.gif" />
+</head>
     <body class="d-flex flex-column min-vh-100">
         <div
             class="modal fade show"
@@ -235,16 +237,10 @@
                 </div>
                 <div class="row g-0">
                         <div class="col-md-4">
-                            <div
-                                class="w-100 h-100 img card-img"
-                                style="
-                                    background: url('/assets/default_image.png');
-                                    background-repeat: no-repeat;
-                                    background-size: cover;
-                                    background-position: center;
-                                    min-height: 100px;
-                                "
-                            ></div>
+                            <img
+                                class="w-100 h-100 card-img lazy"
+                                src="/assets/placeholder.gif"
+                            >
                         </div>
                     <div class="col-md-8">
                         <div class="card-body">
@@ -288,6 +284,9 @@
         <script src="/js/fontawesome.min.js"></script>
         <script src="/js/fa-solid.min.js"></script>
         <script src="/js/fa-brands.min.js"></script>
+
+        <!-- yall -->
+        <script src="/js/yall.min.js"></script>
 
         <!-- Hermes -->
         <script src="/js/common.js"></script>

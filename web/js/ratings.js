@@ -130,10 +130,11 @@ function renderPlaces(places, container, remove = true, split = true, alert = tr
         card.querySelector('.card').setAttribute('id', place.id);
 
         if (place.images > 0) {
-            card.querySelector('.img').style.background = "url('/assets/places/" + place.id + "/0.jpg')";
-            card.querySelector('.img').style.backgroundRepeat = 'no-repeat';
-            card.querySelector('.img').style.backgroundSize = 'cover';
-            card.querySelector('.img').style.backgroundPosition = 'center';
+            card.querySelector('img').setAttribute("data-src", '/assets/places/' + place.id + '/0.jpg');
+            card.querySelector('img').setAttribute("alt", `Imagen de ${place.name}`);
+        } else {
+            card.querySelector('img').setAttribute("data-src", '/assets/default_image.png');
+            card.querySelector('img').setAttribute("alt", `Imagen de ${place.name}`);
         }
 
         card.querySelector('.title').innerHTML = place.name;
@@ -276,6 +277,8 @@ async function main() {
             throwError(err);
             loader.hide();
         }
+
+        yall();
 
         getRandomSuggestions();
         // 2 min.

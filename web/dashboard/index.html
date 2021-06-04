@@ -17,7 +17,9 @@
         <link href="/css/common.css" rel="stylesheet" />
         <link href="/css/dashboard.css" rel="stylesheet" />
         <link href="/css/leaflet.css" rel="stylesheet" />
-    </head>
+
+<link rel="prefetch" href="/assets/placeholder.gif" />
+</head>
     <body>
         <!-- Tutorial Modals -->
         <div class="modal fade" id="tutorialModal" tabindex="-1" aria-labelledby="tutorialModal" aria-hidden="true" data-tutorial="dashboard" data-bs-backdrop="static">
@@ -676,7 +678,7 @@
         <!-- Popup carousel item -->
         <template id="templatePopupCarouselItem">
             <div class="carousel-item">
-                <img src="/assets/default_image.png" class="d-block w-100" />
+                <img src="/assets/placeholder.gif" class="d-block w-100 lazy" />
             </div>
         </template>
 
@@ -741,6 +743,9 @@
         <!-- Leaflet -->
         <script src="/js/leaflet.js"></script>
         <script src="/js/leaflet-icons.js"></script>
+
+        <!-- yall -->
+        <script src="/js/yall.min.js"></script>
 
         <!-- Hermes -->
         <script src="/js/common.js"></script>
