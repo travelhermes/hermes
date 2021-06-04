@@ -894,7 +894,7 @@ async function deletePlan() {
 }
 
 async function deleteUnknownPlan() {
-	const spinner = new Spinner('Deleting a plan');
+	const spinner = new Spinner('Deleting an unknown plan');
 	const res = await post(ENDPOINTS.plannerDelete, { id: planId });
 	spinner.assert(res.status == 403);
 }

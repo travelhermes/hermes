@@ -97,7 +97,7 @@ async function deleteRatingDoesNotExist() {
 }
 
 async function deleteRatingPlaceDoesNotExist() {
-	const spinner = new Spinner('Delete a rating that does not exist');
+	const spinner = new Spinner('Delete a rating of a place that does not exist');
 
 	const res = await post(ENDPOINTS.ratingDelete, {
 		placeId: 400,
