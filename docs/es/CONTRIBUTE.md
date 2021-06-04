@@ -174,7 +174,7 @@ Por favor, no modifiques lugares existentes. Si deseas modificar un lugar existe
 
 Las versiones son nombradas mediante [SemVer](https://semver.org/).
 
-Este proyecto usa el programa CLI [`prettier`](https://prettier.io/) con la siguiente configuración:
+Este proyecto usa el programa CLI [`prettier`](https://prettier.io/) respetando la configuración por defecto, excepto con:
 
 -   Print width: 120.
 -   Tab width: 4.

@@ -1,11 +1,11 @@
 /* jshint esversion: 8 */
-const validator = require("validator");
+const validator = require('validator');
 
 exports.sanitize = function (string) {
-    if (typeof string != "string") {
+    if (typeof string != 'string') {
         return '';
     }
 
-    string = string.replace(/[]/g)
-    return validator.trim(validator.escape(validator.blacklist(string, '`\'"{}<>&\/')));
+    string = string.replace(/[]/g);
+    return validator.trim(validator.escape(validator.blacklist(string, '`\'"{}<>&/')));
 };
