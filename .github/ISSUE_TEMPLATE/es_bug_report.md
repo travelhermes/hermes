@@ -1,8 +1,8 @@
 ---
 name: "[ES] Informe de errores"
 about: Crear un informe que nos ayude a mejorar
-title: "[ES][BUG] "
-labels: bug
+title: "[BUG] "
+labels: bug, es
 assignees: SrGMC
 
 ---

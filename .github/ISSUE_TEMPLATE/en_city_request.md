@@ -1,8 +1,8 @@
 ---
 name: "[EN] City request"
 about: Suggest a new city
-title: "[EN][CITY] "
-labels: city request
+title: "[CITY] "
+labels: city request, en
 assignees: SrGMC
 
 ---

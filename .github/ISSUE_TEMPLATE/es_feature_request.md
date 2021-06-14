@@ -1,8 +1,8 @@
 ---
 name: "[ES] Solicitud de características"
 about: Sugerir una nueva característica
-title: "[ES][FEATURE] "
-labels: enhancement
+title: "[FEATURE] "
+labels: enhancement, es
 assignees: SrGMC
 
 ---

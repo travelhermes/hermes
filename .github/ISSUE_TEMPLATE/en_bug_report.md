@@ -1,8 +1,8 @@
 ---
 name: "[EN] Bug report"
 about: Create a report to help us improve
-title: "[EN][BUG] "
-labels: bug
+title: "[BUG] "
+labels: bug, en
 assignees: SrGMC
 
 ---

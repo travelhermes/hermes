@@ -1,8 +1,8 @@
 ---
 name: "[EN] Place request"
 about: Suggest a new place or an edit
-title: "[EN][PLACE] "
-labels: place request
+title: "[PLACE] "
+labels: place request, en
 assignees: SrGMC
 
 ---

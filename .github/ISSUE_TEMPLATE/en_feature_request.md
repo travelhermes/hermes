@@ -1,8 +1,8 @@
 ---
 name: "[EN] Feature request"
 about: Suggest an idea for this project
-title: "[EN][FEATURE] "
-labels: enhancement
+title: "[FEATURE] "
+labels: enhancement, en
 assignees: SrGMC
 
 ---

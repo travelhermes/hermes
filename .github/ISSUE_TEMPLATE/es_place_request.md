@@ -1,8 +1,8 @@
 ---
 name: "[ES] Solicitud de lugar"
 about: Sugiere una edición o un nuevo lugar.
-title: "[ES][LUGAR] "
-labels: place request
+title: "[LUGAR] "
+labels: place request, es
 assignees: SrGMC
 
 ---

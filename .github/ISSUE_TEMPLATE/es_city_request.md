@@ -1,8 +1,8 @@
 ---
 name: "[ES] Solicitud de ciudad"
 about: Sugerir una nueva ciudad
-title: "[ES][CIUDAD] "
-labels: city request
+title: "[CIUDAD] "
+labels: city request, es
 assignees: SrGMC
 
 ---
