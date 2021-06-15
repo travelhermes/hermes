@@ -121,6 +121,12 @@ const User = sequelize.define(
         country: {
             type: DataTypes.STRING,
             allowNull: false,
+            default: "ES"
+        },
+        lang: {
+            type: DataTypes.STRING,
+            allowNull: false,
+            defaultValue: 'en',
         },
         email: {
             type: DataTypes.STRING,

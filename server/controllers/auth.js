@@ -104,6 +104,7 @@ class AuthMiddleware {
      */
     async middleware(request, reply) {
         const status = await Session.checkSession(request);
+
         if (!status) {
             // Check if url is in public paths
             for (var i = 0; i < publicPaths.length; i++) {
@@ -384,8 +385,8 @@ class AuthController {
             !request.body.password ||
             !validator.isHexadecimal(request.body.password) ||
             request.body.password.length != 64 ||
-            !request.body.country ||
-            request.body.country.length != 2 ||
+            //!request.body.country ||
+            //request.body.country.length != 2 ||
             !request.body.preferences ||
             request.body.preferences.length < 3 ||
             hasDuplicates(request.body.preferences) ||
@@ -399,7 +400,7 @@ class AuthController {
         request.body.surname = sanitize(request.body.surname);
         request.body.email = sanitize(request.body.email);
         request.body.password = sanitize(request.body.password);
-        request.body.country = sanitize(request.body.country);
+        //request.body.country = sanitize(request.body.country);
 
         // Get user
         var user = await db.User.findOne({
@@ -478,7 +479,8 @@ class AuthController {
                     surname: request.body.surname,
                     email: request.body.email,
                     password: hash,
-                    country: request.body.country,
+                    country: "ES",
+                    lang: request.detectedLng,
                     lastAttempt: new Date(),
                 });
 
