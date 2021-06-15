@@ -6,10 +6,10 @@
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta
             name="description"
-            content="Hermes es un sistema recomendador y planificador turístico, para facilitarte la tarea más tediosa de todo viaje: planificarlo"
+            content="{{landingPageDescription}}: {{landingPagePlanning}}."
         />
         <meta name="author" content="Álvaro Galisteo" />
-        <title>Hermes - Elige una ciudad. Nosotros planeamos el resto.</title>
+        <title>Hermes - {{landingPageCatchphrase}}</title>
 
         <!-- CSS -->
         <link href="/css/bootstrap.min.css" rel="stylesheet" />
@@ -38,31 +38,30 @@
             </header>
 
             <main class="px-3">
-                <h1>Elige una ciudad. Nosotros planeamos el resto.</h1>
+                <h1>{{landingPageCatchphrase}}</h1>
                 <p class="fs-5">
-                    Hermes es un sistema recomendador y planificador turístico, con una base de datos curada, para facilitarte la tarea más tediosa de
-                    todo viaje: <b>planificarlo</b>.
+                    {{landingPageDescription}}: <b>{{landingPagePlanning}}</b>.
                 </p>
                 <p class="lead">
-                    <a href="/signup/" class="btn btn-lg btn-primary">Crear una cuenta</a>
+                    <a href="/signup/" class="btn btn-lg btn-primary">{{signup}}</a>
                 </p>
                 <p class="lead">
-                    <a href="/signin/" class="btn btn-secondary fw-bold border-white bg-white">Iniciar sesión</a>
+                    <a href="/signin/" class="btn btn-secondary fw-bold border-white bg-white">{{signin}}</a>
                 </p>
-                <p class="fs-5 mt-4">Ciudades disponibles: <b>Madrid</b>.</p>
+                <p class="fs-5 mt-4">{{availableCities}}: <b>{{cityMadrid}}</b>.</p>
             </main>
 
             <!-- Footer -->
             <footer class="mt-auto pt-5 text-white-50">
                 <p>
-                    Creado por
+                    {{createdBy}}
                     <a href="https://galisteo.me" class="text-white">Álvaro Galisteo</a><br />
-                    <a href="/attributions/" class="text-white">Atribuciones</a> -
-                    <a href="/help/" class="text-white">Ayuda</a> -
+                    <a href="/attributions/" class="text-white">{{attributions}}</a> -
+                    <a href="/help/" class="text-white">{{help}}</a> -
 
-                    <a href="https://status.travelhermes.com" class="text-white">Estado</a><br>
-                    <a href="/terms/" class="text-white">Terminos y condiciones</a> - 
-                    <a href="/privacy/" class="text-white">Política de privacidad</a>
+                    <a href="https://status.travelhermes.com" class="text-white">{{status}}</a><br>
+                    <a href="/terms/" class="text-white">{{terms}}</a> - 
+                    <a href="/privacy/" class="text-white">{{privacyPolicy}}</a>
                 </p>
             </footer>
         </div>
