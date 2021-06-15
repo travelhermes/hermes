@@ -14,7 +14,7 @@ document.querySelectorAll('.dropdown-menu').forEach((dropdown) => {
 async function save(form) {
     document.querySelector('#categoriesSelect').classList.remove('text-danger');
     document.querySelector('#categoriesSelect').classList.add('text-dark');
-    document.querySelector('#categoriesSelect').innerHTML = 'Selecciona al menos 3 categorías';
+    document.querySelector('#categoriesSelect').innerHTML = document.querySelector('#categoriesSelect').getAttribute('original-data');
 
     setLoadButton(document.querySelector('#inputSaveProfile'));
     const data = {
