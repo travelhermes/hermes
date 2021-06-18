@@ -1,13 +1,14 @@
 /*jshint esversion: 8 */
 const db = require('../db/models.js');
+const Recommender = require('../recommender/index.js');
 const validator = require('validator');
+const { acceptedLanguage } = require('../utils/lang.js');
+const { ApplicationLogger } = require('../logger/logger.js');
 const { Cache } = require('../utils/cache.js');
 const { hasDuplicates } = require('../utils/arrays.js');
 const { MailType } = require('../mail/mail.js');
 const { sanitize } = require('../utils/text.js');
 const { Session } = require('./session.js');
-const { ApplicationLogger } = require('../logger/logger.js');
-const Recommender = require('../recommender/index.js');
 
 //
 // Init
@@ -57,12 +58,14 @@ class AccountController {
             !request.body.user.name ||
             !request.body.user.surname ||
             !request.body.user.email ||
+            !request.body.user.lang ||
             request.body.user.name.length <= 0 ||
             request.body.user.surname.length <= 0 ||
             request.body.user.email.length <= 0 ||
             request.body.user.name.length > 127 ||
             request.body.user.surname.length > 127 ||
             request.body.user.email.length > 127 ||
+            !acceptedLanguage(request.body.user.lang) ||
             !validator.isEmail(request.body.user.email) ||
             !request.body.preferences ||
             request.body.preferences.length < 3 ||
@@ -104,6 +107,7 @@ class AccountController {
         user.name = request.body.user.name;
         user.surname = request.body.user.surname;
         user.email = request.body.user.email;
+        user.lang = request.body.user.lang;
         await user.save();
 
         // Bulk create preferences
@@ -146,7 +150,10 @@ class AccountController {
             typeof request.body.ratings != 'boolean' ||
             request.body.plans == undefined ||
             request.body.plans == null ||
-            typeof request.body.plans != 'boolean'
+            typeof request.body.plans != 'boolean' /*||
+            request.body.features == undefined ||
+            request.body.features == null ||
+            typeof request.body.features != 'boolean'*/
         ) {
             reply.status(400).send();
             return;
@@ -162,6 +169,7 @@ class AccountController {
         // Update user
         user.notificationsPlans = request.body.plans;
         user.notificationsRatings = request.body.ratings;
+        user.notificationsFeatures = request.body.features;
         await user.save();
 
         // Send reply
@@ -188,10 +196,12 @@ class AccountController {
                     name: user.name,
                     surname: user.surname,
                     email: user.email,
+                    lang: user.lang,
                 },
                 notifications: {
                     plans: user.notificationsPlans,
                     ratings: user.notificationsRatings,
+                    /*features: user.notificationsFeatures*/
                 },
                 preferences: (
                     await db.UserCategory.findAll({

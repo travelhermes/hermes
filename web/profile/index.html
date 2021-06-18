@@ -307,9 +307,28 @@
                                 </div>
                                 <div class="row">
                                     <div class="col">
-                                        <label for="inputEmail" class="form-label">{{email}}</label>
+                                        <label for="inputEmail" class="form-label mt-2">{{email}}</label>
                                         <input required type="email" id="inputEmail" class="form-control" maxlength="127"/>
                                     </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <label for="inputLang" class="form-label mt-2">{{language}}</label>
+                                        <select required id="inputLang" class="form-control">
+                                            <option value="es">{{langSpanish}}</option>
+                                            <option value="en">{{langEnglish}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="w-100 mt-3">
+                                    <button
+                                        id="inputSaveProfile"
+                                        type="submit"
+                                        class="btn btn-success"
+                                        original-data="{{saveChanges}}"
+                                    >
+                                        {{saveChanges}}
+                                    </button>
                                 </div>
                                 <div class="row">
                                     <div class="col">

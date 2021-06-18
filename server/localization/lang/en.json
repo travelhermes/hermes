@@ -121,8 +121,8 @@
   "preferences": "Preferences",
   "recommendations": "Recommendations",
   "plans": "Plans",
-  "plan": "Plan",
   "ratings": "Ratings",
+  "plan": "Plan",
   "profile": "Profile",
   "notifications": "Notifications",
   "account": "Account",
@@ -253,5 +253,8 @@
   "prevImage": "Previous image",
   "webpage": "Web page",
   "addToPlan": "Add to plan",
-  "removeFromPlan": "Remove from plan"
+  "removeFromPlan": "Remove from plan",
+  "language": "Language",
+  "langSpanish": "Spanish",
+  "langEnglish": "English"
 }

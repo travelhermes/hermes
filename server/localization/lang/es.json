@@ -253,5 +253,8 @@
   "prevImage": "Anterior imagen",
   "webpage": "Página web",
   "addToPlan": "Añadir al plan",
-  "removeFromPlan": "Eliminar del plan"
+  "removeFromPlan": "Eliminar del plan",
+  "language": "Idioma",
+  "langSpanish": "Español",
+  "langEnglish": "Inglés"
 }

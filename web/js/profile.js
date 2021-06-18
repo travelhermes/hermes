@@ -22,6 +22,7 @@ async function save(form) {
             name: form.querySelector('#inputName').value,
             surname: form.querySelector('#inputSurname').value,
             email: form.querySelector('#inputEmail').value,
+            lang: form.querySelector("#inputLang").value,
         },
         preferences: [],
     };
@@ -239,6 +240,7 @@ async function main() {
             document.querySelector('#inputName').value = res.user.name;
             document.querySelector('#inputSurname').value = res.user.surname;
             document.querySelector('#inputEmail').value = res.user.email;
+            document.querySelector('#inputLang').value = res.user.lang;
 
             document.querySelector('#notificationsPlans').checked = res.notifications.plans;
             document.querySelector('#notificationsRatings').checked = res.notifications.ratings;
