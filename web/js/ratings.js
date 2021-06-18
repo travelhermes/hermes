@@ -191,6 +191,9 @@ function renderPlaces(places, container, remove = true, split = true, alert = tr
             setStars(document.getElementById(place.id).querySelector('.bi-star'), place.rating, false);
         }
     }
+
+    // Lazy load images
+    yall();
 }
 
 /**
@@ -277,8 +280,6 @@ async function main() {
             throwError(err);
             loader.hide();
         }
-
-        yall();
 
         getRandomSuggestions();
         // 2 min.

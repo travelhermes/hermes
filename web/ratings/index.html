@@ -9,7 +9,7 @@
             content="{{landingPageDescription}}: {{landingPagePlanning}}."
         />
         <meta name="author" content="Álvaro Galisteo" />
-        <title>Puntuaciones - Hermes</title>
+        <title>{{ratings}} - Hermes</title>
 
         <!-- CSS -->
         <link href="/css/bootstrap.min.css" rel="stylesheet" />
@@ -41,28 +41,28 @@
             <div class="modal-dialog modal-lg modal-dialog-scrollable modal-dialog-centered">
                 <form class="modal-content" id="searchForm">
                     <div class="modal-header">
-                        <h4 class="modal-title" id="searchModalLabel">Añadir puntuación</h4>
-                        <button type="button" class="btn-close close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                        <h4 class="modal-title" id="searchModalLabel">{{addRating}}</h4>
+                        <button type="button" class="btn-close close" data-bs-dismiss="modal" aria-label="{{close}}"></button>
                     </div>
                     <div class="modal-body">
-                        <p>Introduce un criterio y puntua los lugares que más se adapten a tu búsqueda</p>
-                        <input type="text" id="inputSearch" class="w-100 fs-6" placeholder="Buscar lugar" maxlength="127" required/>
+                        <p>{{addRatingModalText}}</p>
+                        <input type="text" id="inputSearch" class="w-100 fs-6" placeholder="{{searchPlace}}" maxlength="127" required/>
                         <div id="searchItems" class="d-none">
                             <p class="mt-3 mb-1">
-                                <span class="fs-5">Resultados de la búsqueda</span>
+                                <span class="fs-5">{{searchResults}}</span>
                             </p>
                             <div class="text-center">
                                 <div class="alert alert-primary w-100 mt-2 d-inline-block d-none" role="alert">
-                                    Sin resultados. Prueba con otro criterio de búsqueda <br />
-                                    ¿Te falta algún lugar?
-                                    <a href="https://github.com/SrGMC/hermes">Háznoslo saber</a>
+                                    {{noResultsSearchCriteria}} <br />
+                                    {{missingAPlace}}
+                                    <a href="https://github.com/SrGMC/hermes">{{notifyUs}}</a>
                                 </div>
                             </div>
                             <div id="searchItemsList"></div>
                         </div>
                         <div id="ratingSuggestions">
                             <p class="mt-3 mb-1">
-                                <span class="fs-5">¿Qué te parecen estos sitios para puntuar?</span> <a href="#" id="refreshSuggestions" class="ms-2"><i class="bi bi-arrow-clockwise me-1"></i>Refrescar</a>
+                                <span class="fs-5">{{ratingSuggestionsHeader}}</span> <a href="#" id="refreshSuggestions" class="ms-2"><i class="bi bi-arrow-clockwise me-1"></i>{{refresh}}</a>
                             </p>
                             <div id="ratingSuggestionsList"></div>
                         </div>
@@ -73,16 +73,16 @@
                             class="btn btn-secondary close"
                             data-bs-dismiss="modal"
                         >
-                            Cerrar
+                            {{close}}
                         </button>
                         <button
                             id="btnSubmitSearch"
                             type="submit"
                             class="btn btn-primary"
-                            original-data="Buscar"
+                            original-data="{{search}}"
                             disabled
                         >
-                            Buscar
+                            {{search}}
                         </button>
                     </div>
                 </form>
@@ -161,16 +161,16 @@
             </div>
             <main class="ms-sm-auto px-md-4">
                 <div class="border-bottom py-2 mb-2">
-                    <h2 class="my-0">Puntuaciones pendientes</h2>
+                    <h2 class="my-0">{{pendingRatings}}</h2>
                     <p class="text-muted fs-6 mb-1">
-                        Estos son todos los sitios que has visitado o tienes pendiente de visitar y que aún no has puntuado.
+                        {{pendingRatingsDescription}}
                     </p>
                 </div>
                 <div class="container">
                     <div id="pendingRatings" class="row">
                         <div class="text-center">
                             <div class="alert alert-success w-md-75 d-inline-block d-none" role="alert">
-                                <i class="bi bi-check2"></i> ¡Sin puntuaciones pendientes!
+                                <i class="bi bi-check2"></i> {{noPendingRatings}}
                             </div>
                         </div>
                         <div class="col"></div>
@@ -178,16 +178,16 @@
                     </div>
                 </div>
                 <div class="border-bottom py-2 mx-0 mt-5 position-relative">
-                    <h2 class="my-0">Puntuaciones realizadas</h2>
+                    <h2 class="my-0">{{completedRatings}}</h2>
                     <p class="text-muted fs-6 mb-1">
-                        Estas son todas las puntuaciones que has creado
+                        {{completedRatingsDescription}}
                     </p>
                 </div>
                 <div class="container">
                     <div id="completedRatings" class="row">
                         <div class="text-center mt-2">
                             <div class="alert alert-success w-md-75 d-inline-block d-none" role="alert">
-                                Sin resultados. ¿Porqué no pruebas a puntuar un sitio?
+                                {{completedRatingsNoResults}}
                             </div>
                         </div>
                         <div class="col"></div>
@@ -203,20 +203,20 @@
             data-bs-target="#searchModal"
         >
             <i class="me-md-2 bi bi-star-fill"></i>
-            <span class="fs-5 d-none d-md-inline">Añadir nueva puntuación</span>
+            <span class="fs-5 d-none d-md-inline">{{addRating}}</span>
         </button>
 
         <!-- Footer -->
         <footer class="mt-auto pt-5 text-center mb-md-5">
             <p>
-                Creado por
+                {{createdBy}}
                 <a href="https://galisteo.me">Álvaro Galisteo</a><br />
-                <a href="/attributions/">Atribuciones</a> -
-                <a href="/help/">Ayuda</a> -
+                <a href="/attributions/">{{attributions}}</a> -
+                <a href="/help/">{{help}}</a> -
 
-                <a href="https://status.travelhermes.com">Estado</a><br>
-                <a href="/terms/">Terminos y condiciones</a> -
-                <a href="/privacy/">Política de privacidad</a>
+                <a href="https://status.travelhermes.com">{{status}}</a><br>
+                <a href="/terms/">{{terms}}</a> - 
+                <a href="/privacy/">{{privacyPolicy}}</a>
             </p>
         </footer>
 
@@ -253,7 +253,7 @@
                                     <i class="bi bi-star" data-index="5"> </i>
                                 </div>
                                 <div class="spinner-border spinner-border-sm d-inline-block ms-2 mb-1 d-none" role="status">
-                                    <span class="visually-hidden">Guardando...</span>
+                                    <span class="visually-hidden">{{saving}}...</span>
                                 </div>
                             </div>
                             <div class="btn-group mt-3" role="group" aria-label="Acciones">
@@ -267,7 +267,7 @@
                                     original-data='<i class="mx-md-1 bi bi-trash-fill"></i><span class="d-none d-lg-inline"> Eliminar </span>'
                                 >
                                     <i class="mx-md-1 bi bi-trash-fill"></i>
-                                    <span class="d-none d-lg-inline"> Eliminar </span>
+                                    <span class="d-none d-lg-inline"> {{delete}} </span>
                                 </button>
                             </div>
                             <div class="description me-3 my-2 fs-6"></div>

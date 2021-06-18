@@ -45,7 +45,7 @@ function renderPlans(plansArray, container) {
 
         card.querySelector('div').setAttribute('id', 'plan' + plan.id);
         card.querySelector('.card-title').innerHTML = plan.name;
-        card.querySelector('.days').innerHTML = days + (days == 1 ? ' día' : ' días');
+        card.querySelector('.days').innerHTML = plural(daysBetween(plan.startDate, plan.endDate) + 1, document.querySelector('input#dayText').value);
         card.querySelector('.state').appendChild(resolveState(plan.status));
         card.querySelector('.start-date').innerHTML = getFormattedDate(startDate);
         card.querySelector('.end-date').innerHTML = getFormattedDate(endDate);
