@@ -690,8 +690,8 @@ function _getDayHeuristic() {
 
         post(ENDPOINTS.plannerLength, request)
             .then((res) => {
-                document.querySelector('#recommendedDayLength').innerHTML = plural(res.days, 'día');
-                document.querySelector('#recommendedDayLengthValidate').innerHTML = plural(res.days, 'día');
+                document.querySelector('#recommendedDayLength').innerHTML = plural(res.days, document.querySelector('input#dayText').value);
+                document.querySelector('#recommendedDayLengthValidate').innerHTML = plural(res.days, document.querySelector('input#dayText').value);
                 planLength = res.days;
                 resolve();
             })

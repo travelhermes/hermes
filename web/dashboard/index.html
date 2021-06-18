@@ -9,7 +9,7 @@
             content="{{landingPageDescription}}: {{landingPagePlanning}}."
         />
         <meta name="author" content="Álvaro Galisteo" />
-        <title>Recomendaciones - Hermes</title>
+        <title>{{recommendations}} - Hermes</title>
 
         <!-- CSS -->
         <link href="/css/bootstrap.min.css" rel="stylesheet" />
@@ -26,15 +26,15 @@
             <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable text-white">
                 <div class="modal-content bg-dark">
                     <div class="modal-header border-0 text-center d-block">
-                        <h2 class="modal-title" id="tutorialModalLabel">¡Bienvenida/o a Hermes!</h2>
-                        <p class="my-0">Vamos a guiarte por todas las funcionalidades de Hermes</p>
+                        <h2 class="modal-title" id="tutorialModalLabel">{{dashboardTutorialWelcome}}</h2>
+                        <p class="my-0">{{dashboardTutorialSubtitle}}</p>
                     </div>
                     <div class="modal-body border-0 px-0">
-                        <p class="mx-4">Hermes es un sistema recomendador y planificador turístico, con una base da datos curada, <b>adaptado para tí</b>, a partir de tus puntuaciones y preferencias. En Hermes, solo te tienes que preocupar de <b>explorar</b>, <b>añadir</b> y pensar <b>cuando quieres descansar</b>.</p>
-                        <p class="mx-4 fs-5">Nosotros nos encargamos del resto.</p>
-                        <p class="mx-4"><i class="bi bi-exclamation-circle me-1"></i> <b>Nota</b>: Hermes solo recomienda lugares para visitar, por lo que no incluye restaurantes o lugares comerciales. Si has encontrado un lugar para visitar que no está en Hermes, podrás añadirlo al plan al editar este.</p>
+                        <p class="mx-4">{{{dashboardTutorialDescription}}}</p>
+                        <p class="mx-4 fs-5">{{dashboardTutorialCatchprase}}</p>
+                        <p class="mx-4"><i class="bi bi-exclamation-circle me-1"></i> <b>{{note}}</b>: {{dashboardTutorialNote}}</p>
                         <hr>
-                        <p class="mx-4">Estos son los botones del menú principal. Pulsando en ellos, podrás navegar entre las distintas páginas de Hermes. Si tienes dudas, no olvides consultar la ayuda.</p>
+                        <p class="mx-4">{{dashboardTutorialPages}}</p>
                         <div class="container d-inline-block mb-2 text-center">
                             <div class="row">
                                 <div class="col">
@@ -48,7 +48,7 @@
                                             title="{{recommendations}}"
                                         ></i> </span
                                     ><br />
-                                    Recomendado para tí
+                                    {{recommendedForYou}}
                                 </div>
                                 <div class="col">
                                     <span>
@@ -61,7 +61,7 @@
                                             title="{{plans}}"
                                         ></i> </span
                                     ><br />
-                                    Planes
+                                    {{plans}}
                                 </div>
                                 <div class="col">
                                     <span>
@@ -74,7 +74,7 @@
                                             title="{{ratings}}"
                                         ></i> </span
                                     ><br />
-                                    Puntuaciones
+                                    {{ratings}}
                                 </div>
                                 <div class="col">
                                     <span>
@@ -87,7 +87,7 @@
                                             title="{{profile}}"
                                         ></i> </span
                                     ><br />
-                                    Perfil
+                                    {{profile}}
                                 </div>
                                 <div class="col">
                                     <span>
@@ -100,13 +100,13 @@
                                             title="{{help}}"
                                         ></i> </span
                                     ><br />
-                                    Ayuda
+                                    {{help}}
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer border-0">
-                        <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#tutorial2Modal" data-bs-dismiss="modal">Siguiente</button>
+                        <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#tutorial2Modal" data-bs-dismiss="modal">{{next}}</button>
                     </div>
                 </div>
             </div>
@@ -115,13 +115,13 @@
             <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable text-white">
                 <div class="modal-content bg-dark">
                     <div class="modal-header border-0 text-center d-block">
-                        <h2 class="modal-title" id="tutorial2ModalLabel">Tutorial</h2>
+                        <h2 class="modal-title" id="tutorial2ModalLabel">{{tutorial}}</h2>
                     </div>
                     <div class="modal-body border-0 px-0">
-                        <p class="px-4">En <b>Recomendado para tí</b>, aparecen los lugares que más te pueden interesar. Todos estos lugares aparecerán en dos secciones distintas</p>
+                        <p class="px-4">{{{dashboardTutorialRecommendedForYou}}}</p>
                         <hr>
-                        <p class="px-4 fs-5">Mapa</p>
-                        <p class="px-4">Cada punto en el mapa representa un lugar recomendado. Al hacer click sobre uno de ellos, verás más información sobre esté, así como fotografías del lugar.</p>
+                        <p class="px-4 fs-5">{{map}}</p>
+                        <p class="px-4">{{dashboardTutorialMapDescription}}</p>
                         <div class="w-100">
                             <img src="/assets/help/dashboard_tutorial_map.png" class="w-100">
                         </div>
@@ -129,24 +129,24 @@
                             <div class="row">
                                 <div class="col-6">
                                     <img src="/assets/map/categories/water_2x.png" width="24px"><br>
-                                    Los puntos con fondo blanco son recomendaciones
+                                    {{dashboardTutorialPin}}
                                 </div>
                                 <div class="col-6">
                                     <img src="/assets/map/categories/water_selected_2x.png" width="24px"><br>
-                                    Mientras que los puntos con fondo de color indican que el lugar se ha añadido al plan
+                                    {{dashboardTutorialSelectedPin}}
                                 </div>
                             </div>
                         </div>
-                        <p class="px-4 fs-5">Listado de lugares</p>
-                        <p class="px-4">En el listado de lugares, podrás ver, ordenado según la recomendación, los lugares que se muestran en el mapa.</p>
+                        <p class="px-4 fs-5">{{dashboardTutorialPlacesList}}</p>
+                        <p class="px-4">{{dashboardTutorialPlacesListDescription}}</p>
                         <div class="container px-5">
                             <div class="row d-block d-md-flex">
                                 <div class="col-md-6 d-block d-md-flex text-end">
                                     <div class="card place-card text-dark d-inline-block text-start">
                                         <div class="card-body">
-                                            <div class="fs-md-4 fs-5 card-title mb-0 w-75">Puerta de Alcalá</div>
-                                            <div class="card-categories text-muted mb-2">Monumentos, Lugares históricos</div>
-                                            <div class="card-text">Arco de triunfo cerca del Parque del Buen Retiro, con ornamentación tallada en piedra y refinadas esculturas.</div>
+                                            <div class="fs-md-4 fs-5 card-title mb-0 w-75">{{dashboardTutorialAlcalaDoor}}</div>
+                                            <div class="card-categories text-muted mb-2">{{dashboardTutorialAlcalaDoorCategories}}</div>
+                                            <div class="card-text">{{dashboardTutorialAlcalaDoorDescription}}</div>
                                         </div>
                                         <ul class="list-group list-group-flush text-center">
                                             <li class="list-group-item">
@@ -162,26 +162,26 @@
                                 <div class="col-md-6 d-block d-md-flex">
                                     <ul class="text-start">
                                         <li class="mt-1">
-                                            <div class="d-inline-block bg-light text-dark rounded px-1 py-1"><i class="mx-md-1 bi bi-clock-fill text-muted"></i> 30min</div>: Esta es la duración de la visita</li>
+                                            <div class="d-inline-block bg-light text-dark rounded px-1 py-1"><i class="mx-md-1 bi bi-clock-fill text-muted"></i> 30min</div>: {{dashboardTutorialDuration}}</li>
                                         <li class="mt-1">
-                                            <div class="d-inline-block bg-light text-dark rounded px-1 py-1"><i class="mx-md-1 bi bi-star-fill text-warning"></i> 4.0</div>: Esta es la puntuación media del lugar</li>
+                                            <div class="d-inline-block bg-light text-dark rounded px-1 py-1"><i class="mx-md-1 bi bi-star-fill text-warning"></i> 4.0</div>: {{dashboardTutorialRating}}</li>
                                         <li class="mt-1">
-                                            <div class="d-inline-block bg-light text-dark rounded px-1 py-1"><i class="mx-md-1 bi bi-hand-thumbs-up-fill text-success"></i> 75%</div>: Cuanto cree Hermes que te puede gustar</li>
+                                            <div class="d-inline-block bg-light text-dark rounded px-1 py-1"><i class="mx-md-1 bi bi-hand-thumbs-up-fill text-success"></i> 75%</div>: {{dashboardTutorialConfidence}}</li>
                                     </ul>
                                 </div>
                             </div>
                         </div>
                         <hr>
-                        <p class="px-4 fs-5">Planificar</p>
-                        <p class="px-4">Los sitios que añadas al plan, se marcarán en verde, en el mapa y en el listado. Una vez hayas seleccionado un minimo de 3 lugares, podrás crear un nuevo plan siguiendo los pasos</p>
-                        <p class="px-4">Hermes te pedirá una serie de datos, y después creará de forma algorítmica. Una vez termine, podrás añadir descansos (por ejemplo, para comer) u otros sitios al plan.</p>
+                        <p class="px-4 fs-5">{{plans}}</p>
+                        <p class="px-4">{{dashboardTutorialPlanningDescription1}}</p>
+                        <p class="px-4">{{dashboardTutorialPlanningDescription2}}</p>
                     </div>
                     <div class="modal-footer border-0" id="tutorialFooter">
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
-                            <label class="form-check-label" for="flexCheckDefault"> No volver a mostrar </label>
+                            <label class="form-check-label" for="flexCheckDefault"> {{dontShowAgain}} </label>
                         </div>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{close}}</button>
                     </div>
                 </div>
             </div>
@@ -198,16 +198,16 @@
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h4 class="modal-title" id="clearPlanModalLabel">Vaciar plan</h4>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                        <h4 class="modal-title" id="clearPlanModalLabel">{{emptyPlan}}</h4>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{close}}"></button>
                     </div>
                     <div class="modal-body">
-                        ¿Desea vaciar el plan actual? Esto eliminará todas las selecciones realizadas.
+                        {{emptyPlanConfirm}}
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{close}}</button>
                         <button type="button" id="clearPlan" class="btn btn-danger" data-bs-dismiss="modal">
-                            Vaciar plan
+                            {{emptyPlan}}
                         </button>
                     </div>
                 </div>
@@ -225,8 +225,8 @@
             <div class="modal-dialog modal-dialog-centered modal-lg">
                 <form class="modal-content" id="createPlan">
                     <div class="modal-header">
-                        <h4 class="modal-title" id="createPlanModalLabel">Crear plan</h4>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <h4 class="modal-title" id="createPlanModalLabel">{{createPlan}}</h4>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{close}}"></button>
                     </div>
                     <div class="modal-body px-0">
                         <ul class="nav nav-tabs nav-fill" id="createPlanTabs" role="tablist">
@@ -241,7 +241,7 @@
                                     aria-controls="info"
                                     aria-selected="true"
                                 >
-                                    1. Información
+                                    1. {{information}}
                                 </button>
                             </li>
                             <li class="nav-item" role="presentation">
@@ -255,7 +255,7 @@
                                     aria-controls="times"
                                     aria-selected="true"
                                 >
-                                    2. Horas
+                                    2. {{hours}}
                                 </button>
                             </li>
                             <li class="nav-item" role="presentation">
@@ -269,7 +269,7 @@
                                     aria-controls="start"
                                     aria-selected="false"
                                 >
-                                    3. Lugar de inicio
+                                    3. {{startingPlace}}
                                 </button>
                             </li>
                             <li class="nav-item" role="presentation">
@@ -283,7 +283,7 @@
                                     aria-controls="days"
                                     aria-selected="false"
                                 >
-                                    4. Días
+                                    4. {{days}}
                                 </button>
                             </li>
                         </ul>
@@ -295,13 +295,13 @@
                                 role="tabpanel"
                                 aria-labelledby="info-tab"
                             >
-                                <label for="planName" class="form-label fs-5 mt-1">Nombre del plan</label>
+                                <label for="planName" class="form-label fs-5 mt-1">{{planName}}</label>
                                 <input type="text" class="form-control" id="planName" required maxlength="127"/>
                                 <div class="text-danger d-none mt-1" id="planNameValidation">
-                                    Por favor, introduce un nombre
+                                    {{planNameMissing}}
                                 </div>
 
-                                <label for="planDescription" class="form-label fs-5 mt-2">Descripción del plan</label>
+                                <label for="planDescription" class="form-label fs-5 mt-2">{{planDescription}}</label>
                                 <textarea class="form-control" id="planDescription"></textarea>
 
                                 <div class="text-center mt-3">
@@ -311,7 +311,7 @@
                                         id="infoNextButton"
                                         disabled
                                     >
-                                        Siguiente<i class="bi bi-arrow-right-short ms-1"></i>
+                                        {{next}}<i class="bi bi-arrow-right-short ms-1"></i>
                                     </button>
                                 </div>
                             </div>
@@ -321,31 +321,29 @@
                                 role="tabpanel"
                                 aria-labelledby="times-tab"
                             >
-                                <div class="fs-5 mt-2">¿Cuanto tiempo quieres estar de visita cada día?</div>
+                                <div class="fs-5 mt-2">{{planDayLengthTitle}}</div>
                                 <div class="row mt-2">
                                     <div class="col col-6">
-                                        <label for="timeStart" class="form-label">Hora de inicio</label>
+                                        <label for="timeStart" class="form-label">{{planStartTime}}</label>
                                         <div>
                                             <input type="time" class="form-control" id="timeStart" required />
                                         </div>
                                     </div>
                                     <div class="col col-6">
-                                        <label for="timeEnd" class="form-label">Hora de fin</label>
+                                        <label for="timeEnd" class="form-label">{{planEndTime}}</label>
                                         <div>
                                             <input type="time" class="form-control" id="timeEnd" required />
                                         </div>
                                     </div>
                                 </div>
                                 <div class="text-danger d-none mt-1" id="timeValidation">
-                                    La hora de inicio debe ocurrir antes de la hora de fin.
+                                    {{invalidDayLength}}
                                 </div>
                                 <div class="my-1 text-muted">
-                                    <b>Nota:</b> Una vez establecida la duración del día, no podrás cambiarla más
-                                    adelante.
+                                    <b>{{note}}:</b> {{planDayLengthNote1}}
                                 </div>
                                 <p class="text-muted mt-2">
-                                    Si deseas añadir descansos (por ejemplo, para comer), podrás añadirlos
-                                    posteriormente al editar el plan generado.
+                                    {{planDayLengthNote2}}
                                 </p>
                                 <div class="text-center mt-3">
                                     <button
@@ -354,7 +352,7 @@
                                         id="timesNextButton"
                                         disabled
                                     >
-                                        Siguiente<i class="bi bi-arrow-right-short ms-1"></i>
+                                        {{next}}<i class="bi bi-arrow-right-short ms-1"></i>
                                     </button>
                                 </div>
                             </div>
@@ -364,10 +362,9 @@
                                 role="tabpanel"
                                 aria-labelledby="start-tab"
                             >
-                                <div class="fs-5 mt-1 px-4">¿Donde te vas a alojar?</div>
+                                <div class="fs-5 mt-1 px-4">{{planAccommodationTitle}}</div>
                                 <div class="my-1 px-4 text-muted">
-                                    Puedes buscar una dirección con el buscador, o seleccionar en el mapa el lugar de
-                                    inicio y fin de cada día.
+                                    {{planAccommodationDescription}}
                                 </div>
                                 <div class="mt-2 mb-2 px-4">
                                     <div id="addressForm" class="container px-0 mb-2">
@@ -376,20 +373,20 @@
                                                 <input
                                                     class="form-control me-2 w-100"
                                                     type="search"
-                                                    placeholder="Buscar dirección"
+                                                    placeholder="{{searchAddress}}"
                                                     id="addressInput"
-                                                    aria-label="Buscar dirección"
+                                                    aria-label="{{searchAddress}}"
                                                 />
                                             </div>
                                             <div class="col-3 ps-1">
-                                                <button class="btn btn-outline-primary w-100" id="addressSearch" original-data="Buscar">Buscar</button>
+                                                <button class="btn btn-outline-primary w-100" id="addressSearch" original-data="{{search}}">{{search}}</button>
                                             </div>
                                         </div>
                                         <p class="text-danger d-block mt-1 mb-0 d-none" id="noAddressResults">
-                                            <i class="bi bi-patch-question-fill me-1"></i>Sin resultados
+                                            <i class="bi bi-patch-question-fill me-1"></i>{{noResults}}
                                         </p>
                                         <p class="text-muted mb-1">
-                                            Con la tecnología de
+                                            {{poweredBy}}
                                             <a href="https://nominatim.openstreetmap.org" target="_blank"
                                                 >OpenStreetMap Nominatim</a
                                             >
@@ -404,7 +401,7 @@
                                         id="startNextButton"
                                         disabled
                                     >
-                                        Siguiente<i class="bi bi-arrow-right-short ms-1"></i>
+                                        {{next}}<i class="bi bi-arrow-right-short ms-1"></i>
                                     </button>
                                 </div>
                             </div>
@@ -414,50 +411,48 @@
                                 role="tabpanel"
                                 aria-labelledby="days-tab"
                             >
-                                <div class="fs-5 mt-1">¿Qué días quieres realizar el plan?</div>
+                                <div class="fs-5 mt-1">{{planDateLengthTitle}}</div>
                                 <div class="my-1">
-                                    A partir de los lugares seleccionados, para poder generar un plan, debes seleccionar
-                                    una duración mínima de
+                                    {{planDateLengthDescription1}}
                                     <b class="text-dark ms-1" id="recommendedDayLength"
                                         ><div class="spinner-border spinner-border-sm" role="status"></div></b
                                     >.
                                 </div>
                                 <div class="my-1 text-muted">
-                                    Si no estás satisfecho con la duración mínima, elimina lugares del plan o aumenta la duración de la visita diaria.
+                                    {{planDateLengthDescription2}}
                                 </div>
                                 <div class="row mt-2">
                                     <div class="col col-6">
-                                        <label for="daysStart" class="form-label">Día de inicio</label>
+                                        <label for="daysStart" class="form-label">{{planStartDate}}</label>
                                         <input type="date" class="form-control" id="daysStart" required />
                                     </div>
                                     <div class="col col-6">
-                                        <label for="daysEnd" class="form-label">Día de fin</label>
+                                        <label for="daysEnd" class="form-label">{{planEndDate}}</label>
                                         <input type="date" class="form-control" id="daysEnd" required />
                                     </div>
                                 </div>
                                 <div class="text-danger d-none mt-1" id="daysValidation">
-                                    La fecha de inicio debe ocurrir antes de la fecha de fin.
+                                    {{planLengthDaysValidation}}
                                 </div>
                                 <div class="text-danger d-none mt-1" id="daysValidationLength">
-                                    La cantidad de días seleccionados debe ser mayor o igual a
+                                    {{planLengthDaysLengthValidation}}
                                     <span class="text-dark" id="recommendedDayLengthValidate"></span>.
                                 </div>
                                 <div class="my-1 text-muted">
-                                    <b>Nota:</b> Una vez establecida la duración del plan, no podrás cambiarla más
-                                    adelante, aunque podrás adelantar o atrasar la fecha de inicio al editar el plan.
+                                    <b>{{note}}:</b> {{planDateLengthNote}}
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{close}}</button>
                         <button
                             type="submit"
                             class="btn btn-primary umami--click--create-plan"
                             disabled
                             id="createPlanButton"
                         >
-                            Crear plan
+                            {{createPlan}}
                         </button>
                     </div>
                 </form>
@@ -487,8 +482,8 @@
                     class="form-control form-control-dark w-100 dropdown-toggle"
                     type="text"
                     maxlength="127"
-                    placeholder="Buscar lugares"
-                    aria-label="Buscar lugares"
+                    placeholder="{{searchPlaces}}"
+                    aria-label="{{searchPlaces}}"
                     id="searchInput"
                     data-bs-toggle="dropdown"
                     aria-expanded="false"
@@ -508,12 +503,12 @@
                     <div
                         class="px-3 py-1 text-center"
                         id="searchPlaceholder"
-                        original-data="<i>Introduce un nombre de lugar para buscar</i>"
+                        original-data="<i>{{dashboardSearchPlaceholder}}</i>"
                     >
-                        <i>Busca por nombres de lugar o por categorías</i>
+                        <i>{{dashboardSearchPlaceholder}}</i>
                     </div>
                     <div id="searchItems"></div>
-                    <p id="noSearchResults" class="my-1 d-none text-center">Sin resultados</p>
+                    <p id="noSearchResults" class="my-1 d-none text-center">{{noResults}}</p>
                 </ul>
             </div>
 
@@ -578,8 +573,8 @@
                 <nav id="sidebarMenu" class="col-md-4 col-lg-3 d-md-block bg-light sidebar collapse">
                     <div class="sidebar-sticky pt-3 px-3">
                         <div class="row mx-0 border-bottom py-2">
-                            <h2 class="d-inline me-1" id="explore">Recomendado para ti</h2>
-                            <div class="col-10 fs-5"><span id="placeCount">0</span> lugares</div>
+                            <h2 class="d-inline me-1" id="explore">{{recommendedForYou}}</h2>
+                            <div class="col-10 fs-5"><span id="placeCount">0</span> {{places}}</div>
                             <div class="col-2 text-end">
                                 <a
                                     href="#"
@@ -588,8 +583,8 @@
                                     class="fs-5 my-auto text-danger d-none"
                                     data-bs-toggle="tooltip"
                                     data-bs-placement="bottom"
-                                    data-bs-original-title="Vaciar plan"
-                                    title="Vaciar plan"
+                                    data-bs-original-title="{{clearPlan}}"
+                                    title="{{clearPlan}}"
                                     id="clearPlanPrompter"
                                 >
                                     <i class="bi bi-calendar2-x"></i>
@@ -615,12 +610,12 @@
                                 data-bs-target="#createPlanModal"
                                 data-bs-toggle="tooltip"
                                 data-bs-placement="top"
-                                data-bs-original-title="Selecciona al menos 3 lugares antes de planificar"
-                                title="Selecciona al menos 3 lugares antes de planificar"
+                                data-bs-original-title="{{dashboardPlanningRequirement}}"
+                                title="{{dashboardPlanningRequirement}}"
                             >
-                                Planificar
+                                {{planning}}
                                 <div class="text-white" style="font-size: 0.75rem !important">
-                                    <span id="selectedCount">0</span> lugares seleccionados
+                                    <span id="selectedCount">0</span> {{selectedPlaces}}
                                 </div>
                             </button>
                         </div>
@@ -665,11 +660,11 @@
                 <div class="carousel-inner">
                     <button class="carousel-control-prev" type="button" data-bs-target="" data-bs-slide="prev">
                         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Anterior imagen</span>
+                        <span class="visually-hidden">{{prevImage}}</span>
                     </button>
                     <button class="carousel-control-next" type="button" data-bs-target="" data-bs-slide="next">
                         <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Siguiente imagen</span>
+                        <span class="visually-hidden">{{nextImage}}</span>
                     </button>
                 </div>
             </div>
@@ -696,7 +691,7 @@
                     ></span>
                     <span class="url d-block"
                         ><i class="mx-md-1 bi bi-link-45deg text-secondary"></i>
-                        <a target="_blank" href="#">Página web</a></span
+                        <a target="_blank" href="#">{{webpage}}</a></span
                     >
                 </p>
                 <div class="fs-md-6 my-3 text-center contact-sn">
@@ -715,8 +710,8 @@
                     </div>
                 </div>
                 <div class="fs-6 my-3 text-center actions">
-                    <button class="w-100 btn btn-primary add-to-plan">Añadir al plan</button>
-                    <button class="w-100 btn btn-danger remove-from-plan d-none">Eliminar del plan</button>
+                    <button class="w-100 btn btn-primary add-to-plan">{{addToPlan}}</button>
+                    <button class="w-100 btn btn-danger remove-from-plan d-none">{{removeFromPlan}}</button>
                 </div>
             </div>
         </template>
@@ -731,6 +726,8 @@
                 </a>
             </li>
         </template>
+
+        <input id="dayText" class="d-none" value="{{day}}">
 
         <!-- Bootstrap -->
         <script src="/js/bootstrap.bundle.min.js"></script>
