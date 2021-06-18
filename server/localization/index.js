@@ -39,7 +39,7 @@ function walk(directoryName) {
 	return paths;
 }
 
-function readFileLang(volume, path) {
+function readFileMemfs(volume, path) {
 	return new Promise((resolve, reject) => {
 		volume.readFile(path, 'utf-8', (err, data) => {
 			if (err) {
@@ -47,9 +47,6 @@ function readFileLang(volume, path) {
 				return;
 			}
 
-			/* Return from language */
-			if (path.endsWith('.html')) {
-			}
 			resolve(data);
 		});
 	});
@@ -94,10 +91,12 @@ class Localization {
 			}
 
 			// Read file from memfs, translate and send
-			readFileLang(this.volume, url)
+			readFileMemfs(this.volume, url)
 				.then((data) => {
-					const template = Handlebars.compile(data);
-					reply.status(200).type(mimeType).send(template(langs[request.detectedLng]));
+					if (url.endsWith('.html')) {
+						data = Handlebars.compile(data)(langs[request.detectedLng]);
+					}
+					reply.status(200).type(mimeType).send(data);
 				})
 				.catch((err) => {
 					reply.status(500).send(err);
