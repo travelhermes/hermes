@@ -104,13 +104,14 @@ class AuthMiddleware {
      */
     async middleware(request, reply) {
         const status = await Session.checkSession(request);
+        const url = request.urlData().path;
 
         if (!status) {
             // Check if url is in public paths
             for (var i = 0; i < publicPaths.length; i++) {
                 switch (publicPaths[i].type) {
                     case 'contains': {
-                        if (request.url.includes(publicPaths[i].value)) {
+                        if (url.includes(publicPaths[i].value)) {
                             if (publicPaths[i].cache) {
                                 reply.header('Cache-Control', 'max-age=86400');
                             } else {
@@ -121,7 +122,7 @@ class AuthMiddleware {
                         break;
                     }
                     case 'equals': {
-                        if (request.url == publicPaths[i].value) {
+                        if (url == publicPaths[i].value) {
                             if (publicPaths[i].cache) {
                                 reply.header('Cache-Control', 'max-age=86400');
                             } else {
@@ -141,15 +142,15 @@ class AuthMiddleware {
             //reply.status(301).redirect('/signin/');
             return;
         } else {
-            if (request.url.includes('/api')) {
+            if (url.includes('/api')) {
                 reply.header('Cache-Control', 'no-store');
             } else {
                 reply.header('Cache-Control', 'max-age=86400');
             }
 
             if (
-                !request.url.includes('/help') &&
-                (request.url.includes('/signin') || request.url.includes('/signup') || request.url.includes('/recover'))
+                !url.includes('/help') &&
+                (url.includes('/signin') || url.includes('/signup') || request.url.includes('/recover'))
             ) {
                 reply.header('Cache-Control', 'no-store');
                 reply.status(302).redirect('/dashboard/');
