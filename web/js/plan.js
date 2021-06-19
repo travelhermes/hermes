@@ -231,7 +231,7 @@ function prevDay(button) {
  */
 function renderPlanInfo(plan) {
     document.querySelector('#planning').innerHTML = '';
-    document.querySelector('#days').innerHTML = plural(daysBetween(plan.startDate, plan.endDate) + 1, 'día');
+    document.querySelector('#days').innerHTML = plural(daysBetween(plan.startDate, plan.endDate) + 1, document.querySelector('input#dayText').value);
     document.querySelector('#start-date').value = getFormattedDate(plan.startDate, true);
     document.querySelector('#end-date').value = getFormattedDate(plan.endDate, true);
     document.querySelector('#start-date').min = getFormattedDate(new Date(), true);
@@ -442,13 +442,13 @@ function renderPlan(plan, day) {
                 travel.querySelector('.fa-car').classList.remove('d-none');
                 travel.querySelector('.fa-walking').classList.add('d-none');
             }
-            travel.querySelector('.time').innerHTML = plural(item.travelNext, 'minuto');
+            travel.querySelector('.time').innerHTML = plural(item.travelNext, document.querySelector('input#minuteText').value);
             if (item.travelDist < 1000) {
-                travel.querySelector('.distance').innerHTML = plural(item.travelDist, 'metro');
+                travel.querySelector('.distance').innerHTML = plural(item.travelDist, document.querySelector('input#meterText').value);
             } else {
                 travel.querySelector('.distance').innerHTML = plural(
                     parseInt((item.travelDist / 1000).toFixed(2)),
-                    'kilómetro'
+                    document.querySelector('input#kilometerText').value
                 );
             }
             document.querySelector('#planning').appendChild(travel);
