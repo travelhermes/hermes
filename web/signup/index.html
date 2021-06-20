@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" class="h-100">
+<html lang="{{currentLang}}" class="h-100">
     <head>
         <meta charset="utf-8" />
         <link rel="shortcut icon" type="image/png" href="/assets/favicon.png" />
@@ -848,6 +848,8 @@
                 </div>
             </div>
         </template>
+
+        <input id="currentLang" class="d-none" value="{{currentLang}}">
 
         <!-- hCaptcha -->
         <script src="https://hcaptcha.com/1/api.js" async defer></script>
