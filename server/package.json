@@ -10,7 +10,7 @@
     "author": "Álvaro Galisteo (https://alvaro.galisteo.me)",
     "license": "GPL-3.0",
     "bugs": {
-        "url": "https://github.com/SrGMC/hermes-issues/issues"
+        "url": "https://github.com/SrGMC/hermes/issues"
     },
     "homepage": "https://github.com/SrGMC/hermes#readme",
     "scripts": {
