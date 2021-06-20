@@ -2,7 +2,9 @@
 const cluster = require('cluster');
 const { ApplicationLogger, LogLevel } = require('../logger/logger.js');
 const nodemailer = require('nodemailer');
-const pug = require('pug');
+const fs = require('fs');
+const Handlebars = require('handlebars');
+const Localization = require('../localization/index.js');
 
 const MailType = {
     passwordRequest: 0,
@@ -14,17 +16,6 @@ const MailType = {
     startPlan: 6,
     rateVisited: 7,
 };
-
-const MailSubject = [
-    'Solicitud de recuperación de contraseña',
-    'Se ha actualizado la contraseña de la cuenta',
-    '¡Bienvenido a Hermes!',
-    'Confirmación de eliminación de cuenta',
-    'Se ha producido un nuevo inicio de sesión en tu cuenta',
-    'Se ha cambiado la dirección de correo asociada a la cuenta',
-    'Uno de tus planes empieza mañana. ¿Estás preparado?',
-    '¡Hey! Recuerda puntuar los sitios que visitaste ayer',
-];
 
 class MailServer {
     constructor(auth = {}, service = null, worker = 0) {
@@ -89,14 +80,17 @@ class MailServer {
      * @param {string}      address     Email address.
      * @param {MessageType} messageType Type of message. Used to get subject and body.
      * @param {object}      dictionary  Content to add to the message.
+     * @param {object}      lang        Language of the email to send.
      */
-    add(address, messageType, dictionary) {
+    add(address, messageType, dictionary, lang = 'en') {
         dictionary.host = process.env.SERVER_HOST;
 
         // Get message body
         var body;
+        const templateName = Object.keys(MailType)[messageType] + '.html';
+        const templatePath = __dirname + '/templates/' + lang + '/' + templateName;
         try {
-            body = pug.renderFile(__dirname + '/' + Object.keys(MailType)[messageType] + '.pug', dictionary);
+            body = Handlebars.compile(fs.readFileSync(templatePath))(dictionary);
         } catch (error) {
             ApplicationLogger.logBase(LogLevel.FATAL, this.worker, null, null, 'mail/add', null, error);
             return;
@@ -106,7 +100,7 @@ class MailServer {
         const message = {
             from: process.env.MAIL_FROM,
             to: address,
-            subject: MailSubject[messageType],
+            subject: Localization.getString('mail' + Object.keys(MailType)[messageType], lang),
             html: body,
         };
 

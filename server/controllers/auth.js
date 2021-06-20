@@ -320,7 +320,7 @@ class AuthController {
                                     name: user.name,
                                     date: new Date().toLocaleString(),
                                     address: request.realIp,
-                                });
+                                }, user.lang);
                             }
 
                             ApplicationLogger.logBase(
@@ -522,7 +522,7 @@ class AuthController {
                 // Send welcome email
                 mailServer.add(request.body.email, MailType.newAccount, {
                     name: request.body.name,
-                });
+                }, request.detectedLng);
 
                 ApplicationLogger.logBase(
                     LogLevel.WARNING,
@@ -629,7 +629,7 @@ class AuthController {
             mailServer.add(user.email, MailType.passwordRequest, {
                 name: user.name,
                 token: key,
-            });
+            }, user.lang);
         }
         reply.status(200).send();
         ApplicationLogger.logBase(
@@ -717,7 +717,7 @@ class AuthController {
                     // Send email
                     mailServer.add(user.email, MailType.passwordChange, {
                         name: user.name,
-                    });
+                    }, user.lang);
                 })
                 .catch(async (error) => {
                     const logId = await ApplicationLogger.logBase(
@@ -797,7 +797,7 @@ class AuthController {
                     mailServer.add(user.email, MailType.passwordChange, {
                         name: user.name,
                         address: request.realIp,
-                    });
+                    }, user.lang);
                 })
                 .catch(async (error) => {
                     const logId = await ApplicationLogger.fatal(request, reply, error);
@@ -856,7 +856,7 @@ class AuthController {
                         // Send email
                         mailServer.add(user.email, MailType.confirmDelete, {
                             name: user.name,
-                        });
+                        }, user.lang);
                     } else {
                         reply.status(401).send();
                     }

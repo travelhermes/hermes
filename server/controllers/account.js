@@ -130,7 +130,7 @@ class AccountController {
                 name: user.name,
                 currentEmail: currentEmail,
                 newEmail: request.body.user.email,
-            });
+            }, user.lang);
             ApplicationLogger.warning(request, reply, 'Email changed from ' + currentEmail + ' to ' + request.body.user.email);
         }
     }

@@ -112,6 +112,10 @@ class Localization {
 			});
 		}
 	}
+
+	static getString(id, lang) {
+		return langs[lang][id];
+	}
 }
 
 module.exports = Localization;
