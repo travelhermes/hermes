@@ -4,10 +4,7 @@
         <meta charset="utf-8" />
         <link rel="shortcut icon" type="image/png" href="/assets/favicon.png" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta
-            name="description"
-            content="{{landingPageDescription}}: {{landingPagePlanning}}."
-        />
+        <meta name="description" content="{{landingPageDescription}}: {{landingPagePlanning}}." />
         <meta name="author" content="Álvaro Galisteo" />
         <title>{{plan}} - Hermes</title>
 
@@ -18,8 +15,8 @@
         <link href="/css/plans.css" rel="stylesheet" />
         <link href="/css/leaflet.css" rel="stylesheet" />
 
-<link rel="prefetch" href="/assets/placeholder.gif" />
-</head>
+        <link rel="prefetch" href="/assets/placeholder.gif" />
+    </head>
     <body class="d-flex flex-column min-vh-100">
         <div
             class="modal fade show"
@@ -39,14 +36,23 @@
         </div>
 
         <!-- Tutorial modal -->
-        <div class="modal fade" id="tutorialModal" tabindex="-1" aria-labelledby="tutorialModalLabel" aria-hidden="true" data-tutorial="plan">
+        <div
+            class="modal fade"
+            id="tutorialModal"
+            tabindex="-1"
+            aria-labelledby="tutorialModalLabel"
+            aria-hidden="true"
+            data-tutorial="plan"
+        >
             <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable text-white">
                 <div class="modal-content bg-dark">
                     <div class="modal-header border-0 text-center d-block">
                         <h2 class="modal-title" id="tutorialModalLabel">{{tutorial}}</h2>
                     </div>
                     <div class="modal-body border-0 px-0">
-                        <p class="mx-4 mb-0"><i class="bi bi-exclamation-circle me-1"></i> <b>{{note}}</b>: {{plansTutorialNote}}:</p>
+                        <p class="mx-4 mb-0">
+                            <i class="bi bi-exclamation-circle me-1"></i> <b>{{note}}</b>: {{plansTutorialNote}}:
+                        </p>
                         <ul class="mx-4 mb-3">
                             <li>{{plansTutorialNoteItem1}}</li>
                             <li>{{plansTutorialNoteItem2}}</li>
@@ -55,60 +61,37 @@
                             <li>{{plansTutorialNoteItem5}}</li>
                             <li>{{plansTutorialNoteItem6}}</li>
                         </ul>
-                        <hr>
+                        <hr />
                         <p class="mx-4 fs-5">{{yourPlan}}</p>
                         <p class="mx-4 mb-2">{{plansTutorialYourPlanDescription}}:</p>
                         <div class="container d-inline-block mb-2 text-center px-4">
                             <div class="row">
                                 <div class="col">
-                                    <span>
-                                        <i
-                                            class="bi bi-house-door-fill"
-                                            style="font-size: 1.75rem"
-                                        ></i> </span
+                                    <span> <i class="bi bi-house-door-fill" style="font-size: 1.75rem"></i> </span
                                     ><br />
                                     {{itemStart}}
                                 </div>
                                 <div class="col">
-                                    <span>
-                                        <i
-                                            class="bi bi-building"
-                                            style="font-size: 1.75rem"
-                                        ></i> </span
-                                    ><br />
+                                    <span> <i class="bi bi-building" style="font-size: 1.75rem"></i> </span><br />
                                     {{itemPlace}}
                                 </div>
                                 <div class="col">
-                                    <span>
-                                        <i
-                                            class="bi bi-plus-circle"
-                                            style="font-size: 1.75rem"
-                                        ></i> </span
-                                    ><br />
+                                    <span> <i class="bi bi-plus-circle" style="font-size: 1.75rem"></i> </span><br />
                                     {{itemCustom}}
                                 </div>
                                 <div class="col">
-                                    <span>
-                                        <i
-                                            class="bi bi-hourglass-split"
-                                            style="font-size: 1.75rem"
-                                        ></i> </span
+                                    <span> <i class="bi bi-hourglass-split" style="font-size: 1.75rem"></i> </span
                                     ><br />
                                     {{itemWait}}
                                 </div>
                                 <div class="col">
-                                    <span>
-                                        <i
-                                            class="bi bi-tree-fill"
-                                            style="font-size: 1.75rem"
-                                        ></i> </span
-                                    ><br />
+                                    <span> <i class="bi bi-tree-fill" style="font-size: 1.75rem"></i> </span><br />
                                     {{itemRest}}
                                 </div>
                             </div>
                         </div>
                         <p class="mx-4">{{plansTutorialYourPlanItems}}</p>
-                        <hr>
+                        <hr />
                         <p class="mx-4 fs-5">{{plansTutorialEdit}}</p>
                         <p class="mx-4 mb-0">{{plansTutorialEditDescription}}:</p>
                         <ul class="mx-4">
@@ -145,9 +128,7 @@
                         <div class="spinner-border mx-auto" role="status"></div>
                         <div class="fs-3 my-2">{{statusPlanning}}</div>
 
-                        <div class="text-muted fs-6 px-2">
-                            {{statusPlanningDescription}}
-                        </div>
+                        <div class="text-muted fs-6 px-2">{{statusPlanningDescription}}</div>
                     </div>
                     <div id="timedoutStatus" class="d-none">
                         <div class="fs-2 text-danger mx-auto" role="status">
@@ -155,18 +136,14 @@
                         </div>
                         <div class="fs-3 text-danger my-2">{{statusTimedOut}}</div>
 
-                        <div class="text-muted fs-6 px-2">
-                            {{statusTimedOutDescription}}
-                        </div>
+                        <div class="text-muted fs-6 px-2">{{statusTimedOutDescription}}</div>
                     </div>
                     <div id="internalErrorStatus" class="d-none">
                         <div class="fs-2 text-danger mx-auto" role="status">
                             <i class="bi bi-x-circle me-1"></i>
                         </div>
                         <div class="fs-3 text-danger my-2">{{statusInternalError}}</div>
-                        <div class="text-muted fs-6 px-2">
-                            {{statusInternalErrorDescription}}
-                        </div>
+                        <div class="text-muted fs-6 px-2">{{statusInternalErrorDescription}}</div>
                     </div>
                 </div>
             </div>
@@ -202,7 +179,14 @@
                     </div>
                     <div class="modal-body">
                         <p>{{searchPlaceholder}}</p>
-                        <input type="text" id="inputSearch" class="w-100 fs-6" placeholder="{{searchPlace}}" maxlength="127" required/>
+                        <input
+                            type="text"
+                            id="inputSearch"
+                            class="w-100 fs-6"
+                            placeholder="{{searchPlace}}"
+                            maxlength="127"
+                            required
+                        />
                         <div id="searchItems" class="d-none">
                             <p class="mt-3 mb-1">
                                 <span class="fs-5">{{searchResults}}</span>
@@ -218,14 +202,23 @@
                         </div>
                         <div id="suggestions">
                             <p class="mt-3 mb-1">
-                                <span class="fs-5">{{planningSuggestionsHeader}}</span> <a href="#" id="refreshSuggestions" class="ms-2"><i class="bi bi-arrow-clockwise me-1"></i>{{refresh}}</a>
+                                <span class="fs-5">{{planningSuggestionsHeader}}</span>
+                                <a href="#" id="refreshSuggestions" class="ms-2"
+                                    ><i class="bi bi-arrow-clockwise me-1"></i>{{refresh}}</a
+                                >
                             </p>
                             <div id="suggestionsList"></div>
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{close}}</button>
-                        <button type="submit" id="searchButton" class="btn btn-primary" original-data="{{search}}" disabled>
+                        <button
+                            type="submit"
+                            id="searchButton"
+                            class="btn btn-primary"
+                            original-data="{{search}}"
+                            disabled
+                        >
                             {{search}}
                         </button>
                     </div>
@@ -448,11 +441,10 @@
             <p>
                 {{createdBy}}
                 <a href="https://galisteo.me">Álvaro Galisteo</a><br />
-                <a href="/attributions/">{{attributions}}</a> -
-                <a href="/help/">{{help}}</a> -
+                <a href="/attributions/">{{attributions}}</a> - <a href="/help/">{{help}}</a> -
 
-                <a href="https://status.travelhermes.com">{{status}}</a><br>
-                <a href="/terms/">{{terms}}</a> - 
+                <a href="https://status.travelhermes.com">{{status}}</a><br />
+                <a href="/terms/">{{terms}}</a> -
                 <a href="/privacy/">{{privacyPolicy}}</a>
             </p>
         </footer>
@@ -467,10 +459,7 @@
                 <div class="card my-3 text-start item-card">
                     <div class="row g-0">
                         <div class="col-md-4">
-                            <img
-                                class="w-100 h-100 card-img lazy"
-                                src="/assets/placeholder.gif"
-                            >
+                            <img class="w-100 h-100 card-img lazy" src="/assets/placeholder.gif" />
                         </div>
                         <div class="col-md-8">
                             <div class="card-body">
@@ -625,9 +614,7 @@
                                     />
                                     {{minutes}}
                                 </div>
-                                <p class="card-text description mt-2 mb-0">
-                                    {{itemWaitDescription}}
-                                </p>
+                                <p class="card-text description mt-2 mb-0">{{itemWaitDescription}}</p>
                                 <div
                                     class="btn-group edit-mode-show d-none my-2 mb-0"
                                     role="group"
@@ -698,9 +685,7 @@
                                     />
                                     {{minutes}}
                                 </div>
-                                <p class="card-text description mt-2 mb-0">
-                                    {{itemRestDescription}}
-                                </p>
+                                <p class="card-text description mt-2 mb-0">{{itemRestDescription}}</p>
                                 <div
                                     class="btn-group edit-mode-show d-none mt-2 mb-0"
                                     role="group"
@@ -752,7 +737,7 @@
                                 class="w-100 h-100 card-img lazy"
                                 src="/assets/placeholder.gif"
                                 data-src="/assets/default_image.png"
-                            >
+                            />
                         </div>
                         <div class="col-md-8">
                             <div class="card-body">
@@ -775,9 +760,7 @@
                                     />
                                     {{minutes}}
                                 </div>
-                                <p class="card-text description mt-2 mb-0">
-                                    {{itemCustomDescription}}
-                                </p>
+                                <p class="card-text description mt-2 mb-0">{{itemCustomDescription}}</p>
                                 <div class="btn-group edit-mode-show d-none my-2" role="group" aria-label="{{actions}}">
                                     <button class="btn btn-outline-danger remove">
                                         <i class="mx-md-1 bi bi-trash-fill"></i>
@@ -817,23 +800,13 @@
         </template>
 
         <template id="templatePlanning">
-            <div
-                class="d-inline-block"
-                tabindex="0"
-                data-bs-toggle="tooltip"
-                title="{{statusPlanningDescription}}"
-            >
+            <div class="d-inline-block" tabindex="0" data-bs-toggle="tooltip" title="{{statusPlanningDescription}}">
                 <div class="spinner-border spinner-border-sm me-1" role="status"></div>
                 {{statusPlanning}}
             </div>
         </template>
         <template id="templateActive">
-            <div
-                class="d-inline-block"
-                tabindex="0"
-                data-bs-toggle="tooltip"
-                title="{{statusActiveDescription}}"
-            >
+            <div class="d-inline-block" tabindex="0" data-bs-toggle="tooltip" title="{{statusActiveDescription}}">
                 <i class="bi bi-compass me-1"></i>{{statusActive}}
             </div>
         </template>
@@ -891,10 +864,7 @@
                 </div>
                 <div class="row g-0">
                     <div class="col-md-4">
-                        <img
-                            class="w-100 h-100 card-img lazy"
-                            src="/assets/placeholder.gif"
-                        >
+                        <img class="w-100 h-100 card-img lazy" src="/assets/placeholder.gif" />
                     </div>
                     <div class="col-md-8">
                         <div class="card-body">
@@ -955,11 +925,11 @@
             </div>
         </template>
 
-        <input id="dayText" class="d-none" value="{{day}}">
-        <input id="minuteText" class="d-none" value="{{minute}}">
-        <input id="meterText" class="d-none" value="{{meter}}">
-        <input id="kilometerText" class="d-none" value="{{kilometer}}">
-        <input id="currentLang" class="d-none" value="{{currentLang}}">
+        <input id="dayText" class="d-none" value="{{day}}" />
+        <input id="minuteText" class="d-none" value="{{minute}}" />
+        <input id="meterText" class="d-none" value="{{meter}}" />
+        <input id="kilometerText" class="d-none" value="{{kilometer}}" />
+        <input id="currentLang" class="d-none" value="{{currentLang}}" />
 
         <!-- Bootstrap -->
         <script src="/js/bootstrap.bundle.min.js"></script>

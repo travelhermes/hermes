@@ -4,10 +4,7 @@
         <meta charset="utf-8" />
         <link rel="shortcut icon" type="image/png" href="/assets/favicon.png" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta
-            name="description"
-            content="{{landingPageDescription}}: {{landingPagePlanning}}."
-        />
+        <meta name="description" content="{{landingPageDescription}}: {{landingPagePlanning}}." />
         <meta name="author" content="Álvaro Galisteo" />
         <title>{{profile}} - Hermes</title>
 
@@ -17,8 +14,8 @@
         <link href="/css/common.css" rel="stylesheet" />
         <link href="/css/profile.css" rel="stylesheet" />
 
-<link rel="prefetch" href="/assets/placeholder.gif" />
-</head>
+        <link rel="prefetch" href="/assets/placeholder.gif" />
+    </head>
     <body>
         <div
             class="modal fade show"
@@ -46,14 +43,10 @@
                     </div>
                     <div class="modal-body">
                         <p class="fs-4">{{deleteAccountConfirmationHeader}}</p>
-                        <p>
-                            {{{deleteAccountConfirmation}}}
-                        </p>
+                        <p>{{{deleteAccountConfirmation}}}</p>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-success" data-bs-dismiss="modal">
-                            {{getMeOut}}
-                        </button>
+                        <button type="button" class="btn btn-success" data-bs-dismiss="modal">{{getMeOut}}</button>
                         <button
                             type="button"
                             class="btn btn-danger"
@@ -91,7 +84,7 @@
                             {{invalidPassword}}
                         </div>
                         <p>{{inputPasswordText}}</p>
-                        <input type="password" id="inputDeletePassword" placeholder="{{password}}" maxlength="127"/>
+                        <input type="password" id="inputDeletePassword" placeholder="{{password}}" maxlength="127" />
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-success" data-bs-dismiss="modal">{{getMeOut}}</button>
@@ -251,25 +244,42 @@
                     </li>
                 </ul>
                 <div class="tab-content" id="profileContent">
-                    <div class="tab-pane fade show active" id="notifications" role="tabpanel" aria-labelledby="notifications-tab">
+                    <div
+                        class="tab-pane fade show active"
+                        id="notifications"
+                        role="tabpanel"
+                        aria-labelledby="notifications-tab"
+                    >
                         <form class="notifications-form" class="mt-5" id="notificationsForm">
                             <div class="container px-0 mx-0 mt-3">
                                 <h3 class="mt-3">{{manageNotifications}}</h3>
-                                <p class="w-100 text-muted mb-0">
-                                    {{notificationsDescription}}
-                                </p>
+                                <p class="w-100 text-muted mb-0">{{notificationsDescription}}</p>
                                 <p class="w-100 text-muted">
                                     <i class="bi bi-exclamation-circle me-1"></i> {{notificationsWarning}}
                                 </p>
                                 <div>
                                     <div class="form-check form-switch">
-                                        <input class="form-check-input" type="checkbox" id="notificationsPlans" checked>
-                                        <label class="form-check-label" for="notificationsPlans">{{planNotifications}}</label>
+                                        <input
+                                            class="form-check-input"
+                                            type="checkbox"
+                                            id="notificationsPlans"
+                                            checked
+                                        />
+                                        <label class="form-check-label" for="notificationsPlans"
+                                            >{{planNotifications}}</label
+                                        >
                                     </div>
                                     <p class="mb-3 w-100 text-muted">{{planNotificationsDescription}}</p>
                                     <div class="form-check form-switch">
-                                        <input class="form-check-input" type="checkbox" id="notificationsRatings" checked>
-                                        <label class="form-check-label" for="notificationsRatings">{{ratingNotifications}}</label>
+                                        <input
+                                            class="form-check-input"
+                                            type="checkbox"
+                                            id="notificationsRatings"
+                                            checked
+                                        />
+                                        <label class="form-check-label" for="notificationsRatings"
+                                            >{{ratingNotifications}}</label
+                                        >
                                     </div>
                                     <p class="mb-3 w-100 text-muted">{{ratingNotificationsDescription}}</p>
                                     <!--<div class="form-check form-switch">
@@ -298,17 +308,35 @@
                                 <div class="row">
                                     <div class="col">
                                         <label for="inputName" class="form-label">{{name}}</label>
-                                        <input required type="text" id="inputName" class="form-control" maxlength="127"/>
+                                        <input
+                                            required
+                                            type="text"
+                                            id="inputName"
+                                            class="form-control"
+                                            maxlength="127"
+                                        />
                                     </div>
                                     <div class="col">
                                         <label for="inputSurname" class="form-label">{{surname}}</label>
-                                        <input required type="text" id="inputSurname" class="form-control" maxlength="127"/>
+                                        <input
+                                            required
+                                            type="text"
+                                            id="inputSurname"
+                                            class="form-control"
+                                            maxlength="127"
+                                        />
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col">
                                         <label for="inputEmail" class="form-label mt-2">{{email}}</label>
-                                        <input required type="email" id="inputEmail" class="form-control" maxlength="127"/>
+                                        <input
+                                            required
+                                            type="email"
+                                            id="inputEmail"
+                                            class="form-control"
+                                            maxlength="127"
+                                        />
                                     </div>
                                 </div>
                                 <div class="row">
@@ -973,7 +1001,12 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <p id="categoriesSelect" style="margin-top: -5px" class="fs-6 mb-3 text-dark" original-data="{{categoryRequirement}}">
+                                        <p
+                                            id="categoriesSelect"
+                                            style="margin-top: -5px"
+                                            class="fs-6 mb-3 text-dark"
+                                            original-data="{{categoryRequirement}}"
+                                        >
                                             {{categoryRequirement}}
                                         </p>
                                     </div>
@@ -998,10 +1031,14 @@
                                 <div class="row">
                                     <div class="col">
                                         <label for="inputPassword1" class="form-label">{{newPassword}}</label>
-                                        <input type="password" id="inputPassword1" class="form-control" required maxlength="127"/>
-                                        <p class="w-100 text-muted">
-                                            {{passwordChangeAlert}}
-                                        </p>
+                                        <input
+                                            type="password"
+                                            id="inputPassword1"
+                                            class="form-control"
+                                            required
+                                            maxlength="127"
+                                        />
+                                        <p class="w-100 text-muted">{{passwordChangeAlert}}</p>
                                     </div>
                                     <div class="col">
                                         <label for="inputPassword2" class="form-label">{{repeatPassword}}</label>
@@ -1032,16 +1069,10 @@
                         </form>
                         <h3 class="mt-5">{{sessions}}</h3>
                         <div class="mt-2 w-100">
-                            <button
-                                class="btn btn-danger"
-                                original-data="{{closeAllSessions}}"
-                                id="logoutSessions"
-                            >
+                            <button class="btn btn-danger" original-data="{{closeAllSessions}}" id="logoutSessions">
                                 {{closeAllSessions}}
                             </button>
-                            <p class="w-100 text-muted mt-2">
-                                {{closeAllSessionsAlert}}
-                            </p>
+                            <p class="w-100 text-muted mt-2">{{closeAllSessionsAlert}}</p>
                         </div>
                     </div>
                     <div class="tab-pane fade" id="advanced" role="tabpanel" aria-labelledby="advanced-tab">
@@ -1056,9 +1087,7 @@
                                 {{downloadMyData}}
                             </button>
                         </div>
-                        <p class="w-100 text-muted">
-                            {{downloadMyDataDescription}}
-                        </p>
+                        <p class="w-100 text-muted">{{downloadMyDataDescription}}</p>
                         <h3 class="mt-3 text-danger mt-5">{{deleteAccount}}</h3>
                         <div class="mb-2">
                             <button
@@ -1083,16 +1112,15 @@
             <p>
                 {{createdBy}}
                 <a href="https://galisteo.me">Álvaro Galisteo</a><br />
-                <a href="/attributions/">{{attributions}}</a> -
-                <a href="/help/">{{help}}</a> -
+                <a href="/attributions/">{{attributions}}</a> - <a href="/help/">{{help}}</a> -
 
-                <a href="https://status.travelhermes.com">{{status}}</a><br>
-                <a href="/terms/">{{terms}}</a> - 
+                <a href="https://status.travelhermes.com">{{status}}</a><br />
+                <a href="/terms/">{{terms}}</a> -
                 <a href="/privacy/">{{privacyPolicy}}</a>
             </p>
         </footer>
 
-        <input id="currentLang" class="d-none" value="{{currentLang}}">
+        <input id="currentLang" class="d-none" value="{{currentLang}}" />
 
         <!-- Bootstrap -->
         <script src="/js/bootstrap.bundle.min.js"></script>
@@ -1105,6 +1133,11 @@
         <!-- Hermes -->
         <script src="/js/common.js"></script>
         <script src="/js/profile.js"></script>
-        <script async defer data-website-id="0f73de68-9610-4a9c-a7a8-ab61ab30208a" src="https://data.travelhermes.com/umami.js"></script>
+        <script
+            async
+            defer
+            data-website-id="0f73de68-9610-4a9c-a7a8-ab61ab30208a"
+            src="https://data.travelhermes.com/umami.js"
+        ></script>
     </body>
 </html>

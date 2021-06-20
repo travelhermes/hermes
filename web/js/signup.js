@@ -214,7 +214,9 @@ function signup() {
     // Reset categories message
     document.querySelector('#categoriesSelect').classList.remove('text-danger');
     document.querySelector('#categoriesSelect').classList.add('text-white');
-    document.querySelector('#categoriesSelect').innerHTML = document.querySelector('#categoriesSelect').getAttribute('original-data');
+    document.querySelector('#categoriesSelect').innerHTML = document
+        .querySelector('#categoriesSelect')
+        .getAttribute('original-data');
 
     preferences = [];
     document.querySelectorAll('.dropdown-menu').forEach((dropdown) => {

@@ -45,7 +45,10 @@ function renderPlans(plansArray, container) {
 
         card.querySelector('div').setAttribute('id', 'plan' + plan.id);
         card.querySelector('.card-title').innerHTML = plan.name;
-        card.querySelector('.days').innerHTML = plural(daysBetween(plan.startDate, plan.endDate) + 1, document.querySelector('input#dayText').value);
+        card.querySelector('.days').innerHTML = plural(
+            daysBetween(plan.startDate, plan.endDate) + 1,
+            document.querySelector('input#dayText').value
+        );
         card.querySelector('.state').appendChild(resolveState(plan.status));
         card.querySelector('.start-date').innerHTML = getFormattedDate(startDate);
         card.querySelector('.end-date').innerHTML = getFormattedDate(endDate);
@@ -87,7 +90,7 @@ function startIntervalStatus() {
                     .querySelector('#plan' + plans.active[i].id)
                     .querySelector('.state')
                     .appendChild(resolveState(status));
-                    count++;
+                count++;
             } catch (err) {
                 throwError(err);
                 break;
@@ -105,15 +108,15 @@ function startIntervalStatus() {
                     .querySelector('#plan' + plans.past[i].id)
                     .querySelector('.state')
                     .appendChild(resolveState(status));
-                    count++;
+                count++;
             } catch (err) {
                 throwError(err);
                 break;
             }
         }
 
-        if(count == 0) {
-            console.info("Stopped interval");
+        if (count == 0) {
+            console.info('Stopped interval');
             clearInterval(statusInterval);
         }
     }, 5000);
@@ -151,7 +154,7 @@ function deletePlan(button) {
 }
 
 async function main() {
-    if(loader == null) {
+    if (loader == null) {
         loader = new bootstrap.Modal(document.querySelector('#loader'), {
             backdrop: 'static',
             keyboard: false,
@@ -182,4 +185,6 @@ async function main() {
     });
 }
 
-window.onload = () => { main(); };
+window.onload = () => {
+    main();
+};

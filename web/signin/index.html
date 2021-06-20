@@ -4,10 +4,7 @@
         <meta charset="utf-8" />
         <link rel="shortcut icon" type="image/png" href="/assets/favicon.png" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta
-            name="description"
-            content="{{landingPageDescription}}: {{landingPagePlanning}}."
-        />
+        <meta name="description" content="{{landingPageDescription}}: {{landingPagePlanning}}." />
         <meta name="author" content="Álvaro Galisteo" />
         <title>{{signin}} - Hermes</title>
 
@@ -16,8 +13,8 @@
         <link href="/css/bootstrap-icons.css" rel="stylesheet" />
         <link href="/css/signin.css" rel="stylesheet" />
 
-<link rel="prefetch" href="/assets/placeholder.gif" />
-</head>
+        <link rel="prefetch" href="/assets/placeholder.gif" />
+    </head>
     <body class="d-flex h-100 text-center text-white bg-dark">
         <div
             class="modal fade text-start text-dark"
@@ -33,16 +30,19 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{close}}"></button>
                     </div>
                     <div class="modal-body">
-                        <p>
-                            {{recoverPasswordModalBody}}
-                        </p>
+                        <p>{{recoverPasswordModalBody}}</p>
                         <div class="alert alert-danger d-none mb-1 mt-4" role="alert" id="cooldownReset">
                             {{recoverPasswordModalCooldown}}
                         </div>
-                        <input type="email" id="inputEmailRecover" placeholder="{{email}}" required maxlength="127"/>
+                        <input type="email" id="inputEmailRecover" placeholder="{{email}}" required maxlength="127" />
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary" id="inputSubmitRecover" original-data="{{recoverPasswordModalButton}}">
+                        <button
+                            type="submit"
+                            class="btn btn-primary"
+                            id="inputSubmitRecover"
+                            original-data="{{recoverPasswordModalButton}}"
+                        >
                             {{recoverPasswordModalButton}}
                         </button>
                     </div>
@@ -63,17 +63,10 @@
                         {{signinTextJoin}}
                         <a href="/signup/" class="text-white">{{signinLinkJoin}}</a>
                     </div>
-                    <div
-                        class="alert alert-danger d-none"
-                        role="alert"
-                        id="invalidCredentials"
-                       
-                    >
+                    <div class="alert alert-danger d-none" role="alert" id="invalidCredentials">
                         {{invalidEmailOrPassword}}
                     </div>
-                    <div class="alert alert-danger d-none" role="alert" id="cooldown">
-                        {{signinCooldown}}
-                    </div>
+                    <div class="alert alert-danger d-none" role="alert" id="cooldown">{{signinCooldown}}</div>
                     <div class="join">
                         <label for="inputEmail" class="visually-hidden"> {{email}} </label>
                         <input
@@ -110,9 +103,7 @@
                         </label>
                     </div>
                     <div class="mt-2">
-                        <a href="#recoverModal" data-bs-toggle="modal" class="text-white">
-                            {{forgotPassword}}
-                        </a>
+                        <a href="#recoverModal" data-bs-toggle="modal" class="text-white"> {{forgotPassword}} </a>
                     </div>
                 </form>
             </main>
@@ -125,14 +116,14 @@
                     <a href="/attributions/" class="text-white">{{attributions}}</a> -
                     <a href="/help/" class="text-white">{{help}}</a> -
 
-                    <a href="https://status.travelhermes.com" class="text-white">{{status}}</a><br>
-                    <a href="/terms/" class="text-white">{{terms}}</a> - 
+                    <a href="https://status.travelhermes.com" class="text-white">{{status}}</a><br />
+                    <a href="/terms/" class="text-white">{{terms}}</a> -
                     <a href="/privacy/" class="text-white">{{privacyPolicy}}</a>
                 </p>
             </footer>
         </div>
 
-        <input id="currentLang" class="d-none" value="{{currentLang}}">
+        <input id="currentLang" class="d-none" value="{{currentLang}}" />
 
         <!-- Bootstrap -->
         <script src="/js/bootstrap.bundle.min.js"></script>
@@ -140,6 +131,11 @@
         <!-- Hermes -->
         <script src="/js/common.js"></script>
         <script src="/js/signin.js"></script>
-        <script async defer data-website-id="0f73de68-9610-4a9c-a7a8-ab61ab30208a" src="https://data.travelhermes.com/umami.js"></script>
+        <script
+            async
+            defer
+            data-website-id="0f73de68-9610-4a9c-a7a8-ab61ab30208a"
+            src="https://data.travelhermes.com/umami.js"
+        ></script>
     </body>
 </html>

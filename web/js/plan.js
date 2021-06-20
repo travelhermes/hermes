@@ -231,7 +231,10 @@ function prevDay(button) {
  */
 function renderPlanInfo(plan) {
     document.querySelector('#planning').innerHTML = '';
-    document.querySelector('#days').innerHTML = plural(daysBetween(plan.startDate, plan.endDate) + 1, document.querySelector('input#dayText').value);
+    document.querySelector('#days').innerHTML = plural(
+        daysBetween(plan.startDate, plan.endDate) + 1,
+        document.querySelector('input#dayText').value
+    );
     document.querySelector('#start-date').value = getFormattedDate(plan.startDate, true);
     document.querySelector('#end-date').value = getFormattedDate(plan.endDate, true);
     document.querySelector('#start-date').min = getFormattedDate(new Date(), true);
@@ -290,11 +293,11 @@ function renderPlace(item) {
     }
 
     if (item.place.images > 0) {
-        card.querySelector('img').setAttribute("data-src", '/assets/places/' + item.place.id + '/0.jpg');
-        card.querySelector('img').setAttribute("alt", `Imagen de ${item.place.name}`);
+        card.querySelector('img').setAttribute('data-src', '/assets/places/' + item.place.id + '/0.jpg');
+        card.querySelector('img').setAttribute('alt', `Imagen de ${item.place.name}`);
     } else {
-        card.querySelector('img').setAttribute("data-src", '/assets/default_image.png');
-        card.querySelector('img').setAttribute("alt", `Imagen de ${item.place.name}`);
+        card.querySelector('img').setAttribute('data-src', '/assets/default_image.png');
+        card.querySelector('img').setAttribute('alt', `Imagen de ${item.place.name}`);
     }
 
     return card;
@@ -442,9 +445,15 @@ function renderPlan(plan, day) {
                 travel.querySelector('.fa-car').classList.remove('d-none');
                 travel.querySelector('.fa-walking').classList.add('d-none');
             }
-            travel.querySelector('.time').innerHTML = plural(item.travelNext, document.querySelector('input#minuteText').value);
+            travel.querySelector('.time').innerHTML = plural(
+                item.travelNext,
+                document.querySelector('input#minuteText').value
+            );
             if (item.travelDist < 1000) {
-                travel.querySelector('.distance').innerHTML = plural(item.travelDist, document.querySelector('input#meterText').value);
+                travel.querySelector('.distance').innerHTML = plural(
+                    item.travelDist,
+                    document.querySelector('input#meterText').value
+                );
             } else {
                 travel.querySelector('.distance').innerHTML = plural(
                     parseInt((item.travelDist / 1000).toFixed(2)),
@@ -793,11 +802,11 @@ function renderInsertPlaces(places, container, alert = true) {
         card.querySelector('.card').setAttribute('id', place.id);
 
         if (place.images > 0) {
-            card.querySelector('img').setAttribute("data-src", '/assets/places/' + place.id + '/0.jpg');
-            card.querySelector('img').setAttribute("alt", `Imagen de ${place.name}`);
+            card.querySelector('img').setAttribute('data-src', '/assets/places/' + place.id + '/0.jpg');
+            card.querySelector('img').setAttribute('alt', `Imagen de ${place.name}`);
         } else {
-            card.querySelector('img').setAttribute("data-src", '/assets/default_image.png');
-            card.querySelector('img').setAttribute("alt", `Imagen de ${place.name}`);
+            card.querySelector('img').setAttribute('data-src', '/assets/default_image.png');
+            card.querySelector('img').setAttribute('alt', `Imagen de ${place.name}`);
         }
 
         card.querySelector('.title').innerHTML = place.name;
@@ -834,7 +843,7 @@ function insertPlace(button) {
     if (searchMode == 'search') {
         place = getElementByKey(searchPlaces, 'id', id);
         umami.trackEvent('Insert searched place', 'click');
-    } else if (searchMode == 'suggestions'){
+    } else if (searchMode == 'suggestions') {
         place = getElementByKey(suggestionPlaces, 'id', id);
         umami.trackEvent('Insert suggested place', 'click');
     }
@@ -1171,6 +1180,6 @@ async function main() {
 }
 
 window.onload = () => {
-    document.addEventListener("DOMContentLoaded", yall);
+    document.addEventListener('DOMContentLoaded', yall);
     main();
 };

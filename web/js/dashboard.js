@@ -76,8 +76,8 @@ function createMarkerContent(place, added = false) {
                 item.querySelector('.carousel-item').classList.add('active');
             }
             item.querySelector('.carousel-item');
-            item.querySelector('img').setAttribute("data-src", '/assets/places/' + place.id + '/' + j + '.jpg');
-            item.querySelector('img').setAttribute("alt", `Imagen ${j+1} de ${place.name}`);
+            item.querySelector('img').setAttribute('data-src', '/assets/places/' + place.id + '/' + j + '.jpg');
+            item.querySelector('img').setAttribute('alt', `Imagen ${j + 1} de ${place.name}`);
             carousel
                 .querySelector('.carousel-inner')
                 .insertBefore(item, carousel.querySelector('.carousel-inner').firstChild);
@@ -85,12 +85,12 @@ function createMarkerContent(place, added = false) {
     } else {
         carousel = getTemplate('templatePopupCarousel');
         carousel.firstElementChild.setAttribute('id', 'carouselPopup' + place.id);
-        
+
         const item = getTemplate('templatePopupCarouselItem');
-        item.querySelector('img').setAttribute("data-src", '/assets/default_image.png');
-        item.querySelector('img').setAttribute("alt", `Imagen de ${place.name}`);
+        item.querySelector('img').setAttribute('data-src', '/assets/default_image.png');
+        item.querySelector('img').setAttribute('alt', `Imagen de ${place.name}`);
         item.querySelector('.carousel-item').classList.add('active');
-        
+
         carousel
             .querySelector('.carousel-inner')
             .insertBefore(item, carousel.querySelector('.carousel-inner').firstChild);
@@ -690,8 +690,14 @@ function _getDayHeuristic() {
 
         post(ENDPOINTS.plannerLength, request)
             .then((res) => {
-                document.querySelector('#recommendedDayLength').innerHTML = plural(res.days, document.querySelector('input#dayText').value);
-                document.querySelector('#recommendedDayLengthValidate').innerHTML = plural(res.days, document.querySelector('input#dayText').value);
+                document.querySelector('#recommendedDayLength').innerHTML = plural(
+                    res.days,
+                    document.querySelector('input#dayText').value
+                );
+                document.querySelector('#recommendedDayLengthValidate').innerHTML = plural(
+                    res.days,
+                    document.querySelector('input#dayText').value
+                );
                 planLength = res.days;
                 resolve();
             })
