@@ -90,7 +90,8 @@ class MailServer {
         const templateName = Object.keys(MailType)[messageType] + '.html';
         const templatePath = __dirname + '/templates/' + lang + '/' + templateName;
         try {
-            body = Handlebars.compile(fs.readFileSync(templatePath))(dictionary);
+            body = fs.readFileSync(templatePath, 'utf-8');
+            body = Handlebars.compile(body)(dictionary);
         } catch (error) {
             ApplicationLogger.logBase(LogLevel.FATAL, this.worker, null, null, 'mail/add', null, error);
             return;
