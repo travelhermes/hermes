@@ -276,7 +276,7 @@ async function main() {
                     startDate: getFormattedDate(plans[i].startDate, false, '/'),
                     endDate: getFormattedDate(plans[i].endDate, false, '/'),
                     id: plans[i].id,
-                });
+                }, plans[i].User.lang);
                 countPlans++;
             }
             // Send rating reminder emails
@@ -286,7 +286,7 @@ async function main() {
                 }
                 mailServer.add(plans[i].User.email, MailType.rateVisited, {
                     name: plans[i].User.name,
-                });
+                }, plans[i].User.lang);
                 countRatings++;
             }
         }

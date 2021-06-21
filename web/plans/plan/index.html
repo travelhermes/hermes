@@ -1,15 +1,12 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="{{currentLang}}">
     <head>
         <meta charset="utf-8" />
         <link rel="shortcut icon" type="image/png" href="/assets/favicon.png" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta
-            name="description"
-            content="Hermes es un sistema recomendador y planificador turístico, para facilitarte la tarea más tediosa de todo viaje: planificarlo"
-        />
+        <meta name="description" content="{{landingPageDescription}}: {{landingPagePlanning}}." />
         <meta name="author" content="Álvaro Galisteo" />
-        <title>Plan - Hermes</title>
+        <title>{{plan}} - Hermes</title>
 
         <!-- CSS -->
         <link href="/css/bootstrap.min.css" rel="stylesheet" />
@@ -18,8 +15,8 @@
         <link href="/css/plans.css" rel="stylesheet" />
         <link href="/css/leaflet.css" rel="stylesheet" />
 
-<link rel="prefetch" href="/assets/placeholder.gif" />
-</head>
+        <link rel="prefetch" href="/assets/placeholder.gif" />
+    </head>
     <body class="d-flex flex-column min-vh-100">
         <div
             class="modal fade show"
@@ -32,100 +29,86 @@
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content text-center py-5">
                     <div class="spinner-border mx-auto" role="status">
-                        <span class="visually-hidden">Cargando...</span>
+                        <span class="visually-hidden">{{loading}}...</span>
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- Tutorial modal -->
-        <div class="modal fade" id="tutorialModal" tabindex="-1" aria-labelledby="tutorialModalLabel" aria-hidden="true" data-tutorial="plan">
+        <div
+            class="modal fade"
+            id="tutorialModal"
+            tabindex="-1"
+            aria-labelledby="tutorialModalLabel"
+            aria-hidden="true"
+            data-tutorial="plan"
+        >
             <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable text-white">
                 <div class="modal-content bg-dark">
                     <div class="modal-header border-0 text-center d-block">
-                        <h2 class="modal-title" id="tutorialModalLabel">Tutorial</h2>
+                        <h2 class="modal-title" id="tutorialModalLabel">{{tutorial}}</h2>
                     </div>
                     <div class="modal-body border-0 px-0">
-                        <p class="mx-4 mb-0"><i class="bi bi-exclamation-circle me-1"></i> <b>Nota</b>: Las planificaciones se generan de forma algorítmica. Aunque intentamos ser lo más precisos posible basándonos en los datos de que disponemos, se aconseja la discreción del usuario, por lo tanto:</p>
+                        <p class="mx-4 mb-0">
+                            <i class="bi bi-exclamation-circle me-1"></i> <b>{{note}}</b>: {{plansTutorialNote}}:
+                        </p>
                         <ul class="mx-4 mb-3">
-                            <li>Los horarios pueden no estar actualizados e incluso puede que algún lugar haya sido cerrado permanentemente.</li>
-                            <li>Aunque intentamos estar al día, la información mostrada puede contener errores o no estar actualizada.</li>
-                            <li>No podemos predecir cuando deseas realizar descansos (p. ejemplo, para comer), por lo tanto, tendrás que establecerlo manualmente.</li>
-                            <li>No sabemos si has reservado transportes de ida y vuelta a la ciudad, por lo que tendrás que tenerlo en cuenta.</li>
-                            <li>Los precios de las visitas pueden variar y no ajustarse a tus preferencias para el viaje.</li>
-                            <li>Las se estiman en base a los datos geográficos disponibles. Las condiciones sobre el terreno pueden ser diferentes.</li>
+                            <li>{{plansTutorialNoteItem1}}</li>
+                            <li>{{plansTutorialNoteItem2}}</li>
+                            <li>{{plansTutorialNoteItem3}}</li>
+                            <li>{{plansTutorialNoteItem4}}</li>
+                            <li>{{plansTutorialNoteItem5}}</li>
+                            <li>{{plansTutorialNoteItem6}}</li>
                         </ul>
-                        <hr>
-                        <p class="mx-4 fs-5">Tu plan</p>
-                        <p class="mx-4 mb-2">Aquí podrás ver el plan que se ha generado para tu viaje, junto a la ruta en el mapa. Los lugares se clasifican en 5 tipos distintos:</p>
+                        <hr />
+                        <p class="mx-4 fs-5">{{yourPlan}}</p>
+                        <p class="mx-4 mb-2">{{plansTutorialYourPlanDescription}}:</p>
                         <div class="container d-inline-block mb-2 text-center px-4">
                             <div class="row">
                                 <div class="col">
-                                    <span>
-                                        <i
-                                            class="bi bi-house-door-fill"
-                                            style="font-size: 1.75rem"
-                                        ></i> </span
+                                    <span> <i class="bi bi-house-door-fill" style="font-size: 1.75rem"></i> </span
                                     ><br />
-                                    Inicio
+                                    {{itemStart}}
                                 </div>
                                 <div class="col">
-                                    <span>
-                                        <i
-                                            class="bi bi-building"
-                                            style="font-size: 1.75rem"
-                                        ></i> </span
-                                    ><br />
-                                    Lugar
+                                    <span> <i class="bi bi-building" style="font-size: 1.75rem"></i> </span><br />
+                                    {{itemPlace}}
                                 </div>
                                 <div class="col">
-                                    <span>
-                                        <i
-                                            class="bi bi-plus-circle"
-                                            style="font-size: 1.75rem"
-                                        ></i> </span
-                                    ><br />
-                                    Personalizado
+                                    <span> <i class="bi bi-plus-circle" style="font-size: 1.75rem"></i> </span><br />
+                                    {{itemCustom}}
                                 </div>
                                 <div class="col">
-                                    <span>
-                                        <i
-                                            class="bi bi-hourglass-split"
-                                            style="font-size: 1.75rem"
-                                        ></i> </span
+                                    <span> <i class="bi bi-hourglass-split" style="font-size: 1.75rem"></i> </span
                                     ><br />
-                                    Descanso
+                                    {{itemWait}}
                                 </div>
                                 <div class="col">
-                                    <span>
-                                        <i
-                                            class="bi bi-tree-fill"
-                                            style="font-size: 1.75rem"
-                                        ></i> </span
-                                    ><br />
-                                    Espera
+                                    <span> <i class="bi bi-tree-fill" style="font-size: 1.75rem"></i> </span><br />
+                                    {{itemRest}}
                                 </div>
                             </div>
                         </div>
-                        <p class="mx-4">En cada uno de ellos, podrás ver la duración de la visita, información sobre el lugar y el tiempo y la distancia de viaje entre lugares</p>
-                        <hr>
-                        <p class="mx-4 fs-5">Editar el plan</p>
-                        <p class="mx-4 mb-0">Además de ver el plan, podrás editar el plan. En el modo edición, podrás:</p>
+                        <p class="mx-4">{{plansTutorialYourPlanItems}}</p>
+                        <hr />
+                        <p class="mx-4 fs-5">{{plansTutorialEdit}}</p>
+                        <p class="mx-4 mb-0">{{plansTutorialEditDescription}}:</p>
                         <ul class="mx-4">
-                            <li>Adelantar o atrasar la fecha de inicio del plan, si este no ha comenzado</li>
-                            <li>Cambiar el nombre y la descripción del plan</li>
-                            <li>Añadir lugares, descansos, esperas o lugares personalizados</li>
-                            <li>Cambiar duraciones de las visitas</li>
-                            <li>Eliminar elementos del plan</li>
-                            <li>Añadir notas</li>
+                            <li>{{plansTutorialEditItem1}}</li>
+                            <li>{{plansTutorialEditItem2}}</li>
+                            <li>{{plansTutorialEditItem3}}</li>
+                            <li>{{plansTutorialEditItem4}}</li>
+                            <li>{{plansTutorialEditItem5}}</li>
+                            <li>{{plansTutorialEditItem6}}</li>
                         </ul>
                     </div>
                     <div class="modal-footer border-0" id="tutorialFooter">
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
-                            <label class="form-check-label" for="flexCheckDefault"> No volver a mostrar </label>
+                            <label class="form-check-label" for="flexCheckDefault"> {{dontShowAgain}} </label>
                         </div>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{close}}</button>
                     </div>
                 </div>
             </div>
@@ -143,35 +126,24 @@
                 <div class="modal-content text-center py-5 px-3">
                     <div id="planningStatus" class="d-none">
                         <div class="spinner-border mx-auto" role="status"></div>
-                        <div class="fs-3 my-2">Planificando</div>
+                        <div class="fs-3 my-2">{{statusPlanning}}</div>
 
-                        <div class="text-muted fs-6 px-2">
-                            Hermes está acabando de planificar las rutas. Esto puede tardar hasta 5 minutos. Por favor,
-                            espere.
-                        </div>
+                        <div class="text-muted fs-6 px-2">{{statusPlanningDescription}}</div>
                     </div>
                     <div id="timedoutStatus" class="d-none">
                         <div class="fs-2 text-danger mx-auto" role="status">
                             <i class="bi bi-exclamation-circle me-1"></i>
                         </div>
-                        <div class="fs-3 text-danger my-2">Ruta no encontrada</div>
+                        <div class="fs-3 text-danger my-2">{{statusTimedOut}}</div>
 
-                        <div class="text-muted fs-6 px-2">
-                            Hermes no ha podido encontrar una ruta. Es posible que hayas añadido demasiados sitios o que
-                            hayas establecido poco tiempo. Prueba a eliminar la ruta y crearla de nuevo reduciendo la
-                            cantidad de sitios o aumentando la duración del plan.
-                        </div>
+                        <div class="text-muted fs-6 px-2">{{statusTimedOutDescription}}</div>
                     </div>
                     <div id="internalErrorStatus" class="d-none">
                         <div class="fs-2 text-danger mx-auto" role="status">
                             <i class="bi bi-x-circle me-1"></i>
                         </div>
-                        <div class="fs-3 text-danger my-2">Error interno</div>
-                        <div class="text-muted fs-6 px-2">
-                            Se ha producido un error interno mientras se planficaba tu ruta. Por favor, elimina la ruta
-                            y créala de nuevo más tarde. Si el error persiste,
-                            <a href="/help/">contacta con nosotros</a>.
-                        </div>
+                        <div class="fs-3 text-danger my-2">{{statusInternalError}}</div>
+                        <div class="text-muted fs-6 px-2">{{statusInternalErrorDescription}}</div>
                     </div>
                 </div>
             </div>
@@ -181,17 +153,17 @@
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h4 class="modal-title" id="deleteConfirmLabel">Eliminar ruta</h4>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                        <h4 class="modal-title" id="deleteConfirmLabel">{{deletePlan}}</h4>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{close}}"></button>
                     </div>
                     <div class="modal-body">
-                        <p class="fs-4">¿Estás seguro de querer eliminar el plan?</p>
-                        <p>Esto eliminará todas las rutas y las modificaciones que hayas realizado sobre ellas</p>
+                        <p class="fs-4">{{confirmDeletePlanDetails}}</p>
+                        <p>{{confirmDeletePlanWarning}}</p>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                        <button type="button" class="btn btn-danger" id="deletePlan" original-data="Sí, estoy seguro">
-                            Sí, estoy seguro
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{cancel}}</button>
+                        <button type="button" class="btn btn-danger" id="deletePlan" original-data="{{yesImSure}}">
+                            {{yesImSure}}
                         </button>
                     </div>
                 </div>
@@ -202,36 +174,52 @@
             <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
                 <form class="modal-content" id="searchForm">
                     <div class="modal-header">
-                        <h4 class="modal-title" id="searchModalLabel">Añadir lugar</h4>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                        <h4 class="modal-title" id="searchModalLabel">{{addPlace}}</h4>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{close}}"></button>
                     </div>
                     <div class="modal-body">
-                        <p>Introduce un criterio de búsqueda</p>
-                        <input type="text" id="inputSearch" class="w-100 fs-6" placeholder="Buscar lugar" maxlength="127" required/>
+                        <p>{{searchPlaceholder}}</p>
+                        <input
+                            type="text"
+                            id="inputSearch"
+                            class="w-100 fs-6"
+                            placeholder="{{searchPlace}}"
+                            maxlength="127"
+                            required
+                        />
                         <div id="searchItems" class="d-none">
                             <p class="mt-3 mb-1">
-                                <span class="fs-5">Resultados de la búsqueda</span>
+                                <span class="fs-5">{{searchResults}}</span>
                             </p>
                             <div class="text-center">
                                 <div class="alert alert-primary w-100 mt-2 d-inline-block d-none" role="alert">
-                                    Sin resultados. Prueba con otro criterio de búsqueda <br />
-                                    ¿Te falta algún lugar?
-                                    <a href="https://github.com/SrGMC/hermes">Háznoslo saber</a>
+                                    {{noResultsSearchCriteria}} <br />
+                                    {{missingAPlace}}
+                                    <a href="https://github.com/SrGMC/hermes">{{notifyUs}}</a>
                                 </div>
                             </div>
                             <div id="searchItemsList"></div>
                         </div>
                         <div id="suggestions">
                             <p class="mt-3 mb-1">
-                                <span class="fs-5">¿Qué te parecen estos sitios para puntuar?</span> <a href="#" id="refreshSuggestions" class="ms-2"><i class="bi bi-arrow-clockwise me-1"></i>Refrescar</a>
+                                <span class="fs-5">{{planningSuggestionsHeader}}</span>
+                                <a href="#" id="refreshSuggestions" class="ms-2"
+                                    ><i class="bi bi-arrow-clockwise me-1"></i>{{refresh}}</a
+                                >
                             </p>
                             <div id="suggestionsList"></div>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                        <button type="submit" id="searchButton" class="btn btn-primary" original-data="Buscar" disabled>
-                            Buscar
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{close}}</button>
+                        <button
+                            type="submit"
+                            id="searchButton"
+                            class="btn btn-primary"
+                            original-data="{{search}}"
+                            disabled
+                        >
+                            {{search}}
                         </button>
                     </div>
                 </form>
@@ -243,7 +231,7 @@
             class="position-fixed bottom-0 end-0 btn btn-dark mx-3 my-3 d-none"
             id="goToTop"
             style="z-index: 1001"
-            title="Subir al inicio de la página"
+            title="{{goBackToTop}}"
         >
             <i class="bi bi-arrow-up"></i>
         </a>
@@ -258,7 +246,7 @@
                 <div
                     class="ms-3 btn-group edit-mode-hide"
                     role="group"
-                    aria-label="Acciones"
+                    aria-label="{{actions}}"
                     id="actions"
                     style="margin-top: -15px"
                 >
@@ -278,7 +266,7 @@
                 <div
                     class="ms-3 btn-group d-none edit-mode-show"
                     role="group"
-                    aria-label="Acciones"
+                    aria-label="{{actions}}"
                     id="actions"
                     style="margin-top: -15px"
                 >
@@ -303,8 +291,8 @@
                             style="font-size: 1.75rem"
                             data-bs-toggle="tooltip"
                             data-bs-placement="bottom"
-                            data-bs-original-title="Recomendaciones"
-                            title="Recomendaciones"
+                            data-bs-original-title="{{recommendations}}"
+                            title="{{recommendations}}"
                         ></i>
                     </a>
                     <a href="/plans/" class="active">
@@ -313,8 +301,8 @@
                             style="font-size: 1.75rem"
                             data-bs-toggle="tooltip"
                             data-bs-placement="bottom"
-                            data-bs-original-title="Planes"
-                            title="Planes"
+                            data-bs-original-title="{{plans}}"
+                            title="{{plans}}"
                         ></i>
                     </a>
                     <a href="/ratings/">
@@ -323,8 +311,8 @@
                             style="font-size: 1.75rem"
                             data-bs-toggle="tooltip"
                             data-bs-placement="bottom"
-                            data-bs-original-title="Puntuaciones"
-                            title="Puntuaciones"
+                            data-bs-original-title="{{ratings}}"
+                            title="{{ratings}}"
                         ></i>
                     </a>
                     <a href="/profile/">
@@ -333,8 +321,8 @@
                             style="font-size: 1.75rem"
                             data-bs-toggle="tooltip"
                             data-bs-placement="bottom"
-                            data-bs-original-title="Perfil"
-                            title="Perfil"
+                            data-bs-original-title="{{profile}}"
+                            title="{{profile}}"
                         ></i>
                     </a>
                     <a href="/help/">
@@ -343,8 +331,8 @@
                             style="font-size: 1.75rem"
                             data-bs-toggle="tooltip"
                             data-bs-placement="bottom"
-                            data-bs-original-title="Ayuda"
-                            title="Ayuda"
+                            data-bs-original-title="{{help}}"
+                            title="{{help}}"
                         ></i>
                     </a>
                 </div>
@@ -390,14 +378,14 @@
             ></textarea>
             <h6 id="status"></h6>
             <!-- TODO: If platform has multiple cities, add location here -->
-            <div class="btn-group mt-3 edit-mode-hide" role="group" aria-label="Acciones" id="actions">
+            <div class="btn-group mt-3 edit-mode-hide" role="group" aria-label="{{actions}}" id="actions">
                 <a href="#mainPlan" class="btn btn-primary">
                     <i class="mx-md-1 bi bi-arrow-down"></i>
-                    Ir al plan
+                    {{goToPlan}}
                 </a>
                 <button type="button" class="btn btn-secondary" id="editButton">
                     <i class="mx-md-1 bi bi-pencil-fill"></i>
-                    Editar
+                    {{edit}}
                 </button>
                 <button
                     type="button"
@@ -407,22 +395,22 @@
                     data-bs-target="#deleteConfirm"
                 >
                     <i class="mx-md-1 bi bi-trash-fill"></i>
-                    Eliminar
+                    {{delete}}
                 </button>
             </div>
-            <div class="btn-group mt-3 edit-mode-show d-none" role="group" aria-label="Acciones" id="actions">
+            <div class="btn-group mt-3 edit-mode-show d-none" role="group" aria-label="{{actions}}" id="actions">
                 <button
                     type="button"
                     class="btn btn-success"
                     id="saveButton"
-                    original-data="<i class='mx-md-1 bi bi-save'></i>Guardar"
+                    original-data="<i class='mx-md-1 bi bi-save'></i>{{save}}"
                 >
                     <i class="mx-md-1 bi bi-save"></i>
-                    Guardar
+                    {{save}}
                 </button>
                 <button type="button" class="btn btn-secondary" id="cancelButton">
                     <i class="mx-md-1 bi bi-x-circle"></i>
-                    Cancelar
+                    {{cancel}}
                 </button>
             </div>
         </div>
@@ -432,15 +420,15 @@
                 <div class="btn-group mt-1" role="group" aria-label="Cambiar día">
                     <button id="prev" type="button" class="btn btn-outline-secondary">
                         <i class="mx-md-1 bi bi-arrow-left"></i>
-                        <span class="d-none d-lg-inline"> Anterior día </span>
+                        <span class="d-none d-lg-inline"> {{prevDay}} </span>
                     </button>
                     <button id="next" type="button" class="btn btn-outline-secondary">
-                        <span class="d-none d-lg-inline"> Siguiente día </span>
+                        <span class="d-none d-lg-inline"> {{nextDay}} </span>
                         <i class="mx-md-1 bi bi-arrow-right"></i>
                     </button>
                 </div>
                 <div class="mt-3">
-                    <div class="text-muted">Día</div>
+                    <div class="text-muted">{{dayUpper}}</div>
                     <div class="h5" id="displayDay"></div>
                 </div>
 
@@ -451,13 +439,13 @@
         <!-- Footer -->
         <footer class="mt-auto pt-5 text-center mb-md-5">
             <p>
-                Creado por
+                {{createdBy}}
                 <a href="https://galisteo.me">Álvaro Galisteo</a><br />
-                <a href="/attributions/">Atribuciones</a> - <a href="/help/">Ayuda</a> -
+                <a href="/attributions/">{{attributions}}</a> - <a href="/help/">{{help}}</a> -
 
-                <a href="https://status.travelhermes.com">Estado</a><br />
-                <a href="/terms/">Terminos y condiciones</a> -
-                <a href="/privacy/">Política de privacidad</a>
+                <a href="https://status.travelhermes.com">{{status}}</a><br />
+                <a href="/terms/">{{terms}}</a> -
+                <a href="/privacy/">{{privacyPolicy}}</a>
             </p>
         </footer>
 
@@ -471,10 +459,7 @@
                 <div class="card my-3 text-start item-card">
                     <div class="row g-0">
                         <div class="col-md-4">
-                            <img
-                                class="w-100 h-100 card-img lazy"
-                                src="/assets/placeholder.gif"
-                            >
+                            <img class="w-100 h-100 card-img lazy" src="/assets/placeholder.gif" />
                         </div>
                         <div class="col-md-8">
                             <div class="card-body">
@@ -489,15 +474,15 @@
                                         min="15"
                                         data-bs-toggle="tooltip"
                                         data-bs-placement="bottom"
-                                        data-bs-original-title="La duración de la visita debe ser igual o superior a 15 min."
-                                        title="La duración de la visita debe ser igual o superior a 15 min."
+                                        data-bs-original-title="{{visitDurationRequirement}}"
+                                        title="{{visitDurationRequirement}}"
                                         value="15"
                                         step="1"
                                     />
-                                    minutos
+                                    {{minutes}}
                                 </div>
                                 <p class="card-text description my-2"></p>
-                                <div class="btn-group edit-mode-hide me-2" role="group" aria-label="Acciones">
+                                <div class="btn-group edit-mode-hide me-2" role="group" aria-label="{{actions}}">
                                     <a href="#" target="_blank" class="btn btn-outline-success phone">
                                         <i class="bi bi-telephone-fill"></i>
                                     </a>
@@ -519,16 +504,16 @@
                                 </div>
                                 <a href="#" target="_blank" class="btn btn-outline-success maps mt-md-0 mt-2">
                                     <i class="mx-md-1 bi bi-map"></i>
-                                    Ver en Google Maps
+                                    {{viewOnGoogleMaps}}
                                 </a>
-                                <div class="btn-group edit-mode-show d-none" role="group" aria-label="Acciones">
+                                <div class="btn-group edit-mode-show d-none" role="group" aria-label="{{actions}}">
                                     <button class="btn btn-outline-danger remove">
                                         <i class="mx-md-1 bi bi-trash-fill"></i>
-                                        <span class="d-none d-lg-inline"> Eliminar </span>
+                                        <span class="d-none d-lg-inline"> {{delete}} </span>
                                     </button>
                                 </div>
                                 <textarea
-                                    placeholder="Notas"
+                                    placeholder="{{notes}}"
                                     class="edit-mode-disable notes w-100 d-block form-control mt-2"
                                     disabled
                                     style="height: 80px"
@@ -544,16 +529,16 @@
                         data-bs-toggle="modal"
                         data-bs-target="#searchModal"
                     >
-                        <i class="bi bi-geo-alt-fill me-1"></i>Añadir lugar
+                        <i class="bi bi-geo-alt-fill me-1"></i>{{addPlace}}
                     </button>
                     <button class="btn btn-primary my-1 insert-custom">
-                        <i class="bi bi-plus-circle me-1"></i>Añadir personalizado
+                        <i class="bi bi-plus-circle me-1"></i>{{addCustom}}
                     </button>
                     <button class="btn btn-primary my-1 insert-rest">
-                        <i class="bi bi-tree-fill me-1"></i>Añadir descanso
+                        <i class="bi bi-tree-fill me-1"></i>{{addRest}}
                     </button>
                     <button class="btn btn-primary my-1 insert-wait">
-                        <i class="bi bi-hourglass-split me-1"></i>Añadir espera
+                        <i class="bi bi-hourglass-split me-1"></i>{{addWait}}
                     </button>
                 </div>
             </div>
@@ -567,12 +552,12 @@
                         </div>
                         <div class="col-md-8">
                             <div class="card-body">
-                                <h5 class="card-title my-0">Inicio</h5>
-                                <p class="card-text my-2">Este es tu punto de inicio.</p>
-                                <div class="btn-group" role="group" aria-label="Acciones">
+                                <h5 class="card-title my-0">{{itemStart}}</h5>
+                                <p class="card-text my-2">{{itemStartDescription}}</p>
+                                <div class="btn-group" role="group" aria-label="{{actions}}">
                                     <a href="#" target="_blank" class="btn btn-outline-success maps">
                                         <i class="mx-md-1 bi bi-map"></i>
-                                        Ver en Google Maps
+                                        {{viewOnGoogleMaps}}
                                     </a>
                                 </div>
                             </div>
@@ -586,16 +571,16 @@
                         data-bs-toggle="modal"
                         data-bs-target="#searchModal"
                     >
-                        <i class="bi bi-geo-alt-fill me-1"></i>Añadir lugar
+                        <i class="bi bi-geo-alt-fill me-1"></i>{{addPlace}}
                     </button>
                     <button class="btn btn-primary my-1 insert-custom">
-                        <i class="bi bi-plus-circle me-1"></i>Añadir personalizado
+                        <i class="bi bi-plus-circle me-1"></i>{{addCustom}}
                     </button>
                     <button class="btn btn-primary my-1 insert-rest">
-                        <i class="bi bi-tree-fill me-1"></i>Añadir descanso
+                        <i class="bi bi-tree-fill me-1"></i>{{addRest}}
                     </button>
                     <button class="btn btn-primary my-1 insert-wait">
-                        <i class="bi bi-hourglass-split me-1"></i>Añadir espera
+                        <i class="bi bi-hourglass-split me-1"></i>{{addWait}}
                     </button>
                 </div>
             </div>
@@ -610,7 +595,7 @@
                         </div>
                         <div class="col-md-8">
                             <div class="card-body">
-                                <h5 class="card-title my-0 title">Esperar</h5>
+                                <h5 class="card-title my-0 title">{{itemWait}}</h5>
                                 <div class="d-inline fs-6">
                                     <i class="mx-md-1 bi bi-clock-history text-primary"></i>
 
@@ -622,29 +607,26 @@
                                         min="15"
                                         data-bs-toggle="tooltip"
                                         data-bs-placement="bottom"
-                                        data-bs-original-title="La duración de la visita debe ser igual o superior a 15 min."
-                                        title="La duración de la visita debe ser igual o superior a 15 min."
+                                        data-bs-original-title="{{visitDurationRequirement}}"
+                                        title="{{visitDurationRequirement}}"
                                         value="15"
                                         step="1"
                                     />
-                                    minutos
+                                    {{minutes}}
                                 </div>
-                                <p class="card-text description mt-2 mb-0">
-                                    El siguiente lugar a visitar aún no ha abierto, por lo que tendrás que esperar hasta
-                                    que abra.
-                                </p>
+                                <p class="card-text description mt-2 mb-0">{{itemWaitDescription}}</p>
                                 <div
                                     class="btn-group edit-mode-show d-none my-2 mb-0"
                                     role="group"
-                                    aria-label="Acciones"
+                                    aria-label="{{actions}}"
                                 >
                                     <button class="btn btn-outline-danger remove">
                                         <i class="mx-md-1 bi bi-trash-fill"></i>
-                                        <span class="d-none d-lg-inline"> Eliminar </span>
+                                        <span class="d-none d-lg-inline"> {{delete}} </span>
                                     </button>
                                 </div>
                                 <textarea
-                                    placeholder="Notas"
+                                    placeholder="{{notes}}"
                                     class="edit-mode-disable notes w-100 d-block form-control"
                                     disabled
                                     style="height: 80px"
@@ -660,16 +642,16 @@
                         data-bs-toggle="modal"
                         data-bs-target="#searchModal"
                     >
-                        <i class="bi bi-geo-alt-fill me-1"></i>Añadir lugar
+                        <i class="bi bi-geo-alt-fill me-1"></i>{{addPlace}}
                     </button>
                     <button class="btn btn-primary my-1 insert-custom">
-                        <i class="bi bi-plus-circle me-1"></i>Añadir personalizado
+                        <i class="bi bi-plus-circle me-1"></i>{{addCustom}}
                     </button>
                     <button class="btn btn-primary my-1 insert-rest">
-                        <i class="bi bi-tree-fill me-1"></i>Añadir descanso
+                        <i class="bi bi-tree-fill me-1"></i>{{addRest}}
                     </button>
                     <button class="btn btn-primary my-1 insert-wait">
-                        <i class="bi bi-hourglass-split me-1"></i>Añadir espera
+                        <i class="bi bi-hourglass-split me-1"></i>{{addWait}}
                     </button>
                 </div>
             </div>
@@ -684,7 +666,7 @@
                         </div>
                         <div class="col-md-8">
                             <div class="card-body">
-                                <h5 class="card-title my-0 title">Descanso</h5>
+                                <h5 class="card-title my-0 title">{{itemRest}}</h5>
                                 <div class="d-inline fs-6">
                                     <i class="mx-md-1 bi bi-clock-history text-primary"></i>
 
@@ -696,28 +678,26 @@
                                         min="15"
                                         data-bs-toggle="tooltip"
                                         data-bs-placement="bottom"
-                                        data-bs-original-title="La duración de la visita debe ser igual o superior a 15 min."
-                                        title="La duración de la visita debe ser igual o superior a 15 min."
+                                        data-bs-original-title="{{visitDurationRequirement}}"
+                                        title="{{visitDurationRequirement}}"
                                         value="15"
                                         step="1"
                                     />
-                                    minutos
+                                    {{minutes}}
                                 </div>
-                                <p class="card-text description mt-2 mb-0">
-                                    Este es el período de descanso que has definido al crear el plan
-                                </p>
+                                <p class="card-text description mt-2 mb-0">{{itemRestDescription}}</p>
                                 <div
                                     class="btn-group edit-mode-show d-none mt-2 mb-0"
                                     role="group"
-                                    aria-label="Acciones"
+                                    aria-label="{{actions}}"
                                 >
                                     <button class="btn btn-outline-danger remove">
                                         <i class="mx-md-1 bi bi-trash-fill"></i>
-                                        <span class="d-none d-lg-inline"> Eliminar </span>
+                                        <span class="d-none d-lg-inline"> {{delete}} </span>
                                     </button>
                                 </div>
                                 <textarea
-                                    placeholder="Notas"
+                                    placeholder="{{notes}}"
                                     class="edit-mode-disable notes w-100 d-block form-control mt-2 mb-1 me-2"
                                     disabled
                                     style="height: 80px"
@@ -733,16 +713,16 @@
                         data-bs-toggle="modal"
                         data-bs-target="#searchModal"
                     >
-                        <i class="bi bi-geo-alt-fill me-1"></i>Añadir lugar
+                        <i class="bi bi-geo-alt-fill me-1"></i>{{addPlace}}
                     </button>
                     <button class="btn btn-primary my-1 insert-custom">
-                        <i class="bi bi-plus-circle me-1"></i>Añadir personalizado
+                        <i class="bi bi-plus-circle me-1"></i>{{addCustom}}
                     </button>
                     <button class="btn btn-primary my-1 insert-rest">
-                        <i class="bi bi-tree-fill me-1"></i>Añadir descanso
+                        <i class="bi bi-tree-fill me-1"></i>{{addRest}}
                     </button>
                     <button class="btn btn-primary my-1 insert-wait">
-                        <i class="bi bi-hourglass-split me-1"></i>Añadir espera
+                        <i class="bi bi-hourglass-split me-1"></i>{{addWait}}
                     </button>
                 </div>
             </div>
@@ -757,11 +737,11 @@
                                 class="w-100 h-100 card-img lazy"
                                 src="/assets/placeholder.gif"
                                 data-src="/assets/default_image.png"
-                            >
+                            />
                         </div>
                         <div class="col-md-8">
                             <div class="card-body">
-                                <h5 class="card-title my-0 title">Personalizado</h5>
+                                <h5 class="card-title my-0 title">{{itemCustom}}</h5>
                                 <div class="d-inline fs-6">
                                     <i class="mx-md-1 bi bi-clock-history text-primary"></i>
 
@@ -773,25 +753,22 @@
                                         min="15"
                                         data-bs-toggle="tooltip"
                                         data-bs-placement="bottom"
-                                        data-bs-original-title="La duración de la visita debe ser igual o superior a 15 min."
-                                        title="La duración de la visita debe ser igual o superior a 15 min."
+                                        data-bs-original-title="{{visitDurationRequirement}}"
+                                        title="{{visitDurationRequirement}}"
                                         value="15"
                                         step="1"
                                     />
-                                    minutos
+                                    {{minutes}}
                                 </div>
-                                <p class="card-text description mt-2 mb-0">
-                                    Este es un lugar que has creado de forma manual, y que no está en la base de datos
-                                    de Hermes.
-                                </p>
-                                <div class="btn-group edit-mode-show d-none my-2" role="group" aria-label="Acciones">
+                                <p class="card-text description mt-2 mb-0">{{itemCustomDescription}}</p>
+                                <div class="btn-group edit-mode-show d-none my-2" role="group" aria-label="{{actions}}">
                                     <button class="btn btn-outline-danger remove">
                                         <i class="mx-md-1 bi bi-trash-fill"></i>
-                                        <span class="d-none d-lg-inline"> Eliminar </span>
+                                        <span class="d-none d-lg-inline"> {{delete}} </span>
                                     </button>
                                 </div>
                                 <textarea
-                                    placeholder="Notas"
+                                    placeholder="{{notes}}"
                                     class="edit-mode-disable notes w-100 d-block form-control"
                                     disabled
                                     style="height: 80px"
@@ -807,45 +784,35 @@
                         data-bs-toggle="modal"
                         data-bs-target="#searchModal"
                     >
-                        <i class="bi bi-geo-alt-fill me-1"></i>Añadir lugar
+                        <i class="bi bi-geo-alt-fill me-1"></i>{{addPlace}}
                     </button>
                     <button class="btn btn-primary my-1 insert-custom">
-                        <i class="bi bi-plus-circle me-1"></i>Añadir personalizado
+                        <i class="bi bi-plus-circle me-1"></i>{{addCustom}}
                     </button>
                     <button class="btn btn-primary my-1 insert-rest">
-                        <i class="bi bi-tree-fill me-1"></i>Añadir descanso
+                        <i class="bi bi-tree-fill me-1"></i>{{addRest}}
                     </button>
                     <button class="btn btn-primary my-1 insert-wait">
-                        <i class="bi bi-hourglass-split me-1"></i>Añadir espera
+                        <i class="bi bi-hourglass-split me-1"></i>{{addWait}}
                     </button>
                 </div>
             </div>
         </template>
 
         <template id="templatePlanning">
-            <div
-                class="d-inline-block"
-                tabindex="0"
-                data-bs-toggle="tooltip"
-                title="Hermes está terminando de planificando tu ruta. Esto puede tardar hasta 5 minutos."
-            >
+            <div class="d-inline-block" tabindex="0" data-bs-toggle="tooltip" title="{{statusPlanningDescription}}">
                 <div class="spinner-border spinner-border-sm me-1" role="status"></div>
-                Planificando
+                {{statusPlanning}}
             </div>
         </template>
         <template id="templateActive">
-            <div
-                class="d-inline-block"
-                tabindex="0"
-                data-bs-toggle="tooltip"
-                title="¡Tu ruta está activa! Esto significa que estas realizandola o está pendiente de realizar."
-            >
-                <i class="bi bi-compass me-1"></i>Activo
+            <div class="d-inline-block" tabindex="0" data-bs-toggle="tooltip" title="{{statusActiveDescription}}">
+                <i class="bi bi-compass me-1"></i>{{statusActive}}
             </div>
         </template>
         <template id="templateDone">
-            <div class="d-inline-block" tabindex="0" data-bs-toggle="tooltip" title="Esta ruta ya ha sido completada.">
-                <i class="bi bi-check2-circle me-1"></i>Completado
+            <div class="d-inline-block" tabindex="0" data-bs-toggle="tooltip" title="{{statusDoneDescription}}">
+                <i class="bi bi-check2-circle me-1"></i>{{statusDone}}
             </div>
         </template>
         <template id="templateTimedout">
@@ -853,9 +820,9 @@
                 class="d-inline-block text-danger"
                 tabindex="0"
                 data-bs-toggle="tooltip"
-                title="Hermes no ha podido encontrar una ruta. Es posible que hayas añadido demasiados sitios o que hayas establecido poco tiempo. Prueba a eliminar la ruta y crearla de nuevo reduciendo la cantidad de sitios o aumentando la duración del día/plan."
+                title="{{statusTimedOutDescription}}"
             >
-                <i class="bi bi-exclamation-circle me-1"></i>Ruta no encontrada
+                <i class="bi bi-exclamation-circle me-1"></i>{{statusTimedOut}}
             </div>
         </template>
         <template id="templateInternalError">
@@ -863,9 +830,9 @@
                 class="d-inline-block text-danger"
                 tabindex="0"
                 data-bs-toggle="tooltip"
-                title="Se ha producido un error interno mientras se planficaba tu ruta. Por favor, elimina la ruta y créala de nuevo más tarde. Si el error persiste, contacta con nosotros."
+                title="{{statusInternalErrorDescription}}"
             >
-                <i class="bi bi-x-circle me-1"></i>Error interno
+                <i class="bi bi-x-circle me-1"></i>{{statusInternalError}}
             </div>
         </template>
 
@@ -897,17 +864,14 @@
                 </div>
                 <div class="row g-0">
                     <div class="col-md-4">
-                        <img
-                            class="w-100 h-100 card-img lazy"
-                            src="/assets/placeholder.gif"
-                        >
+                        <img class="w-100 h-100 card-img lazy" src="/assets/placeholder.gif" />
                     </div>
                     <div class="col-md-8">
                         <div class="card-body">
-                            <div class="btn-group" role="group" aria-label="Acciones">
+                            <div class="btn-group" role="group" aria-label="{{actions}}">
                                 <button type="button" class="btn btn-primary insert-button" data-bs-dismiss="modal">
                                     <i class="bi bi-plus-circle me-1"></i>
-                                    Añadir lugar
+                                    {{addPlace}}
                                 </button>
                             </div>
                         </div>
@@ -931,7 +895,7 @@
                     ></span>
                     <span class="url d-block"
                         ><i class="mx-md-1 bi bi-link-45deg text-secondary"></i>
-                        <a target="_blank" href="#">Página web</a></span
+                        <a target="_blank" href="#">{{webpage}}</a></span
                     >
                 </p>
                 <div class="fs-md-6 my-3 text-center contact-sn">
@@ -956,10 +920,16 @@
         <template id="templatePopupStart">
             <div class="leaflet-custom-content">
                 <img src="/assets/start.png" class="w-100" />
-                <h5 class="mb-2 mt-2 title">Inicio</h5>
-                <p class="fs-6 my-0 mb-3">Este es tu punto de inicio y fin.</p>
+                <h5 class="mb-2 mt-2 title">{{itemStart}}</h5>
+                <p class="fs-6 my-0 mb-3">{{itemStartDescription}}</p>
             </div>
         </template>
+
+        <input id="dayText" class="d-none" value="{{day}}" />
+        <input id="minuteText" class="d-none" value="{{minute}}" />
+        <input id="meterText" class="d-none" value="{{meter}}" />
+        <input id="kilometerText" class="d-none" value="{{kilometer}}" />
+        <input id="currentLang" class="d-none" value="{{currentLang}}" />
 
         <!-- Bootstrap -->
         <script src="/js/bootstrap.bundle.min.js"></script>

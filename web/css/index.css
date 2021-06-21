@@ -98,32 +98,32 @@ header {
 }
 
 .background > figure:nth-child(1) {
-    background-image: url("/assets/index/bg1.jpg");
+    background-image: url('/assets/index/bg1.jpg');
 }
 
 .background > figure:nth-child(2) {
     animation-delay: 12s;
-    background-image: url("/assets/index/bg2.jpg");
+    background-image: url('/assets/index/bg2.jpg');
 }
 
 .background > figure:nth-child(3) {
     animation-delay: 24s;
-    background-image: url("/assets/index/bg3.jpg");
+    background-image: url('/assets/index/bg3.jpg');
 }
 
 .background > figure:nth-child(4) {
     animation-delay: 36s;
-    background-image: url("/assets/index/bg4.jpg");
+    background-image: url('/assets/index/bg4.jpg');
 }
 
 .background > figure:nth-child(5) {
     animation-delay: 48s;
-    background-image: url("/assets/index/bg5.jpg");
+    background-image: url('/assets/index/bg5.jpg');
 }
 
 .background > figure:nth-child(6) {
     animation-delay: 60s;
-    background-image: url("/assets/index/bg6.jpg");
+    background-image: url('/assets/index/bg6.jpg');
 }
 
 .card {

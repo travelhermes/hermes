@@ -1,15 +1,12 @@
 <!DOCTYPE html>
-<html lang="es" class="h-100">
+<html lang="{{currentLang}}" class="h-100">
     <head>
         <meta charset="utf-8" />
         <link rel="shortcut icon" type="image/png" href="/assets/favicon.png" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta
-            name="description"
-            content="Hermes es un sistema recomendador y planificador turístico, para facilitarte la tarea más tediosa de todo viaje: planificarlo"
-        />
+        <meta name="description" content="{{landingPageDescription}}: {{landingPagePlanning}}." />
         <meta name="author" content="Álvaro Galisteo" />
-        <title>Crear una cuenta - Hermes</title>
+        <title>{{signup}} - Hermes</title>
 
         <!-- CSS -->
         <link href="/css/bootstrap.min.css" rel="stylesheet" />
@@ -17,48 +14,44 @@
         <link href="/css/common.css" rel="stylesheet" />
         <link href="/css/signin.css" rel="stylesheet" />
 
-<link rel="prefetch" href="/assets/placeholder.gif" />
-</head>
+        <link rel="prefetch" href="/assets/placeholder.gif" />
+    </head>
     <body class="d-flex h-100 text-center text-white bg-dark">
         <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
             <main class="mb-auto mt-auto">
                 <img class="mt-4" src="/assets/logo_light_256.png" alt="" width="128" height="128" />
                 <div class="mt-2">
                     <a href="/help/" target="_blank" class="text-white">
-                        <i class="bi bi-question-circle mx-1"></i>¿Necesitas ayuda?
+                        <i class="bi bi-question-circle mx-1"></i>{{needHelp}}
                     </a>
                 </div>
 
                 <!-- Alerts -->
-                <div class="alert alert-danger d-none mb-1 mt-4" role="alert" id="invalidEmail">
-                    Este correo electrónico ya está en uso
-                </div>
-                <div class="alert alert-danger d-none mb-1 mt-4" role="alert" id="cooldown">
-                    Se han producido demasiadas solicitudes seguidas. Inténtelo de nuevo más tarde.
-                </div>
+                <div class="alert alert-danger d-none mb-1 mt-4" role="alert" id="invalidEmail">{{emailInUse}}</div>
+                <div class="alert alert-danger d-none mb-1 mt-4" role="alert" id="cooldown">{{signupCooldown}}</div>
 
                 <!-- Sign-up first step -->
                 <form class="form-signup pt-1" id="step1">
-                    <div class="mb-2">¿Ya tienes cuenta? <a href="/signin/" class="text-white">Acceder</a></div>
+                    <div class="mb-2">{{signupAccountText}} <a href="/signin/" class="text-white">{{signin}}</a></div>
 
                     <!-- Name and surname -->
                     <div class="join">
-                        <label for="inputName" class="visually-hidden">Nombre</label>
+                        <label for="inputName" class="visually-hidden">{{name}}</label>
                         <input
                             type="text"
                             id="inputName"
                             class="form-control"
-                            placeholder="Nombre"
+                            placeholder="{{name}}"
                             required
                             autofocus
                             maxlength="127"
                         />
-                        <label for="inputSurname" class="visually-hidden">Apellidos</label>
+                        <label for="inputSurname" class="visually-hidden">{{surname}}</label>
                         <input
                             type="text"
                             id="inputSurname"
                             class="form-control"
-                            placeholder="Apellidos"
+                            placeholder="{{surname}}"
                             required
                             maxlength="127"
                         />
@@ -66,43 +59,43 @@
 
                     <!-- Email and password -->
                     <div class="join">
-                        <label for="inputEmail" class="visually-hidden">Correo electrónico</label>
+                        <label for="inputEmail" class="visually-hidden">{{email}}</label>
                         <input
                             type="email"
                             id="inputEmail"
                             class="form-control"
-                            placeholder="Correo electrónico"
+                            placeholder="{{email}}"
                             required
                             maxlength="127"
                         />
-                        <label for="inputPassword" class="visually-hidden">Contraseña</label>
+                        <label for="inputPassword" class="visually-hidden">{{password}}</label>
                         <input
                             type="password"
                             id="inputPassword"
                             class="form-control"
-                            placeholder="Contraseña"
+                            placeholder="{{password}}"
                             required
                             maxlength="127"
                         />
-                        <p class="text-muted mt-2">
-                            Te recomendamos una contraseña de entre 8 y 16 carácteres y que sea distinta a la que usas
-                            en otros servicios.
-                        </p>
+                        <p class="text-muted mt-2">{{passwordRecommendation}}</p>
                     </div>
                     <div class="h-captcha" id="hCaptcha" data-sitekey="f2eb39d5-3457-479a-94d7-542c944d070d"></div>
-                    <p class="text-danger mb-2 mt-0 d-none" id="invalidCaptcha"><i class="bi bi-exclamation-circle"></i> Por favor, verifica que no eres un robot.</p>
+                    <p class="text-danger mb-2 mt-0 d-none" id="invalidCaptcha">
+                        <i class="bi bi-exclamation-circle"></i> {{capthaRequired}}
+                    </p>
                     <button
                         class="w-100 btn btn-lg btn-primary"
                         type="submit"
                         id="inputSubmitStep1"
-                        original-data="Siguiente"
+                        original-data="{{next}}"
                     >
-                        Siguiente
+                        {{next}}
                     </button>
                     <div class="checkbox mt-3 mb-3">
                         <label>
-                            <input type="checkbox" value="privacy-policy" required /> He leído y acepto la
-                            <a href="/privacy/" class="text-white">política de privacidad</a> y los <a href="/terms/" class="text-white">términos y condiciones</a>.
+                            <input type="checkbox" value="privacy-policy" required /> {{iHaveRead}}
+                            <a href="/terms/" class="text-white">{{terms}}</a> {{and}}
+                            <a href="/privacy/" class="text-white">{{privacyPolicy}}</a>
                         </label>
                     </div>
                 </form>
@@ -111,276 +104,12 @@
                 <form class="form-signup d-none pt-1" id="step2">
                     <p class="mt-0 mb-0">
                         <a href="#" class="text-white" id="backButton1">
-                            <i class="bi bi-arrow-left me-1"></i>Volver
+                            <i class="bi bi-arrow-left me-1"></i>{{back}}
                         </a>
                     </p>
-                    <label for="inputCountry" class="form-label mt-3 mb-2 fs-5">¿De donde eres?</label>
-
-                    <!-- Country selection -->
-                    <select
-                        required
-                        autofocus
-                        class="form-select form-control"
-                        aria-label="¿De dónde eres?"
-                        id="inputCountry"
-                    >
-                        <option value="" selected disabled>Selecciona un país</option>
-                        <optgroup label="Europa">
-                            <option value="ES">España</option>
-                            <option value="AD">Andorra</option>
-                            <option value="AL">Albania</option>
-                            <option value="AT">Austria</option>
-                            <option value="BA">Bosnia y Herzegovina</option>
-                            <option value="BE">Bélgica</option>
-                            <option value="BY">Bielorrusia</option>
-                            <option value="CH">Suiza</option>
-                            <option value="CY">Chipre</option>
-                            <option value="CZ">República Checa</option>
-                            <option value="DE">Alemania</option>
-                            <option value="FR">Francia</option>
-                            <option value="GB">Reino Unido</option>
-                            <option value="GI">Gibraltar</option>
-                            <option value="GR">Grecia</option>
-                            <option value="HR">Croacia</option>
-                            <option value="HU">Hungría</option>
-                            <option value="IE">Irlanda</option>
-                            <option value="IT">Italia</option>
-                            <option value="LI">Liechtenstein</option>
-                            <option value="LT">Lituania</option>
-                            <option value="LU">Luxemburgo</option>
-                            <option value="LV">Letonia</option>
-                            <option value="MC">Mónaco</option>
-                            <option value="MD">Moldavia, República de</option>
-                            <option value="ME">Montenegro</option>
-                            <option value="MK">Macedonia, Antigua República Yugoslava de</option>
-                            <option value="NL">Países Bajos</option>
-                            <option value="NO">Noruega</option>
-                            <option value="PT">Portugal</option>
-                            <option value="RO">Rumanía</option>
-                            <option value="SE">Suecia</option>
-                            <option value="SI">Eslovenia</option>
-                            <option value="SK">Eslovaquia</option>
-                            <option value="TF">Territorios Franceses del Sur</option>
-                            <option value="TR">Turquía</option>
-                            <option value="UA">Ucrania</option>
-                            <option value="DK">Dinamarca</option>
-                            <option value="EE">Estonia</option>
-                            <option value="FI">Finlandia</option>
-                            <option value="IS">Islandia</option>
-                            <option value="MT">Malta</option>
-                        </optgroup>
-                        <optgroup label="Norteamérica">
-                            <option value="CA">Canadá</option>
-                            <option value="US">Estados Unidos</option>
-                            <option value="MX">México</option>
-                        </optgroup>
-                        <optgroup label="Resto del mundo">
-                            <option value="AE">Emiratos Árabes Unidos</option>
-                            <option value="AF">Afganistán</option>
-                            <option value="AG">Antigua y Barbuda</option>
-                            <option value="AI">Anguila</option>
-                            <option value="AM">Armenia</option>
-                            <option value="AN">Antillas Neerlandesas</option>
-                            <option value="AO">Angola</option>
-                            <option value="AQ">Antártida</option>
-                            <option value="AR">Argentina</option>
-                            <option value="AS">Samoa Americana</option>
-                            <option value="AU">Australia</option>
-                            <option value="AW">Aruba</option>
-                            <option value="AX">islas terrestres</option>
-                            <option value="AZ">Azerbaiyán</option>
-                            <option value="BB">Barbados</option>
-                            <option value="BD">Bangladesh</option>
-                            <option value="BF">Burkina Faso</option>
-                            <option value="BG">Bulgaria</option>
-                            <option value="BH">Bahrein</option>
-                            <option value="BI">Burundi</option>
-                            <option value="BJ">Benín</option>
-                            <option value="BM">Bermudas</option>
-                            <option value="BN">Brunei Darussalam</option>
-                            <option value="BO">Bolivia</option>
-                            <option value="BR">Brasil</option>
-                            <option value="BS">Bahamas</option>
-                            <option value="BT">Bután</option>
-                            <option value="BV">Isla Bouvet</option>
-                            <option value="BW">Botsuana</option>
-                            <option value="BZ">Belice</option>
-                            <option value="CC">Islas Cocos (Keeling)</option>
-                            <option value="CD">Congo, República Democrática del</option>
-                            <option value="CF">República Centroafricana</option>
-                            <option value="CG">Congo</option>
-                            <option value="CI">Costa de Marfil</option>
-                            <option value="CK">Islas Cook</option>
-                            <option value="CL">Chile</option>
-                            <option value="CM">Camerún</option>
-                            <option value="CN">China</option>
-                            <option value="CO">Colombia</option>
-                            <option value="CR">Costa Rica</option>
-                            <option value="CU">Cuba</option>
-                            <option value="CV">Cabo Verde</option>
-                            <option value="CX">Isla de Navidad</option>
-                            <option value="DJ">Yibuti</option>
-                            <option value="DM">Dominica</option>
-                            <option value="DO">República Dominicana</option>
-                            <option value="DZ">Argelia</option>
-                            <option value="EC">Ecuador</option>
-                            <option value="EG">Egipto</option>
-                            <option value="EH">Sahara Occidental</option>
-                            <option value="ER">Eritrea</option>
-                            <option value="ET">Etiopía</option>
-                            <option value="FJ">Fiyi</option>
-                            <option value="FK">Islas Malvinas</option>
-                            <option value="FM">Micronesia, Estados Federados de</option>
-                            <option value="FO">Islas Feroe</option>
-                            <option value="GA">Gabón</option>
-                            <option value="GD">Granada</option>
-                            <option value="GE">Georgia</option>
-                            <option value="GF">Guayana Francesa</option>
-                            <option value="GG">Guernsey</option>
-                            <option value="GH">Ghana</option>
-                            <option value="GL">Groenlandia</option>
-                            <option value="GM">Gambia</option>
-                            <option value="GN">Guinea</option>
-                            <option value="GP">Guadalupe</option>
-                            <option value="GQ">Guinea Ecuatorial</option>
-                            <option value="GS">Georgia del Sur y las Islas Sandwich del Sur</option>
-                            <option value="GT">Guatemala</option>
-                            <option value="GU">Guam</option>
-                            <option value="GW">Guinea-Bissau</option>
-                            <option value="GY">Guyana</option>
-                            <option value="HK">Hong Kong</option>
-                            <option value="HM">Isla Heard e Islas Mcdonald</option>
-                            <option value="HN">Honduras</option>
-                            <option value="HT">Haití</option>
-                            <option value="ID">Indonesia</option>
-                            <option value="IL">Israel</option>
-                            <option value="IM">Isla de Man</option>
-                            <option value="IN">India</option>
-                            <option value="IO">Territorio Británico del Océano Índico</option>
-                            <option value="IQ">Irak</option>
-                            <option value="IR">Irán, República Islámica de</option>
-                            <option value="JE">Jersey</option>
-                            <option value="JM">Jamaica</option>
-                            <option value="JO">Jordania</option>
-                            <option value="JP">Japón</option>
-                            <option value="KE">Kenia</option>
-                            <option value="KG">Kirguistán</option>
-                            <option value="KH">Camboya</option>
-                            <option value="KI">Kiribati</option>
-                            <option value="KM">Comoras</option>
-                            <option value="KN">San Cristóbal y Nieves</option>
-                            <option value="KP">Corea, República Popular Democrática de</option>
-                            <option value="KR">Corea, República de</option>
-                            <option value="KW">Kuwait</option>
-                            <option value="KY">Islas Caimán</option>
-                            <option value="KZ">Kazajstán</option>
-                            <option value="LA">República Democrática Popular de Laos</option>
-                            <option value="LB">Líbano</option>
-                            <option value="LC">Santa Lucía</option>
-                            <option value="LK">Sri Lanka</option>
-                            <option value="LR">Liberia</option>
-                            <option value="LS">Lesoto</option>
-                            <option value="LY">Jamahiriya Árabe Libia</option>
-                            <option value="MA">Marruecos</option>
-                            <option value="MG">Madagascar</option>
-                            <option value="MH">Islas Marshall</option>
-                            <option value="ML">Mali</option>
-                            <option value="MM">Myanmar</option>
-                            <option value="MN">Mongolia</option>
-                            <option value="MO">Macao</option>
-                            <option value="MP">Islas Marianas del Norte</option>
-                            <option value="MQ">Martinica</option>
-                            <option value="MR">Mauritania</option>
-                            <option value="MS">Montserrat</option>
-                            <option value="MU">Mauricio</option>
-                            <option value="MV">Maldivas</option>
-                            <option value="MW">Malawi</option>
-                            <option value="MY">Malasia</option>
-                            <option value="MZ">Mozambique</option>
-                            <option value="NA">Namibia</option>
-                            <option value="NC">Nueva Caledonia</option>
-                            <option value="NE">Níger</option>
-                            <option value="NF">Isla de Norfolk</option>
-                            <option value="NG">Nigeria</option>
-                            <option value="NI">Nicaragua</option>
-                            <option value="NP">Nepal</option>
-                            <option value="NR">Nauru</option>
-                            <option value="NU">Niue</option>
-                            <option value="NZ">Nueva Zelanda</option>
-                            <option value="OM">Omán</option>
-                            <option value="PA">Panamá</option>
-                            <option value="PE">Perú</option>
-                            <option value="PF">Polinesia Francesa</option>
-                            <option value="PG">Papúa Nueva Guinea</option>
-                            <option value="PH">Filipinas</option>
-                            <option value="PK">Pakistán</option>
-                            <option value="PL">Polonia</option>
-                            <option value="PM">San Pedro y Miquelón</option>
-                            <option value="PN">Pitcairn</option>
-                            <option value="PR">Puerto Rico</option>
-                            <option value="PS">Territorio Palestino Ocupado</option>
-                            <option value="PW">Palau</option>
-                            <option value="PY">Paraguay</option>
-                            <option value="QA">Qatar</option>
-                            <option value="RE">Reunión</option>
-                            <option value="RS">Serbia</option>
-                            <option value="RU">Federación de Rusia</option>
-                            <option value="RW">Rwanda</option>
-                            <option value="SA">Arabia Saudí</option>
-                            <option value="SB">Islas Salomón</option>
-                            <option value="SC">Seychelles</option>
-                            <option value="SD">Sudán</option>
-                            <option value="SG">Singapur</option>
-                            <option value="SH">Santa Helena</option>
-                            <option value="SJ">Svalbard y Jan Mayen</option>
-                            <option value="SL">Sierra Leona</option>
-                            <option value="SM">San Marino</option>
-                            <option value="SN">Senegal</option>
-                            <option value="SO">Somalia</option>
-                            <option value="SR">Surinam</option>
-                            <option value="ST">Santo Tomé y Príncipe</option>
-                            <option value="SV">El Salvador</option>
-                            <option value="SY">República Árabe Siria</option>
-                            <option value="SZ">Suazilandia</option>
-                            <option value="TC">Islas Turcas y Caicos</option>
-                            <option value="TD">Chad</option>
-                            <option value="TG">Togo</option>
-                            <option value="TH">Tailandia</option>
-                            <option value="TJ">Tayikistán</option>
-                            <option value="TK">Tokelau</option>
-                            <option value="TL">Timor Oriental</option>
-                            <option value="TM">Turkmenistán</option>
-                            <option value="TN">Túnez</option>
-                            <option value="TO">Tonga</option>
-                            <option value="TT">Trinidad y Tobago</option>
-                            <option value="TV">Tuvalu</option>
-                            <option value="TW">Taiwán, Provincia de China</option>
-                            <option value="TZ">Tanzania, República Unida de</option>
-                            <option value="UG">Uganda</option>
-                            <option value="UM">Islas menores de los Estados Unidos</option>
-                            <option value="UY">Uruguay</option>
-                            <option value="UZ">Uzbekistán</option>
-                            <option value="VA">Santa Sede (Estado de la Ciudad del Vaticano)</option>
-                            <option value="VC">San Vicente y las Granadinas</option>
-                            <option value="VE">Venezuela</option>
-                            <option value="VG">Islas Vírgenes Británicas</option>
-                            <option value="VI">Islas Vírgenes, EE.UU.</option>
-                            <option value="VN">Vietnam</option>
-                            <option value="VU">Vanuatu</option>
-                            <option value="WF">Wallis y Futuna</option>
-                            <option value="WS">Samoa</option>
-                            <option value="YE">Yemen</option>
-                            <option value="YT">Mayotte</option>
-                            <option value="ZA">Sudáfrica</option>
-                            <option value="ZM">Zambia</option>
-                            <option value="ZW">Zimbabue</option>
-                        </optgroup>
-                    </select>
 
                     <!-- Category selector -->
-                    <label for="inputCategories" class="form-label mt-3 mb-2 fs-5">
-                        ¿Qué tipo de sitios sueles visitar?
-                    </label>
+                    <label for="inputCategories" class="form-label mt-3 mb-2 fs-5"> {{preferedCategories}} </label>
                     <div class="container">
                         <div class="row my-3">
                             <div class="col col-6 px-1">
@@ -393,7 +122,7 @@
                                         aria-expanded="false"
                                     >
                                         <i class="bi bi-life-preserver"></i><br />
-                                        Agua y costas
+                                        {{categoryWater}}
                                     </button>
                                     <ul
                                         class="dropdown-menu"
@@ -401,28 +130,16 @@
                                         id="dropdownCategoriesWater"
                                     >
                                         <li class="dropdown-item">
-                                            <input
-                                                type="checkbox"
-                                                class="form-check-input me-1"
-                                                id="cat-45"
-                                            />
-                                            <label> Bahía </label>
+                                            <input type="checkbox" class="form-check-input me-1" id="cat-45" />
+                                            <label> {{bay}} </label>
                                         </li>
                                         <li class="dropdown-item">
-                                            <input
-                                                type="checkbox"
-                                                class="form-check-input me-1"
-                                                id="cat-24"
-                                            />
-                                            <label> Faro </label>
+                                            <input type="checkbox" class="form-check-input me-1" id="cat-24" />
+                                            <label> {{lighthouse}} </label>
                                         </li>
                                         <li class="dropdown-item">
-                                            <input
-                                                type="checkbox"
-                                                class="form-check-input me-1"
-                                                id="cat-16"
-                                            />
-                                            <label> Lago </label>
+                                            <input type="checkbox" class="form-check-input me-1" id="cat-16" />
+                                            <label> {{lake}} </label>
                                         </li>
                                     </ul>
                                 </div>
@@ -436,7 +153,7 @@
                                         data-bs-toggle="dropdown"
                                         aria-expanded="false"
                                     >
-                                        <i class="fas fa-paw"></i><br />Animales
+                                        <i class="fas fa-paw"></i><br />{{categoryAnimals}}
                                     </button>
                                     <ul
                                         class="dropdown-menu"
@@ -444,28 +161,16 @@
                                         id="dropdownCategoriesAnimals"
                                     >
                                         <li class="dropdown-item">
-                                            <input
-                                                type="checkbox"
-                                                class="form-check-input me-1"
-                                                id="cat-39"
-                                            />
-                                            <label> Acuario </label>
+                                            <input type="checkbox" class="form-check-input me-1" id="cat-39" />
+                                            <label> {{aquarium}} </label>
                                         </li>
                                         <li class="dropdown-item">
-                                            <input
-                                                type="checkbox"
-                                                class="form-check-input me-1"
-                                                id="cat-35"
-                                            />
-                                            <label> Exibición zoologica </label>
+                                            <input type="checkbox" class="form-check-input me-1" id="cat-35" />
+                                            <label> {{zoologicalExhibition}} </label>
                                         </li>
                                         <li class="dropdown-item">
-                                            <input
-                                                type="checkbox"
-                                                class="form-check-input me-1"
-                                                id="cat-10"
-                                            />
-                                            <label> Zoológico </label>
+                                            <input type="checkbox" class="form-check-input me-1" id="cat-10" />
+                                            <label> {{zoo}} </label>
                                         </li>
                                     </ul>
                                 </div>
@@ -482,7 +187,7 @@
                                         aria-expanded="false"
                                     >
                                         <i class="fas fa-palette"></i><br />
-                                        Arte público
+                                        {{categoryPublicArt}}
                                     </button>
                                     <ul
                                         class="dropdown-menu"
@@ -490,28 +195,16 @@
                                         id="dropdownCategoriesPublicArt"
                                     >
                                         <li class="dropdown-item">
-                                            <input
-                                                type="checkbox"
-                                                class="form-check-input me-1"
-                                                id="cat-18"
-                                            />
-                                            <label> Arte callejero </label>
+                                            <input type="checkbox" class="form-check-input me-1" id="cat-18" />
+                                            <label> {{streetArt}} </label>
                                         </li>
                                         <li class="dropdown-item">
-                                            <input
-                                                type="checkbox"
-                                                class="form-check-input me-1"
-                                                id="cat-12"
-                                            />
-                                            <label> Arte público </label>
+                                            <input type="checkbox" class="form-check-input me-1" id="cat-12" />
+                                            <label> {{publicArt}} </label>
                                         </li>
                                         <li class="dropdown-item">
-                                            <input
-                                                type="checkbox"
-                                                class="form-check-input me-1"
-                                                id="cat-4"
-                                            />
-                                            <label> Esculturas al aire libre </label>
+                                            <input type="checkbox" class="form-check-input me-1" id="cat-4" />
+                                            <label> {{outdoorSculptures}} </label>
                                         </li>
                                     </ul>
                                 </div>
@@ -526,7 +219,7 @@
                                         aria-expanded="false"
                                     >
                                         <i class="fas fa-theater-masks"></i><br />
-                                        Artes escénicas
+                                        {{categoryArts}}
                                     </button>
                                     <ul
                                         class="dropdown-menu"
@@ -534,44 +227,24 @@
                                         id="dropdownCategoriesArts"
                                     >
                                         <li class="dropdown-item">
-                                            <input
-                                                type="checkbox"
-                                                class="form-check-input me-1"
-                                                id="cat-50"
-                                            />
-                                            <label> Anfiteatros </label>
+                                            <input type="checkbox" class="form-check-input me-1" id="cat-50" />
+                                            <label> {{amphitheatres}} </label>
                                         </li>
                                         <li class="dropdown-item">
-                                            <input
-                                                type="checkbox"
-                                                class="form-check-input me-1"
-                                                id="cat-29"
-                                            />
-                                            <label> Auditorios </label>
+                                            <input type="checkbox" class="form-check-input me-1" id="cat-29" />
+                                            <label> {{auditoriums}} </label>
                                         </li>
                                         <li class="dropdown-item">
-                                            <input
-                                                type="checkbox"
-                                                class="form-check-input me-1"
-                                                id="cat-1"
-                                            />
-                                            <label> Sala de conciertos </label>
+                                            <input type="checkbox" class="form-check-input me-1" id="cat-1" />
+                                            <label> {{concertHalls}} </label>
                                         </li>
                                         <li class="dropdown-item">
-                                            <input
-                                                type="checkbox"
-                                                class="form-check-input me-1"
-                                                id="cat-6"
-                                            />
-                                            <label> Salón de ópera </label>
+                                            <input type="checkbox" class="form-check-input me-1" id="cat-6" />
+                                            <label> {{operaHalls}} </label>
                                         </li>
                                         <li class="dropdown-item">
-                                            <input
-                                                type="checkbox"
-                                                class="form-check-input me-1"
-                                                id="cat-51"
-                                            />
-                                            <label> Teatros </label>
+                                            <input type="checkbox" class="form-check-input me-1" id="cat-51" />
+                                            <label> {{theatres}} </label>
                                         </li>
                                     </ul>
                                 </div>
@@ -588,7 +261,7 @@
                                         aria-expanded="false"
                                     >
                                         <i class="fas fa-futbol"></i><br />
-                                        Deportes
+                                        {{categorySports}}
                                     </button>
                                     <ul
                                         class="dropdown-menu"
@@ -596,12 +269,8 @@
                                         id="dropdownCategoriesSports"
                                     >
                                         <li class="dropdown-item">
-                                            <input
-                                                type="checkbox"
-                                                class="form-check-input me-1"
-                                                id="cat-17"
-                                            />
-                                            <label> Estadios </label>
+                                            <input type="checkbox" class="form-check-input me-1" id="cat-17" />
+                                            <label> {{stadiums}} </label>
                                         </li>
                                     </ul>
                                 </div>
@@ -616,7 +285,7 @@
                                         aria-expanded="false"
                                     >
                                         <i class="fas fa-monument"></i><br />
-                                        Monumentos
+                                        {{categoryMonuments}}
                                     </button>
                                     <ul
                                         class="dropdown-menu"
@@ -624,60 +293,32 @@
                                         id="dropdownCategoriesMonuments"
                                     >
                                         <li class="dropdown-item">
-                                            <input
-                                                type="checkbox"
-                                                class="form-check-input me-1"
-                                                id="cat-28"
-                                            />
-                                            <label> Castillo </label>
+                                            <input type="checkbox" class="form-check-input me-1" id="cat-28" />
+                                            <label> {{castle}} </label>
                                         </li>
                                         <li class="dropdown-item">
-                                            <input
-                                                type="checkbox"
-                                                class="form-check-input me-1"
-                                                id="cat-7"
-                                            />
-                                            <label> Cueva </label>
+                                            <input type="checkbox" class="form-check-input me-1" id="cat-7" />
+                                            <label> {{cave}} </label>
                                         </li>
                                         <li class="dropdown-item">
-                                            <input
-                                                type="checkbox"
-                                                class="form-check-input me-1"
-                                                id="cat-13"
-                                            />
-                                            <label> Lugares conmemorativos </label>
+                                            <input type="checkbox" class="form-check-input me-1" id="cat-13" />
+                                            <label> {{memorialSites}} </label>
                                         </li>
                                         <li class="dropdown-item">
-                                            <input
-                                                type="checkbox"
-                                                class="form-check-input me-1"
-                                                id="cat-44"
-                                            />
-                                            <label> Lugares históricos </label>
+                                            <input type="checkbox" class="form-check-input me-1" id="cat-44" />
+                                            <label> {{historicalSites}} </label>
                                         </li>
                                         <li class="dropdown-item">
-                                            <input
-                                                type="checkbox"
-                                                class="form-check-input me-1"
-                                                id="cat-25"
-                                            />
-                                            <label> Monumentos </label>
+                                            <input type="checkbox" class="form-check-input me-1" id="cat-25" />
+                                            <label> {{monuments}} </label>
                                         </li>
                                         <li class="dropdown-item">
-                                            <input
-                                                type="checkbox"
-                                                class="form-check-input me-1"
-                                                id="cat-38"
-                                            />
-                                            <label> Palacios </label>
+                                            <input type="checkbox" class="form-check-input me-1" id="cat-38" />
+                                            <label> {{palaces}} </label>
                                         </li>
                                         <li class="dropdown-item">
-                                            <input
-                                                type="checkbox"
-                                                class="form-check-input me-1"
-                                                id="cat-48"
-                                            />
-                                            <label> Puente </label>
+                                            <input type="checkbox" class="form-check-input me-1" id="cat-48" />
+                                            <label> {{bridge}} </label>
                                         </li>
                                     </ul>
                                 </div>
@@ -694,7 +335,7 @@
                                         aria-expanded="false"
                                     >
                                         <i class="fas fa-building"></i><br />
-                                        Gobierno
+                                        {{categoryGovernment}}
                                     </button>
                                     <ul
                                         class="dropdown-menu"
@@ -702,28 +343,16 @@
                                         id="dropdownCategoriesGovernment"
                                     >
                                         <li class="dropdown-item">
-                                            <input
-                                                type="checkbox"
-                                                class="form-check-input me-1"
-                                                id="cat-22"
-                                            />
-                                            <label> Ayuntamientos </label>
+                                            <input type="checkbox" class="form-check-input me-1" id="cat-22" />
+                                            <label> {{townHalls}} </label>
                                         </li>
                                         <li class="dropdown-item">
-                                            <input
-                                                type="checkbox"
-                                                class="form-check-input me-1"
-                                                id="cat-27"
-                                            />
-                                            <label> Capitolio </label>
+                                            <input type="checkbox" class="form-check-input me-1" id="cat-27" />
+                                            <label> {{capitol}} </label>
                                         </li>
                                         <li class="dropdown-item">
-                                            <input
-                                                type="checkbox"
-                                                class="form-check-input me-1"
-                                                id="cat-42"
-                                            />
-                                            <label> Juntas municipales </label>
+                                            <input type="checkbox" class="form-check-input me-1" id="cat-42" />
+                                            <label> {{townCouncils}} </label>
                                         </li>
                                     </ul>
                                 </div>
@@ -738,7 +367,7 @@
                                         aria-expanded="false"
                                     >
                                         <i class="bi bi-flower1"></i><br />
-                                        Jardines
+                                        {{categoryGardens}}
                                     </button>
                                     <ul
                                         class="dropdown-menu"
@@ -746,28 +375,16 @@
                                         id="dropdownCategoriesGardens"
                                     >
                                         <li class="dropdown-item">
-                                            <input
-                                                type="checkbox"
-                                                class="form-check-input me-1"
-                                                id="cat-3"
-                                            />
-                                            <label> Jardínes botánicos </label>
+                                            <input type="checkbox" class="form-check-input me-1" id="cat-3" />
+                                            <label> {{botanicalGardens}} </label>
                                         </li>
                                         <li class="dropdown-item">
-                                            <input
-                                                type="checkbox"
-                                                class="form-check-input me-1"
-                                                id="cat-31"
-                                            />
-                                            <label> Jardínes de esculturas </label>
+                                            <input type="checkbox" class="form-check-input me-1" id="cat-31" />
+                                            <label> {{sculptureGardens}} </label>
                                         </li>
                                         <li class="dropdown-item">
-                                            <input
-                                                type="checkbox"
-                                                class="form-check-input me-1"
-                                                id="cat-9"
-                                            />
-                                            <label> Jardínes públicos </label>
+                                            <input type="checkbox" class="form-check-input me-1" id="cat-9" />
+                                            <label> {{publicGardens}} </label>
                                         </li>
                                     </ul>
                                 </div>
@@ -784,7 +401,7 @@
                                         aria-expanded="false"
                                     >
                                         <i class="fas fa-church"></i><br />
-                                        Lugares de culto
+                                        {{categoryCult}}
                                     </button>
                                     <ul
                                         class="dropdown-menu"
@@ -792,68 +409,36 @@
                                         id="dropdownCategoriesCult"
                                     >
                                         <li class="dropdown-item">
-                                            <input
-                                                type="checkbox"
-                                                class="form-check-input me-1"
-                                                id="cat-21"
-                                            />
-                                            <label> Cementerios </label>
+                                            <input type="checkbox" class="form-check-input me-1" id="cat-21" />
+                                            <label> {{cemeteries}} </label>
                                         </li>
                                         <li class="dropdown-item">
-                                            <input
-                                                type="checkbox"
-                                                class="form-check-input me-1"
-                                                id="cat-41"
-                                            />
-                                            <label> Iglesias y catedrales </label>
+                                            <input type="checkbox" class="form-check-input me-1" id="cat-41" />
+                                            <label> {{churchesCathedrals}} </label>
                                         </li>
                                         <li class="dropdown-item">
-                                            <input
-                                                type="checkbox"
-                                                class="form-check-input me-1"
-                                                id="cat-2"
-                                            />
-                                            <label> Mezquitas </label>
+                                            <input type="checkbox" class="form-check-input me-1" id="cat-2" />
+                                            <label> {{mosques}} </label>
                                         </li>
                                         <li class="dropdown-item">
-                                            <input
-                                                type="checkbox"
-                                                class="form-check-input me-1"
-                                                id="cat-30"
-                                            />
-                                            <label> Monasterios </label>
+                                            <input type="checkbox" class="form-check-input me-1" id="cat-30" />
+                                            <label> {{monasteries}} </label>
                                         </li>
                                         <li class="dropdown-item">
-                                            <input
-                                                type="checkbox"
-                                                class="form-check-input me-1"
-                                                id="cat-34"
-                                            />
-                                            <label> Santuarios </label>
+                                            <input type="checkbox" class="form-check-input me-1" id="cat-34" />
+                                            <label> {{shrines}} </label>
                                         </li>
                                         <li class="dropdown-item">
-                                            <input
-                                                type="checkbox"
-                                                class="form-check-input me-1"
-                                                id="cat-26"
-                                            />
-                                            <label> Sinagogas </label>
+                                            <input type="checkbox" class="form-check-input me-1" id="cat-26" />
+                                            <label> {{synagogues}} </label>
                                         </li>
                                         <li class="dropdown-item">
-                                            <input
-                                                type="checkbox"
-                                                class="form-check-input me-1"
-                                                id="cat-32"
-                                            />
-                                            <label> Templos budistas </label>
+                                            <input type="checkbox" class="form-check-input me-1" id="cat-32" />
+                                            <label> {{buddhistTemples}} </label>
                                         </li>
                                         <li class="dropdown-item">
-                                            <input
-                                                type="checkbox"
-                                                class="form-check-input me-1"
-                                                id="cat-47"
-                                            />
-                                            <label> Templos Sikh </label>
+                                            <input type="checkbox" class="form-check-input me-1" id="cat-47" />
+                                            <label> {{sikhTemples}} </label>
                                         </li>
                                     </ul>
                                 </div>
@@ -868,7 +453,7 @@
                                         aria-expanded="false"
                                     >
                                         <i class="fas fa-store"></i><br />
-                                        Zonas públicas
+                                        {{categoryPublic}}
                                     </button>
                                     <ul
                                         class="dropdown-menu"
@@ -876,44 +461,24 @@
                                         id="dropdownCategoriesPublic"
                                     >
                                         <li class="dropdown-item">
-                                            <input
-                                                type="checkbox"
-                                                class="form-check-input me-1"
-                                                id="cat-40"
-                                            />
-                                            <label> Fuentes </label>
+                                            <input type="checkbox" class="form-check-input me-1" id="cat-40" />
+                                            <label> {{fountains}} </label>
                                         </li>
                                         <li class="dropdown-item">
-                                            <input
-                                                type="checkbox"
-                                                class="form-check-input me-1"
-                                                id="cat-11"
-                                            />
-                                            <label> Mercados </label>
+                                            <input type="checkbox" class="form-check-input me-1" id="cat-11" />
+                                            <label> {{markets}} </label>
                                         </li>
                                         <li class="dropdown-item">
-                                            <input
-                                                type="checkbox"
-                                                class="form-check-input me-1"
-                                                id="cat-49"
-                                            />
-                                            <label> Parque </label>
+                                            <input type="checkbox" class="form-check-input me-1" id="cat-49" />
+                                            <label> {{park}} </label>
                                         </li>
                                         <li class="dropdown-item">
-                                            <input
-                                                type="checkbox"
-                                                class="form-check-input me-1"
-                                                id="cat-5"
-                                            />
-                                            <label> Plazas peatonales </label>
+                                            <input type="checkbox" class="form-check-input me-1" id="cat-5" />
+                                            <label> {{pedestrianSquares}} </label>
                                         </li>
                                         <li class="dropdown-item">
-                                            <input
-                                                type="checkbox"
-                                                class="form-check-input me-1"
-                                                id="cat-37"
-                                            />
-                                            <label> Plazas públicas </label>
+                                            <input type="checkbox" class="form-check-input me-1" id="cat-37" />
+                                            <label> {{publicSquares}} </label>
                                         </li>
                                     </ul>
                                 </div>
@@ -930,7 +495,7 @@
                                         aria-expanded="false"
                                     >
                                         <i class="bi bi-binoculars"></i><br />
-                                        Miradores
+                                        {{categoryLookouts}}
                                     </button>
                                     <ul
                                         class="dropdown-menu"
@@ -938,20 +503,12 @@
                                         id="dropdownCategoriesLookouts"
                                     >
                                         <li class="dropdown-item">
-                                            <input
-                                                type="checkbox"
-                                                class="form-check-input me-1"
-                                                id="cat-19"
-                                            />
-                                            <label> Miradores elevados </label>
+                                            <input type="checkbox" class="form-check-input me-1" id="cat-19" />
+                                            <label> {{elevatedViewpoints}} </label>
                                         </li>
                                         <li class="dropdown-item">
-                                            <input
-                                                type="checkbox"
-                                                class="form-check-input me-1"
-                                                id="cat-15"
-                                            />
-                                            <label> Miradores </label>
+                                            <input type="checkbox" class="form-check-input me-1" id="cat-15" />
+                                            <label> {{viewpoints}} </label>
                                         </li>
                                     </ul>
                                 </div>
@@ -966,7 +523,7 @@
                                         aria-expanded="false"
                                     >
                                         <i class="fas fa-landmark"></i><br />
-                                        Museos
+                                        {{categoryMuseums}}
                                     </button>
                                     <ul
                                         class="dropdown-menu"
@@ -974,92 +531,69 @@
                                         id="dropdownCategoriesMuseums"
                                     >
                                         <li class="dropdown-item">
-                                            <input
-                                                type="checkbox"
-                                                class="form-check-input me-1"
-                                                id="cat-23"
-                                            />
-                                            <label> Galerías de arte </label>
+                                            <input type="checkbox" class="form-check-input me-1" id="cat-23" />
+                                            <label> {{artGalleries}} </label>
                                         </li>
                                         <li class="dropdown-item">
-                                            <input
-                                                type="checkbox"
-                                                class="form-check-input me-1"
-                                                id="cat-14"
-                                            />
-                                            <label> Museos de arte </label>
+                                            <input type="checkbox" class="form-check-input me-1" id="cat-14" />
+                                            <label> {{artMuseums}} </label>
                                         </li>
                                         <li class="dropdown-item">
-                                            <input
-                                                type="checkbox"
-                                                class="form-check-input me-1"
-                                                id="cat-36"
-                                            />
-                                            <label> Museos de ciencia </label>
+                                            <input type="checkbox" class="form-check-input me-1" id="cat-36" />
+                                            <label> {{scienceMuseums}} </label>
                                         </li>
                                         <li class="dropdown-item">
-                                            <input
-                                                type="checkbox"
-                                                class="form-check-input me-1"
-                                                id="cat-43"
-                                            />
-                                            <label> Museos de historia </label>
+                                            <input type="checkbox" class="form-check-input me-1" id="cat-43" />
+                                            <label> {{historyMuseums}} </label>
                                         </li>
                                         <li class="dropdown-item">
-                                            <input
-                                                type="checkbox"
-                                                class="form-check-input me-1"
-                                                id="cat-20"
-                                            />
-                                            <label> Planetario </label>
+                                            <input type="checkbox" class="form-check-input me-1" id="cat-20" />
+                                            <label> {{planetarium}} </label>
                                         </li>
                                     </ul>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <p class="text-white mb-0 mt-1" id="categoriesSelect">Selecciona al menos 3 categorías</p>
-                    <p class="text-muted mt-1 mb-3">Las recomendaciones se basan en tus puntuaciones y preferencias.</p>
+                    <p class="text-white mb-0 mt-1" id="categoriesSelect" original-data="{{categoryRequirement}}">
+                        {{categoryRequirement}}
+                    </p>
+                    <p class="text-muted mt-1 mb-3">{{signupAboutCategoryRecommendations}}</p>
 
                     <button
                         class="w-100 btn btn-lg btn-primary umami--click--signup-button"
                         type="submit"
                         id="inputSubmitStep2"
-                        original-data="Crear cuenta"
+                        original-data="{{signup}}"
                     >
-                        Crear cuenta
+                        {{signup}}
                     </button>
                 </form>
 
                 <form class="form-signup d-none pt-1" id="step3">
                     <!-- Cold-start place ratings -->
-                    <label class="mt-2 mb-2 fs-5">¿Conoces algun sitio?</label>
-                    <p class="text-muted">
-                        Las recomendaciones se basan en tus puntuaciones y preferencias. Puntúa <b>solo</b> sitios que
-                        <b>conozcas o hayas visitado</b>.<br /><br />
-                        Puedes <b>saltarte</b> este paso, pero tus recomendaciones puede que sean menos precisas.
-                        Siempre puedes puntuar más adelante.
-                    </p>
-                    <p>Busca algún lugar</p>
-                    <input type="text" id="inputSearch" class="form-control" maxlength="127"/>
+                    <label class="mt-2 mb-2 fs-5">{{knowPlaces}}</label>
+                    <p class="text-muted">{{{onboardingAboutRecommendations}}}</p>
+                    <p>{{searchPlaces}}</p>
+                    <input type="text" id="inputSearch" class="form-control" maxlength="127" />
                     <button
                         id="inputSubmitSearch"
                         type="button"
                         class="w-100 btn my-1 btn-secondary text-white"
-                        original-data="Buscar"
+                        original-data="{{search}}"
                     >
-                        Buscar
+                        {{search}}
                     </button>
                     <div id="sitesSearch"></div>
-                    <p class="mt-3">O encuentra sitios que puntuar de forma aleatoria</p>
+                    <p class="mt-3">{{findRandomly}}</p>
                     <div id="sitesRandom"></div>
                     <button
                         id="inputPlaces"
                         type="button"
                         class="w-100 btn btn-secondary text-white my-1"
-                        original-data="Cargar más sitios"
+                        original-data="{{loadMorePlaces}}"
                     >
-                        Cargar más sitios
+                        {{loadMorePlaces}}
                     </button>
 
                     <!-- Final button -->
@@ -1067,9 +601,9 @@
                         class="w-100 btn btn-lg btn-primary mt-4"
                         type="submit"
                         id="inputSubmitStep3"
-                        original-data="Finalizar"
+                        original-data="{{finish}}"
                     >
-                        Finalizar
+                        {{finish}}
                     </button>
                 </form>
             </main>
@@ -1077,14 +611,14 @@
             <!-- Footer -->
             <footer class="mt-auto pt-5 text-white-50">
                 <p>
-                    Creado por
+                    {{createdBy}}
                     <a href="https://galisteo.me" class="text-white">Álvaro Galisteo</a><br />
-                    <a href="/attributions/" class="text-white">Atribuciones</a> -
-                    <a href="/help/" class="text-white">Ayuda</a> -
+                    <a href="/attributions/" class="text-white">{{attributions}}</a> -
+                    <a href="/help/" class="text-white">{{help}}</a> -
 
-                    <a href="https://status.travelhermes.com" class="text-white">Estado</a><br>
-                    <a href="/terms/" class="text-white">Terminos y condiciones</a> - 
-                    <a href="/privacy/" class="text-white">Política de privacidad</a>
+                    <a href="https://status.travelhermes.com" class="text-white">{{status}}</a><br />
+                    <a href="/terms/" class="text-white">{{terms}}</a> -
+                    <a href="/privacy/" class="text-white">{{privacyPolicy}}</a>
                 </p>
             </footer>
         </div>
@@ -1115,6 +649,8 @@
             </div>
         </template>
 
+        <input id="currentLang" class="d-none" value="{{currentLang}}" />
+
         <!-- hCaptcha -->
         <script src="https://hcaptcha.com/1/api.js" async defer></script>
 
@@ -1126,10 +662,14 @@
         <script src="/js/fa-solid.min.js"></script>
         <script src="/js/fa-brands.min.js"></script>
 
-
         <!-- Hermes -->
         <script src="/js/common.js"></script>
         <script src="/js/signup.js"></script>
-        <script async defer data-website-id="0f73de68-9610-4a9c-a7a8-ab61ab30208a" src="https://data.travelhermes.com/umami.js"></script>
+        <script
+            async
+            defer
+            data-website-id="0f73de68-9610-4a9c-a7a8-ab61ab30208a"
+            src="https://data.travelhermes.com/umami.js"
+        ></script>
     </body>
 </html>

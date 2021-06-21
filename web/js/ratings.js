@@ -116,7 +116,7 @@ function renderPlaces(places, container, remove = true, split = true, alert = tr
         container.innerHTML = '';
     }
 
-    if(alert) {
+    if (alert) {
         if (!places || places.length == 0) {
             container.parentElement.querySelector('.alert').classList.remove('d-none');
         } else {
@@ -130,11 +130,11 @@ function renderPlaces(places, container, remove = true, split = true, alert = tr
         card.querySelector('.card').setAttribute('id', place.id);
 
         if (place.images > 0) {
-            card.querySelector('img').setAttribute("data-src", '/assets/places/' + place.id + '/0.jpg');
-            card.querySelector('img').setAttribute("alt", `Imagen de ${place.name}`);
+            card.querySelector('img').setAttribute('data-src', '/assets/places/' + place.id + '/0.jpg');
+            card.querySelector('img').setAttribute('alt', `Imagen de ${place.name}`);
         } else {
-            card.querySelector('img').setAttribute("data-src", '/assets/default_image.png');
-            card.querySelector('img').setAttribute("alt", `Imagen de ${place.name}`);
+            card.querySelector('img').setAttribute('data-src', '/assets/default_image.png');
+            card.querySelector('img').setAttribute('alt', `Imagen de ${place.name}`);
         }
 
         card.querySelector('.title').innerHTML = place.name;
@@ -191,6 +191,9 @@ function renderPlaces(places, container, remove = true, split = true, alert = tr
             setStars(document.getElementById(place.id).querySelector('.bi-star'), place.rating, false);
         }
     }
+
+    // Lazy load images
+    yall();
 }
 
 /**
@@ -221,9 +224,9 @@ async function search(button) {
  */
 async function getRandomSuggestions(places) {
     try {
-        const rand = (await post(ENDPOINTS.ratingsRandom, {max: 3})).result;
+        const rand = (await post(ENDPOINTS.ratingsRandom, { max: 3 })).result;
         renderPlaces(rand, document.querySelector('#ratingSuggestionsList'), false, false, false);
-    } catch(err) {
+    } catch (err) {
         throwError(err);
     }
 }
@@ -257,7 +260,7 @@ async function main() {
         getRandomSuggestions();
     });
     document.querySelector('#inputSearch').addEventListener('keyup', (e) => {
-        if(e.target.value.length == 0) {
+        if (e.target.value.length == 0) {
             document.querySelector('#ratingSuggestions').classList.remove('d-none');
             document.querySelector('#searchItems').classList.add('d-none');
             document.querySelector('#btnSubmitSearch').disabled = true;
@@ -277,8 +280,6 @@ async function main() {
             throwError(err);
             loader.hide();
         }
-
-        yall();
 
         getRandomSuggestions();
         // 2 min.

@@ -104,12 +104,14 @@ class AuthMiddleware {
      */
     async middleware(request, reply) {
         const status = await Session.checkSession(request);
+        const url = request.urlData().path;
+
         if (!status) {
             // Check if url is in public paths
             for (var i = 0; i < publicPaths.length; i++) {
                 switch (publicPaths[i].type) {
                     case 'contains': {
-                        if (request.url.includes(publicPaths[i].value)) {
+                        if (url.includes(publicPaths[i].value)) {
                             if (publicPaths[i].cache) {
                                 reply.header('Cache-Control', 'max-age=86400');
                             } else {
@@ -120,7 +122,7 @@ class AuthMiddleware {
                         break;
                     }
                     case 'equals': {
-                        if (request.url == publicPaths[i].value) {
+                        if (url == publicPaths[i].value) {
                             if (publicPaths[i].cache) {
                                 reply.header('Cache-Control', 'max-age=86400');
                             } else {
@@ -140,15 +142,15 @@ class AuthMiddleware {
             //reply.status(301).redirect('/signin/');
             return;
         } else {
-            if (request.url.includes('/api')) {
+            if (url.includes('/api')) {
                 reply.header('Cache-Control', 'no-store');
             } else {
                 reply.header('Cache-Control', 'max-age=86400');
             }
 
             if (
-                !request.url.includes('/help') &&
-                (request.url.includes('/signin') || request.url.includes('/signup') || request.url.includes('/recover'))
+                !url.includes('/help') &&
+                (url.includes('/signin') || url.includes('/signup') || request.url.includes('/recover'))
             ) {
                 reply.header('Cache-Control', 'no-store');
                 reply.status(302).redirect('/dashboard/');
@@ -318,7 +320,7 @@ class AuthController {
                                     name: user.name,
                                     date: new Date().toLocaleString(),
                                     address: request.realIp,
-                                });
+                                }, user.lang);
                             }
 
                             ApplicationLogger.logBase(
@@ -384,8 +386,8 @@ class AuthController {
             !request.body.password ||
             !validator.isHexadecimal(request.body.password) ||
             request.body.password.length != 64 ||
-            !request.body.country ||
-            request.body.country.length != 2 ||
+            //!request.body.country ||
+            //request.body.country.length != 2 ||
             !request.body.preferences ||
             request.body.preferences.length < 3 ||
             hasDuplicates(request.body.preferences) ||
@@ -399,7 +401,7 @@ class AuthController {
         request.body.surname = sanitize(request.body.surname);
         request.body.email = sanitize(request.body.email);
         request.body.password = sanitize(request.body.password);
-        request.body.country = sanitize(request.body.country);
+        //request.body.country = sanitize(request.body.country);
 
         // Get user
         var user = await db.User.findOne({
@@ -478,7 +480,8 @@ class AuthController {
                     surname: request.body.surname,
                     email: request.body.email,
                     password: hash,
-                    country: request.body.country,
+                    country: "ES",
+                    lang: request.detectedLng,
                     lastAttempt: new Date(),
                 });
 
@@ -519,7 +522,7 @@ class AuthController {
                 // Send welcome email
                 mailServer.add(request.body.email, MailType.newAccount, {
                     name: request.body.name,
-                });
+                }, request.detectedLng);
 
                 ApplicationLogger.logBase(
                     LogLevel.WARNING,
@@ -626,7 +629,7 @@ class AuthController {
             mailServer.add(user.email, MailType.passwordRequest, {
                 name: user.name,
                 token: key,
-            });
+            }, user.lang);
         }
         reply.status(200).send();
         ApplicationLogger.logBase(
@@ -714,7 +717,7 @@ class AuthController {
                     // Send email
                     mailServer.add(user.email, MailType.passwordChange, {
                         name: user.name,
-                    });
+                    }, user.lang);
                 })
                 .catch(async (error) => {
                     const logId = await ApplicationLogger.logBase(
@@ -794,7 +797,7 @@ class AuthController {
                     mailServer.add(user.email, MailType.passwordChange, {
                         name: user.name,
                         address: request.realIp,
-                    });
+                    }, user.lang);
                 })
                 .catch(async (error) => {
                     const logId = await ApplicationLogger.fatal(request, reply, error);
@@ -853,7 +856,7 @@ class AuthController {
                         // Send email
                         mailServer.add(user.email, MailType.confirmDelete, {
                             name: user.name,
-                        });
+                        }, user.lang);
                     } else {
                         reply.status(401).send();
                     }

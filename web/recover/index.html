@@ -1,60 +1,59 @@
 <!DOCTYPE html>
-<html lang="es" class="h-100">
+<html lang="{{currentLang}}" class="h-100">
     <head>
         <meta charset="utf-8" />
         <link rel="shortcut icon" type="image/png" href="/assets/favicon.png" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta
-            name="description"
-            content="Hermes es un sistema recomendador y planificador turístico, para facilitarte la tarea más tediosa de todo viaje: planificarlo"
-        />
+        <meta name="description" content="{{landingPageDescription}}: {{landingPagePlanning}}." />
         <meta name="author" content="Álvaro Galisteo" />
-        <title>Recuperar contraseña - Hermes</title>
+        <title>{{recoverPassword}} - Hermes</title>
 
         <!-- CSS -->
         <link href="/css/bootstrap.min.css" rel="stylesheet" />
         <link href="/css/bootstrap-icons.css" rel="stylesheet" />
         <link href="/css/signin.css" rel="stylesheet" />
 
-<link rel="prefetch" href="/assets/placeholder.gif" />
-</head>
+        <link rel="prefetch" href="/assets/placeholder.gif" />
+    </head>
     <body class="d-flex h-100 text-center text-white bg-dark">
         <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
             <main class="mb-auto mt-auto">
                 <img class="mt-4" src="/assets/logo_light_256.png" alt="" width="128" height="128" />
 
                 <form class="form-recover" id="recoverForm">
-                    <div class="mb-3">
-                        ¿Has recordado la contraseña? <a href="/signin/" class="text-white">Acceder</a>
-                    </div>
-                    <div class="alert alert-danger d-none" role="alert" id="invalidLink">
-                        Enlace de cambio de contraseña inválido
-                    </div>
+                    <div class="mb-3">{{rememberedPassword}} <a href="/signin/" class="text-white">{{signin}}</a></div>
+                    <div class="alert alert-danger d-none" role="alert" id="invalidLink">{{invalidRecoveryLink}}</div>
                     <div class="join">
-                        <label for="inputPassword1" class="visually-hidden">Nueva contraseña</label>
+                        <label for="inputPassword1" class="visually-hidden">{{newPassword}}</label>
                         <input
                             type="password"
                             id="inputPassword1"
                             class="form-control"
-                            placeholder="Nueva contraseña"
+                            placeholder="{{newPassword}}"
                             required
                             maxlength="127"
                         />
-                        <label for="inputPassword2" class="visually-hidden">Repetir contraseña</label>
+                        <label for="inputPassword2" class="visually-hidden">{{repeatPassword}}</label>
                         <input
                             type="password"
                             id="inputPassword2"
                             class="form-control"
-                            placeholder="Repetir contraseña"
+                            placeholder="{{repeatPassword}}"
                             required
                             maxlength="127"
                         />
                         <div class="mt-2 d-none" id="inputInvalid">
-                            <i class="bi bi-exclamation-circle"></i> Las contraseñas no coinciden
+                            <i class="bi bi-exclamation-circle"></i> {{passwordsNotMatch}}
                         </div>
                     </div>
-                    <button class="mt-2 w-100 btn btn-lg btn-primary" type="submit" id="inputSubmit" disabled original-data="Guardar cambios">
-                        Guardar cambios
+                    <button
+                        class="mt-2 w-100 btn btn-lg btn-primary"
+                        type="submit"
+                        id="inputSubmit"
+                        disabled
+                        original-data="{{changePassword}}"
+                    >
+                        {{changePassword}}
                     </button>
                 </form>
             </main>
@@ -62,17 +61,19 @@
             <!-- Footer -->
             <footer class="mt-auto pt-5 text-white-50">
                 <p>
-                    Creado por
+                    {{createdBy}}
                     <a href="https://galisteo.me" class="text-white">Álvaro Galisteo</a><br />
-                    <a href="/attributions/" class="text-white">Atribuciones</a> -
-                    <a href="/help/" class="text-white">Ayuda</a> -
+                    <a href="/attributions/" class="text-white">{{attributions}}</a> -
+                    <a href="/help/" class="text-white">{{help}}</a> -
 
-                    <a href="https://status.travelhermes.com" class="text-white">Estado</a><br>
-                    <a href="/terms/" class="text-white">Terminos y condiciones</a> - 
-                    <a href="/privacy/" class="text-white">Política de privacidad</a>
+                    <a href="https://status.travelhermes.com" class="text-white">{{status}}</a><br />
+                    <a href="/terms/" class="text-white">{{terms}}</a> -
+                    <a href="/privacy/" class="text-white">{{privacyPolicy}}</a>
                 </p>
             </footer>
         </div>
+
+        <input id="currentLang" class="d-none" value="{{currentLang}}" />
 
         <!-- Bootstrap -->
         <script src="/js/bootstrap.bundle.min.js"></script>
@@ -80,6 +81,11 @@
         <!-- Hermes -->
         <script src="/js/common.js"></script>
         <script src="/js/recover.js"></script>
-        <script async defer data-website-id="0f73de68-9610-4a9c-a7a8-ab61ab30208a" src="https://data.travelhermes.com/umami.js"></script>
+        <script
+            async
+            defer
+            data-website-id="0f73de68-9610-4a9c-a7a8-ab61ab30208a"
+            src="https://data.travelhermes.com/umami.js"
+        ></script>
     </body>
 </html>

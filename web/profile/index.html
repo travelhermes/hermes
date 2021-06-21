@@ -1,15 +1,12 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="{{currentLang}}">
     <head>
         <meta charset="utf-8" />
         <link rel="shortcut icon" type="image/png" href="/assets/favicon.png" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta
-            name="description"
-            content="Hermes es un sistema recomendador y planificador turístico, para facilitarte la tarea más tediosa de todo viaje: planificarlo"
-        />
+        <meta name="description" content="{{landingPageDescription}}: {{landingPagePlanning}}." />
         <meta name="author" content="Álvaro Galisteo" />
-        <title>Perfil - Hermes</title>
+        <title>{{profile}} - Hermes</title>
 
         <!-- CSS -->
         <link href="/css/bootstrap.min.css" rel="stylesheet" />
@@ -17,8 +14,8 @@
         <link href="/css/common.css" rel="stylesheet" />
         <link href="/css/profile.css" rel="stylesheet" />
 
-<link rel="prefetch" href="/assets/placeholder.gif" />
-</head>
+        <link rel="prefetch" href="/assets/placeholder.gif" />
+    </head>
     <body>
         <div
             class="modal fade show"
@@ -31,7 +28,7 @@
             <div class="modal-dialog modal-dialog-centered modal">
                 <div class="modal-content text-center py-5">
                     <div class="spinner-border mx-auto" role="status">
-                        <span class="visually-hidden">Cargando...</span>
+                        <span class="visually-hidden">{{loading}}...</span>
                     </div>
                 </div>
             </div>
@@ -41,20 +38,15 @@
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title text-danger" id="deleteConfirmLabel">Eliminar tu cuenta</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                        <h5 class="modal-title text-danger" id="deleteConfirmLabel">{{deleteAccount}}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{close}}"></button>
                     </div>
                     <div class="modal-body">
-                        <p class="fs-4">¿Estás seguro de querer eliminar tu cuenta?</p>
-                        <p>
-                            Esto eliminará todas puntuaciones y planes creados. Esta acción no es reversible.<br />
-                            Una vez eliminada la cuenta, ya no podrás acceder y necesitarás crear una cuenta nueva.
-                        </p>
+                        <p class="fs-4">{{deleteAccountConfirmationHeader}}</p>
+                        <p>{{{deleteAccountConfirmation}}}</p>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-success" data-bs-dismiss="modal">
-                            ¡No! ¡Sácame de aquí!
-                        </button>
+                        <button type="button" class="btn btn-success" data-bs-dismiss="modal">{{getMeOut}}</button>
                         <button
                             type="button"
                             class="btn btn-danger"
@@ -62,7 +54,7 @@
                             data-bs-toggle="modal"
                             data-bs-target="#deletePassword"
                         >
-                            Sí, estoy seguro
+                            {{yesImSure}}
                         </button>
                     </div>
                 </div>
@@ -79,8 +71,8 @@
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title text-danger" id="deletePasswordLabel">Eliminar tu cuenta</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                        <h5 class="modal-title text-danger" id="deletePasswordLabel">{{deleteAccount}}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{close}}"></button>
                     </div>
                     <div class="modal-body">
                         <div
@@ -89,20 +81,20 @@
                             id="invalidPassword"
                             style="text-shadow: none"
                         >
-                            Contraseña o usuario incorrectos
+                            {{invalidPassword}}
                         </div>
-                        <p>Introduce tu contraseña para continuar</p>
-                        <input type="password" id="inputDeletePassword" placeholder="Contraseña" maxlength="127"/>
+                        <p>{{inputPasswordText}}</p>
+                        <input type="password" id="inputDeletePassword" placeholder="{{password}}" maxlength="127" />
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-success" data-bs-dismiss="modal">¡Sácame de aquí!</button>
+                        <button type="button" class="btn btn-success" data-bs-dismiss="modal">{{getMeOut}}</button>
                         <button
                             type="button"
                             class="btn btn-danger umami--click--confirm-delete"
                             id="inputDeleteSubmit"
-                            original-data="Eliminar mi cuenta"
+                            original-data="{{deleteAccount}}"
                         >
-                            Eliminar mi cuenta
+                            {{deleteAccount}}
                         </button>
                     </div>
                 </div>
@@ -123,8 +115,8 @@
                             style="font-size: 1.75rem"
                             data-bs-toggle="tooltip"
                             data-bs-placement="bottom"
-                            data-bs-original-title="Recomendaciones"
-                            title="Recomendaciones"
+                            data-bs-original-title="{{recommendations}}"
+                            title="{{recommendations}}"
                         ></i>
                     </a>
                     <a href="/plans/">
@@ -133,8 +125,8 @@
                             style="font-size: 1.75rem"
                             data-bs-toggle="tooltip"
                             data-bs-placement="bottom"
-                            data-bs-original-title="Planes"
-                            title="Planes"
+                            data-bs-original-title="{{plans}}"
+                            title="{{plans}}"
                         ></i>
                     </a>
                     <a href="/ratings/">
@@ -143,8 +135,8 @@
                             style="font-size: 1.75rem"
                             data-bs-toggle="tooltip"
                             data-bs-placement="bottom"
-                            data-bs-original-title="Puntuaciones"
-                            title="Puntuaciones"
+                            data-bs-original-title="{{ratings}}"
+                            title="{{ratings}}"
                         ></i>
                     </a>
                     <a href="/profile/" class="active">
@@ -153,8 +145,8 @@
                             style="font-size: 1.75rem"
                             data-bs-toggle="tooltip"
                             data-bs-placement="bottom"
-                            data-bs-original-title="Perfil"
-                            title="Perfil"
+                            data-bs-original-title="{{profile}}"
+                            title="{{profile}}"
                         ></i>
                     </a>
                     <a href="/help/">
@@ -163,8 +155,8 @@
                             style="font-size: 1.75rem"
                             data-bs-toggle="tooltip"
                             data-bs-placement="bottom"
-                            data-bs-original-title="Ayuda"
-                            title="Ayuda"
+                            data-bs-original-title="{{help}}"
+                            title="{{help}}"
                         ></i>
                     </a>
                 </div>
@@ -181,12 +173,12 @@
             </div>
             <main class="ms-sm-auto px-md-4">
                 <div>
-                    <h2 class="border-bottom py-2 mb-2">Perfil</h2>
+                    <h2 class="border-bottom py-2 mb-2">{{profile}}</h2>
                 </div>
 
                 <div class="mt-3 mb-4">
                     <a href="/api/auth/logout" id="logout" class="btn btn-danger">
-                        <i class="bi bi-box-arrow-left me-2"></i>Cerrar sesión
+                        <i class="bi bi-box-arrow-left me-2"></i>{{logout}}
                     </a>
                 </div>
 
@@ -202,7 +194,7 @@
                             aria-controls="notifications"
                             aria-selected="true"
                         >
-                            <i class="mx-md-1 bi bi-bell-fill"></i> Notificaciones
+                            <i class="mx-md-1 bi bi-bell-fill"></i> {{notifications}}
                         </a>
                     </li>
                     <li class="nav-item">
@@ -216,7 +208,7 @@
                             aria-controls="basic"
                             aria-selected="true"
                         >
-                            <i class="mx-md-1 bi bi-person-fill"></i> Cuenta
+                            <i class="mx-md-1 bi bi-person-fill"></i> {{account}}
                         </a>
                     </li>
                     <li class="nav-item">
@@ -231,7 +223,7 @@
                             aria-selected="false"
                             href="#"
                         >
-                            <i class="mx-md-1 bi bi-shield-lock-fill"></i> Seguridad
+                            <i class="mx-md-1 bi bi-shield-lock-fill"></i> {{security}}
                         </a>
                     </li>
                     <li class="nav-item">
@@ -247,32 +239,54 @@
                             href="#"
                         >
                             <i class="mx-md-1 bi bi-gear-fill"></i>
-                            Avanzado
+                            {{advanced}}
                         </a>
                     </li>
                 </ul>
                 <div class="tab-content" id="profileContent">
-                    <div class="tab-pane fade show active" id="notifications" role="tabpanel" aria-labelledby="notifications-tab">
+                    <div
+                        class="tab-pane fade show active"
+                        id="notifications"
+                        role="tabpanel"
+                        aria-labelledby="notifications-tab"
+                    >
                         <form class="notifications-form" class="mt-5" id="notificationsForm">
                             <div class="container px-0 mx-0 mt-3">
-                                <h3 class="mt-3">Administrar notificaciones</h3>
-                                <p class="w-100 text-muted mb-0">
-                                    Desde aquí, podrás activar o desactivar notificaciones de Hermes.
-                                </p>
+                                <h3 class="mt-3">{{manageNotifications}}</h3>
+                                <p class="w-100 text-muted mb-0">{{notificationsDescription}}</p>
                                 <p class="w-100 text-muted">
-                                    <i class="bi bi-exclamation-circle me-1"></i> <b>Nota:</b> Las notificaciones de seguridad, como por ejemplo, los inicios de sesión, cambios de contraseña, o confirmaciones de eliminación de cuenta no se pueden desactivar.
+                                    <i class="bi bi-exclamation-circle me-1"></i> {{notificationsWarning}}
                                 </p>
                                 <div>
                                     <div class="form-check form-switch">
-                                        <input class="form-check-input" type="checkbox" id="notificationsPlans" checked>
-                                        <label class="form-check-label" for="notificationsPlans">Notificaciones de plan</label>
+                                        <input
+                                            class="form-check-input"
+                                            type="checkbox"
+                                            id="notificationsPlans"
+                                            checked
+                                        />
+                                        <label class="form-check-label" for="notificationsPlans"
+                                            >{{planNotifications}}</label
+                                        >
                                     </div>
-                                    <p class="mb-3 w-100 text-muted">Un día antes de comenzar el plan recibirás notificaciones de recordatorio de este.</p>
+                                    <p class="mb-3 w-100 text-muted">{{planNotificationsDescription}}</p>
                                     <div class="form-check form-switch">
-                                        <input class="form-check-input" type="checkbox" id="notificationsRatings" checked>
-                                        <label class="form-check-label" for="notificationsRatings">Notificaciones de puntuaciones</label>
+                                        <input
+                                            class="form-check-input"
+                                            type="checkbox"
+                                            id="notificationsRatings"
+                                            checked
+                                        />
+                                        <label class="form-check-label" for="notificationsRatings"
+                                            >{{ratingNotifications}}</label
+                                        >
                                     </div>
-                                    <p class="mb-3 w-100 text-muted">Al finalizar el día, recibirás un recordatorio para puntuar los sitios que has visitado recientemente. Recuerda que tus puntuaciones son necesarias para mejorar la precisión de Hermes.</p>
+                                    <p class="mb-3 w-100 text-muted">{{ratingNotificationsDescription}}</p>
+                                    <!--<div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="notificationsFeatures" checked>
+                                        <label class="form-check-label" for="notificationsRatings">{{featuresNotifications}}</label>
+                                    </div>
+                                    <p class="mb-3 w-100 text-muted">{{featuresNotificationsDescription}}</p>-->
                                 </div>
                             </div>
                             <div class="mt-3 w-100">
@@ -280,9 +294,9 @@
                                     type="submit"
                                     class="btn btn-success"
                                     id="inputSaveNotifications"
-                                    original-data="Guardar cambios"
+                                    original-data="{{save}}"
                                 >
-                                    Guardar cambios
+                                    {{saveChanges}}
                                 </button>
                             </div>
                         </form>
@@ -290,28 +304,65 @@
                     <div class="tab-pane fade" id="basic" role="tabpanel" aria-labelledby="basic-tab">
                         <form class="account-form" class="mt-3" id="accountForm">
                             <div class="container px-0 mx-0">
-                                <h3 class="mt-3">Datos de contacto</h3>
+                                <h3 class="mt-3">{{personalData}}</h3>
                                 <div class="row">
                                     <div class="col">
-                                        <label for="inputName" class="form-label">Nombre</label>
-                                        <input required type="text" id="inputName" class="form-control" maxlength="127"/>
+                                        <label for="inputName" class="form-label">{{name}}</label>
+                                        <input
+                                            required
+                                            type="text"
+                                            id="inputName"
+                                            class="form-control"
+                                            maxlength="127"
+                                        />
                                     </div>
                                     <div class="col">
-                                        <label for="inputSurname" class="form-label">Apellidos</label>
-                                        <input required type="text" id="inputSurname" class="form-control" maxlength="127"/>
+                                        <label for="inputSurname" class="form-label">{{surname}}</label>
+                                        <input
+                                            required
+                                            type="text"
+                                            id="inputSurname"
+                                            class="form-control"
+                                            maxlength="127"
+                                        />
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col">
-                                        <label for="inputEmail" class="form-label">Correo electrónico</label>
-                                        <input required type="email" id="inputEmail" class="form-control" maxlength="127"/>
+                                        <label for="inputEmail" class="form-label mt-2">{{email}}</label>
+                                        <input
+                                            required
+                                            type="email"
+                                            id="inputEmail"
+                                            class="form-control"
+                                            maxlength="127"
+                                        />
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col">
-                                        <h3 class="mt-5">Preferencias</h3>
+                                        <label for="inputLang" class="form-label mt-2">{{language}}</label>
+                                        <select required id="inputLang" class="form-control">
+                                            <option value="es">{{langSpanish}}</option>
+                                            <option value="en">{{langEnglish}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="w-100 mt-3">
+                                    <button
+                                        id="inputSaveProfile"
+                                        type="submit"
+                                        class="btn btn-success"
+                                        original-data="{{saveChanges}}"
+                                    >
+                                        {{saveChanges}}
+                                    </button>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <h3 class="mt-5">{{preferences}}</h3>
                                         <label for="inputCategories" class="form-label fs-6">
-                                            ¿Qué tipo de sitios sueles visitar?
+                                            {{preferedCategories}}
                                         </label>
                                         <div class="container mx-0 px-2 w-md-50">
                                             <div class="row my-3">
@@ -325,7 +376,7 @@
                                                             aria-expanded="false"
                                                         >
                                                             <i class="bi bi-life-preserver"></i><br />
-                                                            Agua y costas
+                                                            {{categoryWater}}
                                                         </button>
                                                         <ul
                                                             class="dropdown-menu"
@@ -338,7 +389,7 @@
                                                                     class="form-check-input me-1"
                                                                     id="cat-45"
                                                                 />
-                                                                <label> Bahía </label>
+                                                                <label> {{bay}} </label>
                                                             </li>
                                                             <li class="dropdown-item">
                                                                 <input
@@ -346,7 +397,7 @@
                                                                     class="form-check-input me-1"
                                                                     id="cat-24"
                                                                 />
-                                                                <label> Faro </label>
+                                                                <label> {{lighthouse}} </label>
                                                             </li>
                                                             <li class="dropdown-item">
                                                                 <input
@@ -354,7 +405,7 @@
                                                                     class="form-check-input me-1"
                                                                     id="cat-16"
                                                                 />
-                                                                <label> Lago </label>
+                                                                <label> {{lake}} </label>
                                                             </li>
                                                         </ul>
                                                     </div>
@@ -368,7 +419,7 @@
                                                             data-bs-toggle="dropdown"
                                                             aria-expanded="false"
                                                         >
-                                                            <i class="fas fa-paw"></i><br />Animales
+                                                            <i class="fas fa-paw"></i><br />{{categoryAnimals}}
                                                         </button>
                                                         <ul
                                                             class="dropdown-menu"
@@ -381,7 +432,7 @@
                                                                     class="form-check-input me-1"
                                                                     id="cat-39"
                                                                 />
-                                                                <label> Acuario </label>
+                                                                <label> {{aquarium}} </label>
                                                             </li>
                                                             <li class="dropdown-item">
                                                                 <input
@@ -389,7 +440,7 @@
                                                                     class="form-check-input me-1"
                                                                     id="cat-35"
                                                                 />
-                                                                <label> Exibición zoologica </label>
+                                                                <label> {{zoologicalExhibition}} </label>
                                                             </li>
                                                             <li class="dropdown-item">
                                                                 <input
@@ -397,7 +448,7 @@
                                                                     class="form-check-input me-1"
                                                                     id="cat-10"
                                                                 />
-                                                                <label> Zoológico </label>
+                                                                <label> {{zoo}} </label>
                                                             </li>
                                                         </ul>
                                                     </div>
@@ -414,7 +465,7 @@
                                                             aria-expanded="false"
                                                         >
                                                             <i class="fas fa-palette"></i><br />
-                                                            Arte público
+                                                            {{categoryPublicArt}}
                                                         </button>
                                                         <ul
                                                             class="dropdown-menu"
@@ -427,7 +478,7 @@
                                                                     class="form-check-input me-1"
                                                                     id="cat-18"
                                                                 />
-                                                                <label> Arte callejero </label>
+                                                                <label> {{streetArt}} </label>
                                                             </li>
                                                             <li class="dropdown-item">
                                                                 <input
@@ -435,7 +486,7 @@
                                                                     class="form-check-input me-1"
                                                                     id="cat-12"
                                                                 />
-                                                                <label> Arte público </label>
+                                                                <label> {{publicArt}} </label>
                                                             </li>
                                                             <li class="dropdown-item">
                                                                 <input
@@ -443,7 +494,7 @@
                                                                     class="form-check-input me-1"
                                                                     id="cat-4"
                                                                 />
-                                                                <label> Esculturas al aire libre </label>
+                                                                <label> {{outdoorSculptures}} </label>
                                                             </li>
                                                         </ul>
                                                     </div>
@@ -458,7 +509,7 @@
                                                             aria-expanded="false"
                                                         >
                                                             <i class="fas fa-theater-masks"></i><br />
-                                                            Artes escénicas
+                                                            {{categoryArts}}
                                                         </button>
                                                         <ul
                                                             class="dropdown-menu"
@@ -471,7 +522,7 @@
                                                                     class="form-check-input me-1"
                                                                     id="cat-50"
                                                                 />
-                                                                <label> Anfiteatros </label>
+                                                                <label> {{amphitheatres}} </label>
                                                             </li>
                                                             <li class="dropdown-item">
                                                                 <input
@@ -479,7 +530,7 @@
                                                                     class="form-check-input me-1"
                                                                     id="cat-29"
                                                                 />
-                                                                <label> Auditorios </label>
+                                                                <label> {{auditoriums}} </label>
                                                             </li>
                                                             <li class="dropdown-item">
                                                                 <input
@@ -487,7 +538,7 @@
                                                                     class="form-check-input me-1"
                                                                     id="cat-1"
                                                                 />
-                                                                <label> Sala de conciertos </label>
+                                                                <label> {{concertHalls}} </label>
                                                             </li>
                                                             <li class="dropdown-item">
                                                                 <input
@@ -495,7 +546,7 @@
                                                                     class="form-check-input me-1"
                                                                     id="cat-6"
                                                                 />
-                                                                <label> Salón de ópera </label>
+                                                                <label> {{operaHalls}} </label>
                                                             </li>
                                                             <li class="dropdown-item">
                                                                 <input
@@ -503,7 +554,7 @@
                                                                     class="form-check-input me-1"
                                                                     id="cat-51"
                                                                 />
-                                                                <label> Teatros </label>
+                                                                <label> {{theatres}} </label>
                                                             </li>
                                                         </ul>
                                                     </div>
@@ -520,7 +571,7 @@
                                                             aria-expanded="false"
                                                         >
                                                             <i class="fas fa-futbol"></i><br />
-                                                            Deportes
+                                                            {{categorySports}}
                                                         </button>
                                                         <ul
                                                             class="dropdown-menu"
@@ -533,7 +584,7 @@
                                                                     class="form-check-input me-1"
                                                                     id="cat-17"
                                                                 />
-                                                                <label> Estadios </label>
+                                                                <label> {{stadiums}} </label>
                                                             </li>
                                                         </ul>
                                                     </div>
@@ -548,7 +599,7 @@
                                                             aria-expanded="false"
                                                         >
                                                             <i class="fas fa-monument"></i><br />
-                                                            Monumentos
+                                                            {{categoryMonuments}}
                                                         </button>
                                                         <ul
                                                             class="dropdown-menu"
@@ -561,7 +612,7 @@
                                                                     class="form-check-input me-1"
                                                                     id="cat-28"
                                                                 />
-                                                                <label> Castillo </label>
+                                                                <label> {{castle}} </label>
                                                             </li>
                                                             <li class="dropdown-item">
                                                                 <input
@@ -569,7 +620,7 @@
                                                                     class="form-check-input me-1"
                                                                     id="cat-7"
                                                                 />
-                                                                <label> Cueva </label>
+                                                                <label> {{cave}} </label>
                                                             </li>
                                                             <li class="dropdown-item">
                                                                 <input
@@ -577,7 +628,7 @@
                                                                     class="form-check-input me-1"
                                                                     id="cat-13"
                                                                 />
-                                                                <label> Lugares conmemorativos </label>
+                                                                <label> {{memorialSites}} </label>
                                                             </li>
                                                             <li class="dropdown-item">
                                                                 <input
@@ -585,7 +636,7 @@
                                                                     class="form-check-input me-1"
                                                                     id="cat-44"
                                                                 />
-                                                                <label> Lugares históricos </label>
+                                                                <label> {{historicalSites}} </label>
                                                             </li>
                                                             <li class="dropdown-item">
                                                                 <input
@@ -593,7 +644,7 @@
                                                                     class="form-check-input me-1"
                                                                     id="cat-25"
                                                                 />
-                                                                <label> Monumentos </label>
+                                                                <label> {{monuments}} </label>
                                                             </li>
                                                             <li class="dropdown-item">
                                                                 <input
@@ -601,7 +652,7 @@
                                                                     class="form-check-input me-1"
                                                                     id="cat-38"
                                                                 />
-                                                                <label> Palacios </label>
+                                                                <label> {{palaces}} </label>
                                                             </li>
                                                             <li class="dropdown-item">
                                                                 <input
@@ -609,7 +660,7 @@
                                                                     class="form-check-input me-1"
                                                                     id="cat-48"
                                                                 />
-                                                                <label> Puente </label>
+                                                                <label> {{bridge}} </label>
                                                             </li>
                                                         </ul>
                                                     </div>
@@ -626,7 +677,7 @@
                                                             aria-expanded="false"
                                                         >
                                                             <i class="fas fa-building"></i><br />
-                                                            Gobierno
+                                                            {{categoryGovernment}}
                                                         </button>
                                                         <ul
                                                             class="dropdown-menu"
@@ -639,7 +690,7 @@
                                                                     class="form-check-input me-1"
                                                                     id="cat-22"
                                                                 />
-                                                                <label> Ayuntamientos </label>
+                                                                <label> {{townHalls}} </label>
                                                             </li>
                                                             <li class="dropdown-item">
                                                                 <input
@@ -647,7 +698,7 @@
                                                                     class="form-check-input me-1"
                                                                     id="cat-27"
                                                                 />
-                                                                <label> Capitolio </label>
+                                                                <label> {{capitol}} </label>
                                                             </li>
                                                             <li class="dropdown-item">
                                                                 <input
@@ -655,7 +706,7 @@
                                                                     class="form-check-input me-1"
                                                                     id="cat-42"
                                                                 />
-                                                                <label> Juntas municipales </label>
+                                                                <label> {{townCouncils}} </label>
                                                             </li>
                                                         </ul>
                                                     </div>
@@ -670,7 +721,7 @@
                                                             aria-expanded="false"
                                                         >
                                                             <i class="bi bi-flower1"></i><br />
-                                                            Jardines
+                                                            {{categoryGardens}}
                                                         </button>
                                                         <ul
                                                             class="dropdown-menu"
@@ -683,7 +734,7 @@
                                                                     class="form-check-input me-1"
                                                                     id="cat-3"
                                                                 />
-                                                                <label> Jardínes botánicos </label>
+                                                                <label> {{botanicalGardens}} </label>
                                                             </li>
                                                             <li class="dropdown-item">
                                                                 <input
@@ -691,7 +742,7 @@
                                                                     class="form-check-input me-1"
                                                                     id="cat-31"
                                                                 />
-                                                                <label> Jardínes de esculturas </label>
+                                                                <label> {{sculptureGardens}} </label>
                                                             </li>
                                                             <li class="dropdown-item">
                                                                 <input
@@ -699,7 +750,7 @@
                                                                     class="form-check-input me-1"
                                                                     id="cat-9"
                                                                 />
-                                                                <label> Jardínes públicos </label>
+                                                                <label> {{publicGardens}} </label>
                                                             </li>
                                                         </ul>
                                                     </div>
@@ -716,7 +767,7 @@
                                                             aria-expanded="false"
                                                         >
                                                             <i class="fas fa-church"></i><br />
-                                                            Lugares de culto
+                                                            {{categoryCult}}
                                                         </button>
                                                         <ul
                                                             class="dropdown-menu"
@@ -729,7 +780,7 @@
                                                                     class="form-check-input me-1"
                                                                     id="cat-21"
                                                                 />
-                                                                <label> Cementerios </label>
+                                                                <label> {{cemeteries}} </label>
                                                             </li>
                                                             <li class="dropdown-item">
                                                                 <input
@@ -737,7 +788,7 @@
                                                                     class="form-check-input me-1"
                                                                     id="cat-41"
                                                                 />
-                                                                <label> Iglesias y catedrales </label>
+                                                                <label> {{churchesCathedrals}} </label>
                                                             </li>
                                                             <li class="dropdown-item">
                                                                 <input
@@ -745,7 +796,7 @@
                                                                     class="form-check-input me-1"
                                                                     id="cat-2"
                                                                 />
-                                                                <label> Mezquitas </label>
+                                                                <label> {{mosques}} </label>
                                                             </li>
                                                             <li class="dropdown-item">
                                                                 <input
@@ -753,7 +804,7 @@
                                                                     class="form-check-input me-1"
                                                                     id="cat-30"
                                                                 />
-                                                                <label> Monasterios </label>
+                                                                <label> {{monasteries}} </label>
                                                             </li>
                                                             <li class="dropdown-item">
                                                                 <input
@@ -761,7 +812,7 @@
                                                                     class="form-check-input me-1"
                                                                     id="cat-34"
                                                                 />
-                                                                <label> Santuarios </label>
+                                                                <label> {{shrines}} </label>
                                                             </li>
                                                             <li class="dropdown-item">
                                                                 <input
@@ -769,7 +820,7 @@
                                                                     class="form-check-input me-1"
                                                                     id="cat-26"
                                                                 />
-                                                                <label> Sinagogas </label>
+                                                                <label> {{synagogues}} </label>
                                                             </li>
                                                             <li class="dropdown-item">
                                                                 <input
@@ -777,7 +828,7 @@
                                                                     class="form-check-input me-1"
                                                                     id="cat-32"
                                                                 />
-                                                                <label> Templos budistas </label>
+                                                                <label> {{buddhistTemples}} </label>
                                                             </li>
                                                             <li class="dropdown-item">
                                                                 <input
@@ -785,7 +836,7 @@
                                                                     class="form-check-input me-1"
                                                                     id="cat-47"
                                                                 />
-                                                                <label> Templos Sikh </label>
+                                                                <label> {{sikhTemples}} </label>
                                                             </li>
                                                         </ul>
                                                     </div>
@@ -800,7 +851,7 @@
                                                             aria-expanded="false"
                                                         >
                                                             <i class="fas fa-store"></i><br />
-                                                            Zonas públicas
+                                                            {{categoryPublic}}
                                                         </button>
                                                         <ul
                                                             class="dropdown-menu"
@@ -813,7 +864,7 @@
                                                                     class="form-check-input me-1"
                                                                     id="cat-40"
                                                                 />
-                                                                <label> Fuentes </label>
+                                                                <label> {{fountains}} </label>
                                                             </li>
                                                             <li class="dropdown-item">
                                                                 <input
@@ -821,7 +872,7 @@
                                                                     class="form-check-input me-1"
                                                                     id="cat-11"
                                                                 />
-                                                                <label> Mercados </label>
+                                                                <label> {{markets}} </label>
                                                             </li>
                                                             <li class="dropdown-item">
                                                                 <input
@@ -829,7 +880,7 @@
                                                                     class="form-check-input me-1"
                                                                     id="cat-49"
                                                                 />
-                                                                <label> Parque </label>
+                                                                <label> {{park}} </label>
                                                             </li>
                                                             <li class="dropdown-item">
                                                                 <input
@@ -837,7 +888,7 @@
                                                                     class="form-check-input me-1"
                                                                     id="cat-5"
                                                                 />
-                                                                <label> Plazas peatonales </label>
+                                                                <label> {{pedestrianSquares}} </label>
                                                             </li>
                                                             <li class="dropdown-item">
                                                                 <input
@@ -845,7 +896,7 @@
                                                                     class="form-check-input me-1"
                                                                     id="cat-37"
                                                                 />
-                                                                <label> Plazas públicas </label>
+                                                                <label> {{publicSquares}} </label>
                                                             </li>
                                                         </ul>
                                                     </div>
@@ -862,7 +913,7 @@
                                                             aria-expanded="false"
                                                         >
                                                             <i class="bi bi-binoculars"></i><br />
-                                                            Miradores
+                                                            {{categoryLookouts}}
                                                         </button>
                                                         <ul
                                                             class="dropdown-menu"
@@ -875,7 +926,7 @@
                                                                     class="form-check-input me-1"
                                                                     id="cat-19"
                                                                 />
-                                                                <label> Miradores elevados </label>
+                                                                <label> {{elevatedViewpoints}} </label>
                                                             </li>
                                                             <li class="dropdown-item">
                                                                 <input
@@ -883,7 +934,7 @@
                                                                     class="form-check-input me-1"
                                                                     id="cat-15"
                                                                 />
-                                                                <label> Miradores </label>
+                                                                <label> {{viewpoints}} </label>
                                                             </li>
                                                         </ul>
                                                     </div>
@@ -898,7 +949,7 @@
                                                             aria-expanded="false"
                                                         >
                                                             <i class="fas fa-landmark"></i><br />
-                                                            Museos
+                                                            {{categoryMuseums}}
                                                         </button>
                                                         <ul
                                                             class="dropdown-menu"
@@ -911,7 +962,7 @@
                                                                     class="form-check-input me-1"
                                                                     id="cat-23"
                                                                 />
-                                                                <label> Galerías de arte </label>
+                                                                <label> {{artGalleries}} </label>
                                                             </li>
                                                             <li class="dropdown-item">
                                                                 <input
@@ -919,7 +970,7 @@
                                                                     class="form-check-input me-1"
                                                                     id="cat-14"
                                                                 />
-                                                                <label> Museos de arte </label>
+                                                                <label> {{artMuseums}} </label>
                                                             </li>
                                                             <li class="dropdown-item">
                                                                 <input
@@ -927,7 +978,7 @@
                                                                     class="form-check-input me-1"
                                                                     id="cat-36"
                                                                 />
-                                                                <label> Museos de ciencia </label>
+                                                                <label> {{scienceMuseums}} </label>
                                                             </li>
                                                             <li class="dropdown-item">
                                                                 <input
@@ -935,7 +986,7 @@
                                                                     class="form-check-input me-1"
                                                                     id="cat-43"
                                                                 />
-                                                                <label> Museos de historia </label>
+                                                                <label> {{historyMuseums}} </label>
                                                             </li>
                                                             <li class="dropdown-item">
                                                                 <input
@@ -943,15 +994,20 @@
                                                                     class="form-check-input me-1"
                                                                     id="cat-20"
                                                                 />
-                                                                <label> Planetario </label>
+                                                                <label> {{planetarium}} </label>
                                                             </li>
                                                         </ul>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <p id="categoriesSelect" style="margin-top: -5px" class="fs-6 mb-3 text-dark">
-                                            Selecciona al menos 3 categorías
+                                        <p
+                                            id="categoriesSelect"
+                                            style="margin-top: -5px"
+                                            class="fs-6 mb-3 text-dark"
+                                            original-data="{{categoryRequirement}}"
+                                        >
+                                            {{categoryRequirement}}
                                         </p>
                                     </div>
                                 </div>
@@ -961,9 +1017,9 @@
                                     id="inputSaveProfile"
                                     type="submit"
                                     class="btn btn-success"
-                                    original-data="Guardar cambios"
+                                    original-data="{{saveChanges}}"
                                 >
-                                    Guardar cambios
+                                    {{saveChanges}}
                                 </button>
                             </div>
                         </form>
@@ -971,17 +1027,21 @@
                     <div class="tab-pane fade" id="security" role="tabpanel" aria-labelledby="security-tab">
                         <form class="security-form" class="mt-5" id="passwordForm">
                             <div class="container px-0 mx-0 mt-3">
-                                <h3 class="mt-3">Cambiar contraseña</h3>
+                                <h3 class="mt-3">{{changePassword}}</h3>
                                 <div class="row">
                                     <div class="col">
-                                        <label for="inputPassword1" class="form-label">Nueva contraseña</label>
-                                        <input type="password" id="inputPassword1" class="form-control" required maxlength="127"/>
-                                        <p class="w-100 text-muted">
-                                            Al cambiar la contraseña, se cerrará la sesión en todos los sitios, exceptuando la sesión actual. Además, se olvidarán todos los inicios de sesión anteriores.
-                                        </p>
+                                        <label for="inputPassword1" class="form-label">{{newPassword}}</label>
+                                        <input
+                                            type="password"
+                                            id="inputPassword1"
+                                            class="form-control"
+                                            required
+                                            maxlength="127"
+                                        />
+                                        <p class="w-100 text-muted">{{passwordChangeAlert}}</p>
                                     </div>
                                     <div class="col">
-                                        <label for="inputPassword2" class="form-label">Repetir contraseña</label>
+                                        <label for="inputPassword2" class="form-label">{{repeatPassword}}</label>
                                         <input
                                             type="password"
                                             id="inputPassword2"
@@ -990,53 +1050,45 @@
                                             maxlength="127"
                                         />
                                         <div class="text-danger d-none" id="inputInvalid">
-                                            <i class="bi bi-exclamation-circle"></i> Las contraseñas no coinciden
+                                            <i class="bi bi-exclamation-circle"></i> {{passwordsNotMatch}}
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="mt-3 w-100">
+                            <div class="mt-1 w-100">
                                 <button
                                     type="submit"
                                     class="btn btn-success"
                                     id="inputPasswordChange"
                                     disabled
-                                    original-data="Cambiar contraseña"
+                                    original-data="{{changePassword}}"
                                 >
-                                    Cambiar contraseña
+                                    {{changePassword}}
                                 </button>
                             </div>
                         </form>
-                        <h3 class="mt-5">Sesiones</h3>
+                        <h3 class="mt-5">{{sessions}}</h3>
                         <div class="mt-2 w-100">
-                            <button
-                                class="btn btn-danger"
-                                original-data="Cerrar todas las sesiones"
-                                id="logoutSessions"
-                            >
-                                Cerrar todas las sesiones
+                            <button class="btn btn-danger" original-data="{{closeAllSessions}}" id="logoutSessions">
+                                {{closeAllSessions}}
                             </button>
-                            <p class="w-100 text-muted mt-2">
-                                Esto cerrará todas las sesiones iniciadas en otros dispositivos excepto en este.
-                            </p>
+                            <p class="w-100 text-muted mt-2">{{closeAllSessionsAlert}}</p>
                         </div>
                     </div>
                     <div class="tab-pane fade" id="advanced" role="tabpanel" aria-labelledby="advanced-tab">
-                        <h3 class="mt-3">Descargar mis datos</h3>
+                        <h3 class="mt-3">{{downloadMyData}}</h3>
                         <div class="mb-2">
                             <button
                                 type="button"
                                 class="btn btn-secondary umami--click--download-data"
-                                original-data="Descargar mis datos"
+                                original-data="{{downloadMyData}}"
                                 id="download"
                             >
-                                Descargar mis datos
+                                {{downloadMyData}}
                             </button>
                         </div>
-                        <p class="w-100 text-muted">
-                            Esto descargará todos los datos que has introducido en la plataforma en formato JSON.
-                        </p>
-                        <h3 class="mt-3 text-danger mt-5">Eliminar cuenta</h3>
+                        <p class="w-100 text-muted">{{downloadMyDataDescription}}</p>
+                        <h3 class="mt-3 text-danger mt-5">{{deleteAccount}}</h3>
                         <div class="mb-2">
                             <button
                                 type="button"
@@ -1044,13 +1096,11 @@
                                 data-bs-toggle="modal"
                                 data-bs-target="#deleteConfirm"
                             >
-                                Eliminar mi cuenta
+                                {{deleteAccount}}
                             </button>
                         </div>
                         <p class="w-100 text-muted">
-                            <span class="text-danger">¡Atención! </span> Esto eliminará tu cuenta, incluyendo las
-                            puntuaciones y planes creados. Esta acción no es reversible.<br />
-                            Una vez eliminada la cuenta, ya no podrás acceder y necesitarás crear una cuenta nueva.
+                            <span class="text-danger">{{warning}} </span>{{{deleteAccountConfirmation}}}
                         </p>
                     </div>
                 </div>
@@ -1060,16 +1110,17 @@
         <!-- Footer -->
         <footer class="mt-auto pt-5 text-center mb-md-5">
             <p>
-                Creado por
+                {{createdBy}}
                 <a href="https://galisteo.me">Álvaro Galisteo</a><br />
-                <a href="/attributions/">Atribuciones</a> -
-                <a href="/help/">Ayuda</a> -
+                <a href="/attributions/">{{attributions}}</a> - <a href="/help/">{{help}}</a> -
 
-                <a href="https://status.travelhermes.com">Estado</a><br>
-                <a href="/terms/">Terminos y condiciones</a> -
-                <a href="/privacy/">Política de privacidad</a>
+                <a href="https://status.travelhermes.com">{{status}}</a><br />
+                <a href="/terms/">{{terms}}</a> -
+                <a href="/privacy/">{{privacyPolicy}}</a>
             </p>
         </footer>
+
+        <input id="currentLang" class="d-none" value="{{currentLang}}" />
 
         <!-- Bootstrap -->
         <script src="/js/bootstrap.bundle.min.js"></script>
@@ -1082,6 +1133,11 @@
         <!-- Hermes -->
         <script src="/js/common.js"></script>
         <script src="/js/profile.js"></script>
-        <script async defer data-website-id="0f73de68-9610-4a9c-a7a8-ab61ab30208a" src="https://data.travelhermes.com/umami.js"></script>
+        <script
+            async
+            defer
+            data-website-id="0f73de68-9610-4a9c-a7a8-ab61ab30208a"
+            src="https://data.travelhermes.com/umami.js"
+        ></script>
     </body>
 </html>

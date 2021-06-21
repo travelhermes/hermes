@@ -14,7 +14,9 @@ document.querySelectorAll('.dropdown-menu').forEach((dropdown) => {
 async function save(form) {
     document.querySelector('#categoriesSelect').classList.remove('text-danger');
     document.querySelector('#categoriesSelect').classList.add('text-dark');
-    document.querySelector('#categoriesSelect').innerHTML = 'Selecciona al menos 3 categorías';
+    document.querySelector('#categoriesSelect').innerHTML = document
+        .querySelector('#categoriesSelect')
+        .getAttribute('original-data');
 
     setLoadButton(document.querySelector('#inputSaveProfile'));
     const data = {
@@ -22,6 +24,7 @@ async function save(form) {
             name: form.querySelector('#inputName').value,
             surname: form.querySelector('#inputSurname').value,
             email: form.querySelector('#inputEmail').value,
+            lang: form.querySelector('#inputLang').value,
         },
         preferences: [],
     };
@@ -239,13 +242,17 @@ async function main() {
             document.querySelector('#inputName').value = res.user.name;
             document.querySelector('#inputSurname').value = res.user.surname;
             document.querySelector('#inputEmail').value = res.user.email;
+            document.querySelector('#inputLang').value = res.user.lang;
 
             document.querySelector('#notificationsPlans').checked = res.notifications.plans;
             document.querySelector('#notificationsRatings').checked = res.notifications.ratings;
 
             res.preferences.forEach((preference) => {
                 document.querySelector('#cat-' + preference).checked = true;
-                document.querySelector('#cat-' + preference).closest('.dropdown-item').setAttribute('checked', 'true');
+                document
+                    .querySelector('#cat-' + preference)
+                    .closest('.dropdown-item')
+                    .setAttribute('checked', 'true');
             });
             loader.hide();
         } catch (err) {

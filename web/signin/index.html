@@ -1,23 +1,20 @@
 <!DOCTYPE html>
-<html lang="es" class="h-100">
+<html lang="{{currentLang}}" class="h-100">
     <head>
         <meta charset="utf-8" />
         <link rel="shortcut icon" type="image/png" href="/assets/favicon.png" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta
-            name="description"
-            content="Hermes es un sistema recomendador y planificador turístico, para facilitarte la tarea más tediosa de todo viaje: planificarlo"
-        />
+        <meta name="description" content="{{landingPageDescription}}: {{landingPagePlanning}}." />
         <meta name="author" content="Álvaro Galisteo" />
-        <title>Iniciar sesión - Hermes</title>
+        <title>{{signin}} - Hermes</title>
 
         <!-- CSS -->
         <link href="/css/bootstrap.min.css" rel="stylesheet" />
         <link href="/css/bootstrap-icons.css" rel="stylesheet" />
         <link href="/css/signin.css" rel="stylesheet" />
 
-<link rel="prefetch" href="/assets/placeholder.gif" />
-</head>
+        <link rel="prefetch" href="/assets/placeholder.gif" />
+    </head>
     <body class="d-flex h-100 text-center text-white bg-dark">
         <div
             class="modal fade text-start text-dark"
@@ -29,22 +26,24 @@
             <div class="modal-dialog modal-dialog-centered">
                 <form class="modal-content" id="recoverForm">
                     <div class="modal-header">
-                        <h4 class="modal-title" id="recoverModalLabel">Recuperar contraseña</h4>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                        <h4 class="modal-title" id="recoverModalLabel">{{recoverPassword}}</h4>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{close}}"></button>
                     </div>
                     <div class="modal-body">
-                        <p>
-                            Introduce tu correo electrónico a continuación. Si la cuenta existe, recibirás un correo
-                            electrónico en tu bandeja de entrada
-                        </p>
+                        <p>{{recoverPasswordModalBody}}</p>
                         <div class="alert alert-danger d-none mb-1 mt-4" role="alert" id="cooldownReset">
-                            Se han producido demasiadas solicitudes seguidas. Inténtelo de nuevo más tarde.
+                            {{recoverPasswordModalCooldown}}
                         </div>
-                        <input type="email" id="inputEmailRecover" placeholder="Correo electrónico" required maxlength="127"/>
+                        <input type="email" id="inputEmailRecover" placeholder="{{email}}" required maxlength="127" />
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary" id="inputSubmitRecover" original-data="Enviar enlace de recuperación">
-                            Enviar enlace de recuperación
+                        <button
+                            type="submit"
+                            class="btn btn-primary"
+                            id="inputSubmitRecover"
+                            original-data="{{recoverPasswordModalButton}}"
+                        >
+                            {{recoverPasswordModalButton}}
                         </button>
                     </div>
                 </form>
@@ -55,44 +54,36 @@
                 <img class="mt-4" src="/assets/logo_light_256.png" alt="" width="128" height="128" />
                 <div class="mt-2">
                     <a href="/help/" target="_blank" class="text-white"
-                        ><i class="bi bi-question-circle mx-1"></i>¿Necesitas ayuda?</a
+                        ><i class="bi bi-question-circle mx-1"></i>{{needHelp}}</a
                     >
                 </div>
 
                 <form class="form-signin pt-1" id="signinForm">
                     <div class="mb-2">
-                        ¿No tienes cuenta?
-                        <a href="/signup/" class="text-white">Únete</a>
+                        {{signinTextJoin}}
+                        <a href="/signup/" class="text-white">{{signinLinkJoin}}</a>
                     </div>
-                    <div
-                        class="alert alert-danger d-none"
-                        role="alert"
-                        id="invalidCredentials"
-                       
-                    >
-                        Contraseña o usuario incorrectos
+                    <div class="alert alert-danger d-none" role="alert" id="invalidCredentials">
+                        {{invalidEmailOrPassword}}
                     </div>
-                    <div class="alert alert-danger d-none" role="alert" id="cooldown">
-                        Se han producido demasiados intentos de inicio de sesión incorrectos. Inténtelo de nuevo más
-                        tarde.
-                    </div>
+                    <div class="alert alert-danger d-none" role="alert" id="cooldown">{{signinCooldown}}</div>
                     <div class="join">
-                        <label for="inputEmail" class="visually-hidden"> Correo electrónico </label>
+                        <label for="inputEmail" class="visually-hidden"> {{email}} </label>
                         <input
                             type="email"
                             id="inputEmail"
                             class="form-control"
-                            placeholder="Correo electrónico"
+                            placeholder="{{email}}"
                             required
                             autofocus
                             maxlength="127"
                         />
-                        <label for="inputPassword" class="visually-hidden"> Contraseña </label>
+                        <label for="inputPassword" class="visually-hidden"> {{password}} </label>
                         <input
                             type="password"
                             id="inputPassword"
                             class="form-control"
-                            placeholder="Contraseña"
+                            placeholder="{{password}}"
                             required
                             maxlength="127"
                         />
@@ -101,20 +92,18 @@
                         class="w-100 btn btn-lg btn-primary"
                         type="submit"
                         id="inputSubmit"
-                        original-data="Iniciar sesión"
+                        original-data="{{signin}}"
                     >
-                        Iniciar sesión
+                        {{signin}}
                     </button>
                     <div class="checkbox mt-3">
                         <label>
                             <input type="checkbox" id="inputRemember" />
-                            Recordarme
+                            {{rememberMe}}
                         </label>
                     </div>
                     <div class="mt-2">
-                        <a href="#recoverModal" data-bs-toggle="modal" class="text-white">
-                            He olvidado mi contraseña
-                        </a>
+                        <a href="#recoverModal" data-bs-toggle="modal" class="text-white"> {{forgotPassword}} </a>
                     </div>
                 </form>
             </main>
@@ -122,17 +111,19 @@
             <!-- Footer -->
             <footer class="mt-auto pt-5 text-white-50">
                 <p>
-                    Creado por
+                    {{createdBy}}
                     <a href="https://galisteo.me" class="text-white">Álvaro Galisteo</a><br />
-                    <a href="/attributions/" class="text-white">Atribuciones</a> -
-                    <a href="/help/" class="text-white">Ayuda</a> -
+                    <a href="/attributions/" class="text-white">{{attributions}}</a> -
+                    <a href="/help/" class="text-white">{{help}}</a> -
 
-                    <a href="https://status.travelhermes.com" class="text-white">Estado</a><br>
-                    <a href="/terms/" class="text-white">Terminos y condiciones</a> - 
-                    <a href="/privacy/" class="text-white">Política de privacidad</a>
+                    <a href="https://status.travelhermes.com" class="text-white">{{status}}</a><br />
+                    <a href="/terms/" class="text-white">{{terms}}</a> -
+                    <a href="/privacy/" class="text-white">{{privacyPolicy}}</a>
                 </p>
             </footer>
         </div>
+
+        <input id="currentLang" class="d-none" value="{{currentLang}}" />
 
         <!-- Bootstrap -->
         <script src="/js/bootstrap.bundle.min.js"></script>
@@ -140,6 +131,11 @@
         <!-- Hermes -->
         <script src="/js/common.js"></script>
         <script src="/js/signin.js"></script>
-        <script async defer data-website-id="0f73de68-9610-4a9c-a7a8-ab61ab30208a" src="https://data.travelhermes.com/umami.js"></script>
+        <script
+            async
+            defer
+            data-website-id="0f73de68-9610-4a9c-a7a8-ab61ab30208a"
+            src="https://data.travelhermes.com/umami.js"
+        ></script>
     </body>
 </html>
