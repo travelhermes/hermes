@@ -4,12 +4,9 @@
         <meta charset="utf-8" />
         <link rel="shortcut icon" type="image/png" href="/assets/favicon.png" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta
-            name="description"
-            content="{{landingPageDescription}}: {{landingPagePlanning}}."
-        />
+        <meta name="description" content="{{landingPageDescription}}: {{landingPagePlanning}}." />
 
-        <title>Inicio de sesión | Ayuda - Hermes</title>
+        <title>{{emails}} | {{help}} - Hermes</title>
 
         <!-- Bootstrap core CSS -->
         <link href="/css/bootstrap.min.css" rel="stylesheet" />
@@ -18,8 +15,8 @@
         <!-- Custom styles for this template -->
         <link href="/css/index.css" rel="stylesheet" />
 
-<link rel="prefetch" href="/assets/placeholder.gif" />
-</head>
+        <link rel="prefetch" href="/assets/placeholder.gif" />
+    </head>
     <body class="d-flex h-100 text-white bg-dark" style="box-shadow: none">
         <div class="cover-container-big d-flex w-100 h-100 p-3 mx-auto flex-column">
             <header class="mb-3 text-center">
@@ -32,34 +29,18 @@
             </header>
 
             <main class="px-3 mb-5 text-justify">
-                <a href="/help/" class="text-white fs-5 mb-5">
-                    <i class="bi bi-box-arrow-in-left mx-1"></i>Volver
-                </a>
-                <h1 class="mt-2"><i class="bi bi-envelope-open-fill mx-1"></i> Correos electrónicos</h1>
-                <p class="fs-5">¿Que correos electrónicos puedes recibir?</p>
-                <p class="mt-3">
-                    Hermes envía las siguientes notificaciones importantes por correo electrónico, que no se pueden desactivar.
-                </p>
-                <ul>
-                    <li><b>Nueva cuenta</b>: Bienvenida a la plataforma.</li>
-                    <li><b>Cambio de contraseña</b>: Se ha producido un cambio de contraseña, ya sea mediante recuperación o mediante el perfil.</li>
-                    <li><b>Solicitud de recuperación de contraseña</b>: Se ha solicitado recuperar la contraseña.</li>
-                    <li><b>Cambio de correo electrónico</b>: Se ha cambiado el correo electrónico de la cuenta.</li>
-                    <li><b>Inicio de sesión desconocido</b>: Se ha iniciado sesión desde una IP desconocida.</li>
-                    <li><b>Eliminación de la cuenta</b>: Confirmación de eliminación de cuenta.</li>
-                </ul>
-                <p class="mt-3">
-                    Por otra parte, Hermes envía las siguientes notificaciones que se pueden desactivar a traves de <a href="/profile/" class="text-white">tu perfil</a>.
-                </p>
-                <ul>
-                    <li><b>Recordatorio de inicio del plan</b>: Cuando quede un día para el comienzo de un plan, se te notificará por correo electrónico.</li>
-                    <li><b>Recordatorio de puntuaciones</b>: Cuando acabe el día, se te recordará por correo electrónico que puntues los sitios que has visitado, para mejorar el funcionamiento de Hermes.</li>
-                </ul>
+                <a href="/help/" class="text-white fs-5 mb-5"> <i class="bi bi-box-arrow-in-left mx-1"></i>{{back}} </a>
+                <h1 class="mt-2"><i class="bi bi-envelope-open-fill mx-1"></i> {{emails}}</h1>
+                <p class="fs-5">{{helpEmailsDescription}}</p>
+
+                <textarea id="content" class="d-none">{{helpEmailsContent}}</textarea>
+                <div id="helpContent"></div>
+
                 <div class="text-center">
-                    <h1 class="mt-5">¿Necesitas más ayuda?</h1>
-                    <p class="fs-4">Escríbenos un correo electrónico. Estaremos encantados de ayudarte.</p>
+                    <h1 class="mt-5">{{needMoreHelp}}</h1>
+                    <p class="fs-4">{{helpWriteEmail}}</p>
                     <a href="mailto:hermes@galisteo.me?subject=Hermes: " class="btn btn-primary btn-lg"
-                        ><i class="bi bi-envelope-open-fill me-1"></i>Enviar un mensaje</a
+                        ><i class="bi bi-envelope-open-fill me-1"></i>{{sendEmail}}</a
                     >
                 </div>
             </main>
@@ -70,14 +51,26 @@
                     <a href="https://galisteo.me" class="text-white">Álvaro Galisteo</a><br />
                     <a href="/attributions/" class="text-white">Atribuciones</a> -
 
-                    <a href="/help/" class="text-white">Ayuda</a> - 
+                    <a href="/help/" class="text-white">Ayuda</a> -
 
-                    <a href="/terms/" class="text-white">Terminos y condiciones</a> - 
+                    <a href="/terms/" class="text-white">Terminos y condiciones</a> -
 
                     <a href="/privacy/" class="text-white">Política de privacidad</a>
                 </p>
             </footer>
         </div>
-        <script async defer data-website-id="0f73de68-9610-4a9c-a7a8-ab61ab30208a" src="https://data.travelhermes.com/umami.js"></script>
+
+        <!-- Remarkable -->
+        <script src="/js/remarkable.min.js"></script>
+
+        <!-- Hermes -->
+        <script src="/js/help.js"></script>
+
+        <script
+            async
+            defer
+            data-website-id="0f73de68-9610-4a9c-a7a8-ab61ab30208a"
+            src="https://data.travelhermes.com/umami.js"
+        ></script>
     </body>
 </html>

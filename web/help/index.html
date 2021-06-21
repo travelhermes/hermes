@@ -4,12 +4,9 @@
         <meta charset="utf-8" />
         <link rel="shortcut icon" type="image/png" href="/assets/favicon.png" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta
-            name="description"
-            content="{{landingPageDescription}}: {{landingPagePlanning}}."
-        />
+        <meta name="description" content="{{landingPageDescription}}: {{landingPagePlanning}}." />
 
-        <title>Ayuda - Hermes</title>
+        <title>{{help}} - Hermes</title>
 
         <!-- Bootstrap core CSS -->
         <link href="/css/bootstrap.min.css" rel="stylesheet" />
@@ -18,8 +15,8 @@
         <!-- Custom styles for this template -->
         <link href="/css/index.css" rel="stylesheet" />
 
-<link rel="prefetch" href="/assets/placeholder.gif" />
-</head>
+        <link rel="prefetch" href="/assets/placeholder.gif" />
+    </head>
     <body class="d-flex h-100 text-white bg-dark" style="box-shadow: none">
         <div class="cover-container-big d-flex w-100 h-100 p-3 mx-auto flex-column">
             <header class="mb-3 text-center">
@@ -33,44 +30,44 @@
 
             <main class="px-3 text-center mb-5">
                 <a href="/dashboard/" class="text-white fs-5 mb-5"
-                    ><i class="bi bi-box-arrow-in-left mx-1"></i>Volver</a
+                    ><i class="bi bi-box-arrow-in-left mx-1"></i>{{back}}</a
                 >
-                <h1 class="mt-2 mb-5">¿En que podemos ayudarte?</h1>
+                <h1 class="mt-2 mb-5">{{helpIndexTitle}}</h1>
                 <div class="container">
                     <div class="row">
                         <div class="col break col-4 mb-2">
                             <div class="card text-start">
                                 <div class="card-body">
                                     <div class="fs-1 mb-2"><i class="bi bi-book"></i></div>
-                                    <h4 class="card-title">Manual de uso</h4>
-                                    <p class="card-text">Descubre Hermes.</p>
+                                    <h4 class="card-title">{{userManual}}</h4>
+                                    <p class="card-text">{{userManualDescription}}</p>
 
                                     <a href="/help/signin/" class="card-link">
-                                        <i class="bi bi-key mx-1"></i>Inicio de sesión
+                                        <i class="bi bi-key mx-1"></i>{{signin}}
                                     </a>
                                     <br />
                                     <a href="/help/signup/" class="card-link">
-                                        <i class="bi bi-person-plus-fill mx-1"></i>Registro
+                                        <i class="bi bi-person-plus-fill mx-1"></i>{{signup}}
                                     </a>
                                     <br />
                                     <a href="/help/recommender/" class="card-link"
-                                        ><i class="bi bi-hand-thumbs-up-fill mx-1"></i>Recomendador</a
+                                        ><i class="bi bi-hand-thumbs-up-fill mx-1"></i>{{recommendedForYou}}</a
                                     >
                                     <br />
                                     <a href="/help/planner/" class="card-link"
-                                        ><i class="bi bi-list-check mx-1"></i>Planes</a
+                                        ><i class="bi bi-list-check mx-1"></i>{{plans}}</a
                                     >
                                     <br />
                                     <a href="/help/ratings/" class="card-link">
-                                        <i class="bi bi-star-fill mx-1"></i>Puntuaciones
+                                        <i class="bi bi-star-fill mx-1"></i>{{ratings}}
                                     </a>
                                     <br />
                                     <a href="/help/profile/" class="card-link">
-                                        <i class="bi bi-person-circle mx-1"></i>Perfil
+                                        <i class="bi bi-person-circle mx-1"></i>{{profile}}
                                     </a>
-                                    <br>
+                                    <br />
                                     <a href="/help/emails/" class="card-link">
-                                        <i class="bi bi-envelope-open-fill mx-1"></i>Correos electrónicos
+                                        <i class="bi bi-envelope-open-fill mx-1"></i>{{emails}}
                                     </a>
                                 </div>
                             </div>
@@ -79,14 +76,14 @@
                             <div class="card text-start">
                                 <div class="card-body">
                                     <div class="fs-1 mb-2"><i class="bi bi-geo-alt-fill"></i></div>
-                                    <h4 class="card-title">Sugerir nuevos lugares</h4>
-                                    <p class="card-text">Propón nuevos lugares.</p>
+                                    <h4 class="card-title">{{suggestPlaces}}</h4>
+                                    <p class="card-text">{{suggestPlacesDescription}}</p>
                                     <a href="https://github.com/SrGMC/hermes" target="_blank" class="card-link">
-                                        <i class="bi bi-building mx-1"></i>Proponer un sitio
+                                        <i class="bi bi-building mx-1"></i>{{proposePlace}}
                                     </a>
                                     <br />
                                     <a href="https://github.com/SrGMC/hermes" target="_blank" class="card-link">
-                                        <i class="bi bi-geo-fill mx-1"></i>Proponer una ciudad
+                                        <i class="bi bi-geo-fill mx-1"></i>{{proposeCity}}
                                     </a>
                                 </div>
                             </div>
@@ -95,56 +92,47 @@
                             <div class="card text-start">
                                 <div class="card-body">
                                     <div class="fs-1 mb-2"><i class="bi bi-patch-exclamation"></i></div>
-                                    <h4 class="card-title">Reportar un error</h4>
-                                    <p class="card-text">Ayúdanos a mejorar la plataforma.</p>
+                                    <h4 class="card-title">{{reportBugs}}</h4>
+                                    <p class="card-text">{{reportBugsDescription}}</p>
                                     <a href="https://github.com/SrGMC/hermes" target="_blank" class="card-link">
-                                        <i class="bi bi-exclamation-circle-fill mx-1"></i>Reportar un lugar
+                                        <i class="bi bi-exclamation-circle-fill mx-1"></i>{{reportPlace}}
                                     </a>
                                     <br />
                                     <a href="https://github.com/SrGMC/hermes" target="_blank" class="card-link">
-                                        <i class="bi bi-bug-fill mx-1"></i>Reportar un fallo
+                                        <i class="bi bi-bug-fill mx-1"></i>{{reportBug}}
                                     </a>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <h1 class="mt-5">¿Necesitas más ayuda?</h1>
-                <p class="fs-4">Escríbenos un correo electrónico. Estaremos encantados de ayudarte.</p>
+                <h1 class="mt-5">{{needMoreHelp}}</h1>
+                <p class="fs-4">{{helpWriteEmail}}</p>
                 <a href="mailto:hermes@galisteo.me?subject=Hermes: " class="btn btn-primary btn-lg">
-                    <i class="bi bi-envelope-open-fill me-1"></i> Enviar un mensaje
+                    <i class="bi bi-envelope-open-fill me-1"></i> {{sendEmail}}
                 </a>
 
                 <div class="container">
                     <div class="row">
                         <div class="col break col-6">
-                            <h1 class="mt-5">Términos y condiciones</h1>
-                            <p class="fs-4">
-                                En Hermes, somos completamente abiertos, pero el uso de este servicio requiere de la
-                                aceptación de términos y condiciones.
-                            </p>
+                            <h1 class="mt-5">{{terms}}</h1>
+                            <p class="fs-4">{{termsDescription}}</p>
                             <a href="/terms/" class="btn btn-primary btn-lg">
-                                <i class="bi bi-file-earmark-text-fill"></i> Términos y condiciones
+                                <i class="bi bi-file-earmark-text-fill"></i> {{terms}}
                             </a>
                         </div>
                         <div class="col break col-6">
-                            <h1 class="mt-5">Política de privacidad</h1>
-                            <p class="fs-4">
-                                Nos tomamos muy enserio tu privacidad. Tus datos personales no son compartidos con
-                                ningún tercero y son siempre tuyos.
-                            </p>
+                            <h1 class="mt-5">{{privacyPolicy}}</h1>
+                            <p class="fs-4">{{privacyPolicyDescription}}</p>
                             <a href="/privacy/" class="btn btn-primary btn-lg"
-                                ><i class="bi bi-shield-lock-fill" style="margin-right: 5px"></i> Política de
-                                privacidad</a
+                                ><i class="bi bi-shield-lock-fill" style="margin-right: 5px"></i> {{privacyPolicy}}</a
                             >
                         </div>
                     </div>
                 </div>
 
-                <h1 class="mt-5">Open Source</h1>
-                <p class="fs-4">
-                    Hermes es completamente Open Source, por lo que culquiera puede contribuir a mejorar la plataforma.
-                </p>
+                <h1 class="mt-5">{{openSource}}</h1>
+                <p class="fs-4">{{openSourceDescription}}</p>
                 <a href="https://github.com/SrGMC/hermes" class="btn btn-primary btn-lg">
                     <i class="bi bi-github" style="margin-right: 5px"></i> GitHub
                 </a>
@@ -157,12 +145,17 @@
                     <a href="/attributions/" class="text-white">{{attributions}}</a> -
                     <a href="/help/" class="text-white">{{help}}</a> -
 
-                    <a href="https://status.travelhermes.com" class="text-white">{{status}}</a><br>
-                    <a href="/terms/" class="text-white">{{terms}}</a> - 
+                    <a href="https://status.travelhermes.com" class="text-white">{{status}}</a><br />
+                    <a href="/terms/" class="text-white">{{terms}}</a> -
                     <a href="/privacy/" class="text-white">{{privacyPolicy}}</a>
                 </p>
             </footer>
         </div>
-        <script async defer data-website-id="0f73de68-9610-4a9c-a7a8-ab61ab30208a" src="https://data.travelhermes.com/umami.js"></script>
+        <script
+            async
+            defer
+            data-website-id="0f73de68-9610-4a9c-a7a8-ab61ab30208a"
+            src="https://data.travelhermes.com/umami.js"
+        ></script>
     </body>
 </html>

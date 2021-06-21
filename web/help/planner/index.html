@@ -4,12 +4,9 @@
         <meta charset="utf-8" />
         <link rel="shortcut icon" type="image/png" href="/assets/favicon.png" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta
-            name="description"
-            content="{{landingPageDescription}}: {{landingPagePlanning}}."
-        />
+        <meta name="description" content="{{landingPageDescription}}: {{landingPagePlanning}}." />
 
-        <title>Planificador | Ayuda - Hermes</title>
+        <title>{{planner}} | {{help}} - Hermes</title>
 
         <!-- Bootstrap core CSS -->
         <link href="/css/bootstrap.min.css" rel="stylesheet" />
@@ -18,8 +15,8 @@
         <!-- Custom styles for this template -->
         <link href="/css/index.css" rel="stylesheet" />
 
-<link rel="prefetch" href="/assets/placeholder.gif" />
-</head>
+        <link rel="prefetch" href="/assets/placeholder.gif" />
+    </head>
     <body class="d-flex h-100 text-white bg-dark" style="box-shadow: none">
         <div class="cover-container-big d-flex w-100 h-100 p-3 mx-auto flex-column">
             <header class="mb-3 text-center">
@@ -32,124 +29,18 @@
             </header>
 
             <main class="px-3 mb-5 text-justify">
-                <a href="/help/" class="text-white fs-5 mb-5">
-                    <i class="bi bi-box-arrow-in-left mx-1"></i>Volver
-                </a>
-                <h1 class="mt-2"><i class="bi bi-list-check mx-1"></i> Planificador</h1>
-                <p class="fs-5">Aprende a planificar tus viajes.</p>
-                <p class="mt-3">
-                    El planificador de Hermes es la segunda herramienta principal. Una vez hayas creado un plan a partir
-                    de las <a class="text-white" href="/help/recommender/">recomendaciones</a>, desde la interfaz de
-                    planes podrás gestionar este o todos los planes que hayas creado
-                </p>
-                <h2 class="mt-2 border-bottom pb-2">1. Planes</h2>
-                <p class="mt-3">En Hermes, existen dos tipos de planes</p>
-                <ul>
-                    <li>
-                        Planes activos: Son planes en los que el día de hoy se encuentra entre la fecha de inicio y fin
-                        del plan o cuya fecha de inicio está en el futuro.
-                    </li>
-                    <li>Planes pasados: Son planes que han ocurrido en el pasado.</li>
-                </ul>
-                <p class="mt-3 text-center">
-                    <a href="/assets/help/plans.png"
-                        ><img class="w-50 border rounded" src="/assets/help/plans.png"
-                    /></a>
-                </p>
-                <h2 class="mt-2 border-bottom pb-2">2. Estados</h2>
-                <p class="mt-3">En Hermes, un plan puede estar en uno de los siguientes estados:</p>
-                <div class="d-inline-block">
-                    <div class="spinner-border spinner-border-sm me-1" role="status"></div>
-                    Planificando
-                </div>
-                : Hermes está terminando de planificando tu ruta. Esto puede tardar hasta 5 minutos.
-                <br />
-                <div class="d-inline-block"><i class="bi bi-compass me-1"></i>Activo</div>
-                : ¡Tu ruta está activa! Esto significa que estas realizandola o está pendiente de realizar.
-                <br />
-                <div class="d-inline-block"><i class="bi bi-check2-circle me-1"></i>Completado</div>
-                : Esta ruta ya ha sido completada.
-                <br />
-                <div class="d-inline-block text-danger">
-                    <i class="bi bi-exclamation-circle me-1"></i>Ruta no encontrada
-                </div>
-                : Hermes no ha podido encontrar una ruta. Es posible que hayas añadido demasiados sitios o que hayas
-                establecido poco tiempo. Prueba a eliminar la ruta y crearla de nuevo reduciendo la cantidad de sitios o
-                aumentando la duración del día/plan.
-                <br />
-                <div class="d-inline-block text-danger"><i class="bi bi-x-circle me-1"></i>Error interno</div>
-                : Se ha producido un error interno mientras se planficaba tu ruta. Intenta eliminar la ruta y créala
-                de nuevo más tarde, o si el error persiste, contacta con nosotros.
-                <br />
-                <h2 class="mt-4 border-bottom pb-2">3. Información del plan</h2>
-                <p>Al abrir uno de los planes, se te mostrará el plan al completo.</p>
-                <p class="mt-3 text-center">
-                    <a href="/assets/help/plan_1.png"
-                        ><img class="w-50 border rounded" src="/assets/help/plan_1.png"
-                    /></a>
-                </p>
-                <p class="mt-3">
-                    En el plan, podrás ver las horas de inicio y de fin de cada visita, junto a la duración de la visita
-                    y el tiempo de viaje entre distintos lugares.
-                </p>
-                <p class="mt-3">Existen 5 tipos distintos de lugares:</p>
-                <ul>
-                    <li>Inicio: Es el punto de inicio que has establecido al crear el plan.</li>
-                    <li>
-                        Lugar: Es un lugar que se encuentra en la base de datos de Hermes y que has seleccionado antes
-                        de crear el plan.
-                    </li>
-                    <li>Descanso: Es un período de descanso, como por ejemplo, la hora de la comida.</li>
-                    <li>
-                        Espera: Es un período de espera debido a que el siguiente lugar a visitar todavía no ha abierto.
-                    </li>
-                    <li>
-                        Personalizado: En un lugar personalizado, que has creado manualmente y que no se encuentra en la
-                        base de datos de Hermes.
-                    </li>
-                </ul>
-                <p class="mt-3">
-                    Si el plan tiene una duración superior a un día, podrás cambiar entre días mediante los botones
-                </p>
-                <div class="text-center">
-                                    <div class="btn-group d-inline-block ms-1" role="group" aria-label="Cambiar día">
-                        <a class="btn btn-outline-light btn-sm">
-                            <i class="mx-md-1 bi bi-arrow-left"></i>
-                            <span class="d-none d-lg-inline"> Anterior día </span> </a
-                        ><a class="btn btn-outline-light btn-sm"
-                            ><span class="d-none d-lg-inline"> Siguiente día </span
-                            ><i class="mx-md-1 bi bi-arrow-right"></i
-                        ></a>
-                    </div>
-                </div>
-                <h3 class="mt-2 border-bottom pb-2">3.1 Edición de un plan</h3>
-                <p class="mt-3">
-                    Podrás editar un plan <strong>activo</strong> en cualquier momento. Para ello, pulsa el botón
-                    <a class="btn btn-light btn-sm"><i class="mx-md-1 bi bi-pencil-fill"></i>Editar</a>
-                </p>
-                <p class="mt-3">Al activar el modo edición podrás, de parte superior e inferior en la interfaz:</p>
-                <ul>
-                    <li>Adelantar o atrasar la fecha de inicio del plan</li>
-                    <li>Cambiar el nombre y la descripción del plan</li>
-                    <li>Insertar lugares, descansos, esperas o lugares personalizados</li>
-                    <li>Cambiar duraciones de elementos</li>
-                    <li>Eliminar elementos del plan</li>
-                    <li>Añadir notas</li>
-                </ul>
-                <p class="mt-3 text-center">
-                    <a href="/assets/help/plan_2.png"
-                        ><img class="w-50 border rounded" src="/assets/help/plan_2.png"
-                    /></a>
-                </p>
-                <p class="mt-3">
-                    Una vez guardes los cambios, Hermes recalculará automáticamente todos los tiempos y actualizará la página para mostrarlos.
-                </p>
+                <a href="/help/" class="text-white fs-5 mb-5"> <i class="bi bi-box-arrow-in-left mx-1"></i>{{back}} </a>
+                <h1 class="mt-2"><i class="bi bi-list-check mx-1"></i> {{planner}}</h1>
+                <p class="fs-5">{{helpPlannerDescription}}</p>
+
+                <textarea id="content" class="d-none">{{helpPlannerContent}}</textarea>
+                <div id="helpContent"></div>
 
                 <div class="text-center">
-                    <h1 class="mt-5">¿Necesitas más ayuda?</h1>
-                    <p class="fs-4">Escríbenos un correo electrónico. Estaremos encantados de ayudarte.</p>
+                    <h1 class="mt-5">{{needMoreHelp}}</h1>
+                    <p class="fs-4">{{helpWriteEmail}}</p>
                     <a href="mailto:hermes@galisteo.me?subject=Hermes: " class="btn btn-primary btn-lg"
-                        ><i class="bi bi-envelope-open-fill me-1"></i>Enviar un mensaje</a
+                        ><i class="bi bi-envelope-open-fill me-1"></i>{{sendEmail}}</a
                     >
                 </div>
             </main>
@@ -161,12 +52,23 @@
                     <a href="/attributions/" class="text-white">{{attributions}}</a> -
                     <a href="/help/" class="text-white">{{help}}</a> -
 
-                    <a href="https://status.travelhermes.com" class="text-white">{{status}}</a><br>
-                    <a href="/terms/" class="text-white">{{terms}}</a> - 
+                    <a href="https://status.travelhermes.com" class="text-white">{{status}}</a><br />
+                    <a href="/terms/" class="text-white">{{terms}}</a> -
                     <a href="/privacy/" class="text-white">{{privacyPolicy}}</a>
                 </p>
             </footer>
         </div>
-        <script async defer data-website-id="0f73de68-9610-4a9c-a7a8-ab61ab30208a" src="https://data.travelhermes.com/umami.js"></script>
+        <!-- Remarkable -->
+        <script src="/js/remarkable.min.js"></script>
+
+        <!-- Hermes -->
+        <script src="/js/help.js"></script>
+
+        <script
+            async
+            defer
+            data-website-id="0f73de68-9610-4a9c-a7a8-ab61ab30208a"
+            src="https://data.travelhermes.com/umami.js"
+        ></script>
     </body>
 </html>
