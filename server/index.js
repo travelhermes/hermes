@@ -61,6 +61,24 @@ if (!process.env.MAIL_FROM) {
     process.exit(1);
 }
 
+// SIGINT, SIGTERM handler
+async function closeHandler(signal) {
+   console.log(`Received signal to terminate: ${signal}`);
+
+   await fastify.close();
+   await db.close();
+   process.exit();
+}
+
+// Exception handlers
+process.on("uncaughtException", async function(err) {
+    console.log(`Terminating due to Uncaught Exception: ${signal}`);
+    await fastify.close();
+    await db.close();
+
+    process.exit();
+});
+
 if (cluster.isMaster) {
     console.log(`Master with PID ${process.pid} is running`);
 
@@ -76,6 +94,8 @@ if (cluster.isMaster) {
      * Global configs
      */
     db.sequelize.options.logging = false;
+    process.on('SIGINT', closeHandler);
+    process.on('SIGTERM', closeHandler);
 
     /*
      * Mail Server
@@ -177,6 +197,7 @@ if (cluster.isMaster) {
     fastify.addHook('onSend', async (request, reply, payload) => {
         reply.header('X-Worker', cluster.worker.id);
         reply.header('Permissions-Policy', 'interest-cohort=()');
+        reply.header('X-Frame-Options', 'sameorigin');
 
         request.endTime = new Date();
 

@@ -1,4 +1,4 @@
-FROM rust
+FROM rust AS build
 LABEL maintainer="Álvaro Galisteo (https://galisteo.me)"
 
 # Install python
@@ -15,28 +15,34 @@ RUN apt-get update && \
     npm i -g npm neon-cli html-minifier uglify-js csso-cli && \
     rm -rf /var/lib/apt/lists/*
 
+FROM build
+
 # Copy files and install app
 WORKDIR /usr/src/app
 COPY ./server/package*.json ./
-RUN npm install
+RUN npm i --omit=dev
 
 COPY ./server /usr/src/app
 COPY ./web /usr/src/app/web
 
 # Install hermes-rust package
 WORKDIR /usr/src/app/hermes-rust
-RUN npm i && \
+RUN npm i --omit=dev && \
     rm -rf native/target node_modules
 
-WORKDIR /usr/src/app/web
-
-# Minify files
-RUN find -name '*.html' -exec /usr/bin/html-minifier --collapse-whitespace --remove-comments --sort-attributes --sort-class-name -o {} {} \; && \
-    find -name '*.js' -exec /usr/bin/uglifyjs {} --output {} --compress --mangle \; && \
-    find -name '*.css' -exec /usr/bin/csso {} --input {} --output {} \;
-RUN minify -o /usr/src/app/localization/lang/es.json /usr/src/app/localization/lang/es.json && \
+# Minify files and cleanup
+RUN find /usr/src/app/web -name '*.html' -exec /usr/bin/html-minifier --collapse-whitespace --remove-comments --sort-attributes --sort-class-name -o {} {} \; && \
+    find /usr/src/app/web -name '*.js' -exec /usr/bin/uglifyjs {} --output {} --compress --mangle \; && \
+    find /usr/src/app/web -name '*.css' -exec /usr/bin/csso {} --input {} --output {} \; && \
+    minify -o /usr/src/app/localization/lang/es.json /usr/src/app/localization/lang/es.json && \
     minify -o /usr/src/app/localization/lang/en.json /usr/src/app/localization/lang/en.json
 
+# Create user to prevent root usage
+RUN useradd -ms /bin/bash node && \
+    mkdir -p /usr/src/app && \
+    chown -R node:node /usr/src/app
+
+USER node
 WORKDIR /usr/src/app
 EXPOSE 80
 CMD [ "node", "--trace-warnings", "index.js" ]

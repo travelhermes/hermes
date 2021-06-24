@@ -43,7 +43,6 @@ coverage
 db.json
 dist
 docs/
-ff
 index.node
 jspm_packages/
 lerna-debug.log*
