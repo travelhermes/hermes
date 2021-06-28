@@ -1,5 +1,5 @@
 /* jshint esversion: 8 */
-const Localization = require('../localization/index.js');
+const { Localization } = require('../localization/index.js');
 const loc = new Localization();
 
 module.exports = function (request, reply, done) {

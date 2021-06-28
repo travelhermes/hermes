@@ -4,7 +4,7 @@ const { ApplicationLogger, LogLevel } = require('../logger/logger.js');
 const nodemailer = require('nodemailer');
 const fs = require('fs');
 const Handlebars = require('handlebars');
-const Localization = require('../localization/index.js');
+const { Localization } = require('../localization/index.js');
 
 const MailType = {
     passwordRequest: 0,

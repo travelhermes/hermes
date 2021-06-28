@@ -3,7 +3,7 @@ const CONNECTION_STRING = process.env.DATABASE;
 const { Sequelize, DataTypes } = require('sequelize');
 
 if (!process.env.DATABASE) {
-    console.error("Error: Missing DATABASE env var");
+    console.error('Error: Missing DATABASE env var');
     process.exit(1);
 }
 
@@ -121,7 +121,7 @@ const User = sequelize.define(
         country: {
             type: DataTypes.STRING,
             allowNull: false,
-            default: "ES"
+            default: 'ES',
         },
         lang: {
             type: DataTypes.STRING,
@@ -280,14 +280,6 @@ const Place = sequelize.define(
             type: DataTypes.FLOAT,
             allowNull: false,
         },
-        name: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
-        description: {
-            type: DataTypes.TEXT,
-            allowNull: true,
-        },
         timeSpent: {
             type: DataTypes.FLOAT,
             allowNull: true,
@@ -363,14 +355,17 @@ const Place = sequelize.define(
             allowNull: false,
             defaultValue: 0,
         },
+        TranslationNameId: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+        },
+        TranslationDescriptionId: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+        },
     },
     {
         paranoid: true,
-        indexes: [
-            {
-                fields: ['name'],
-            },
-        ],
     }
 );
 
@@ -471,10 +466,6 @@ const Category = sequelize.define(
             primaryKey: true,
         },
         fsqId: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
-        name: {
             type: DataTypes.STRING,
             allowNull: false,
         },
@@ -751,6 +742,56 @@ const Neighbor = sequelize.define('Neighbor', {
 User.hasMany(Neighbor, { foreignKey: { name: 'UserId1', allowNull: false } });
 User.hasMany(Neighbor, { foreignKey: { name: 'UserId2', allowNull: false } });
 
+const Translation = sequelize.define(
+    'Translation',
+    {
+        id: {
+            type: DataTypes.INTEGER,
+            autoIncrement: true,
+            allowNull: false,
+            unique: true,
+            primaryKey: true,
+        },
+        // 1: Name
+        // 2: Description
+        type: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+        },
+    },
+    {
+        timestamps: false,
+    }
+);
+
+const Text = sequelize.define(
+    'Text',
+    {
+        TranslationId: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            primaryKey: true,
+        },
+        language: {
+            type: DataTypes.STRING,
+            allowNull: false,
+            primaryKey: true,
+        },
+        string: {
+            type: DataTypes.TEXT,
+            allowNull: false,
+        },
+    },
+    {
+        timestamps: false,
+    }
+);
+
+Translation.hasMany(Text, { foreignKey: { name: 'TranslationId', allowNull: false } });
+Translation.hasMany(Place, { foreignKey: { name: 'TranslationNameId', allowNull: false } });
+Translation.hasMany(Place, { foreignKey: { name: 'TranslationDescriptionId', allowNull: false } });
+Translation.hasMany(Category);
+
 const PlaceCategory = sequelize.define('PlaceCategory', {});
 Category.hasMany(PlaceCategory, { foreignKey: { name: 'CategoryId', allowNull: false } });
 Category.belongsToMany(Place, { through: PlaceCategory });
@@ -767,12 +808,11 @@ Category.belongsToMany(User, { through: UserCategory });
 UserCategory.belongsTo(User);
 UserCategory.belongsTo(Category);
 
-exports.sequelize = sequelize;
+exports.AccessLog = AccessLog;
+exports.ApplicationLog = ApplicationLog;
 exports.Category = Category;
 exports.Distance = Distance;
 exports.Hour = Hour;
-exports.AccessLog = AccessLog;
-exports.ApplicationLog = ApplicationLog;
 exports.Login = Login;
 exports.Neighbor = Neighbor;
 exports.PasswordRequest = PasswordRequest;
@@ -783,7 +823,10 @@ exports.PlanItem = PlanItem;
 exports.PopularTime = PopularTime;
 exports.Rating = Rating;
 exports.Recommendation = Recommendation;
+exports.sequelize = sequelize;
 exports.Session = Session;
+exports.Text = Text;
+exports.Translation = Translation;
 exports.User = User;
 exports.UserCategory = UserCategory;
 exports.UserView = UserView;

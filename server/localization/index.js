@@ -5,6 +5,7 @@ const realFs = require('fs');
 const path = require('path');
 const Handlebars = require('handlebars');
 const mime = require('mime-types');
+const db = require('../db/models.js');
 
 const WEB_ROOT = path.join(__dirname, '/../web');
 const LANG_ROOT = path.join(__dirname, 'lang');
@@ -118,4 +119,18 @@ class Localization {
 	}
 }
 
-module.exports = Localization;
+class Translation {
+	static async getTranslation(id, lang) {
+		return (
+			await db.Text.findOne({
+				where: {
+					TranslationId: id,
+					language: lang,
+				},
+			})
+		).string;
+	}
+}
+
+exports.Localization = Localization;
+exports.Translation = Translation;

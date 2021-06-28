@@ -1,6 +1,6 @@
 /* jshint esversion: 8 */
 const CONFIG = require('./config.json');
-const db = require("../server/db/models.js");
+const db = require('../server/db/models.js');
 const http = require('http');
 
 if (!process.argv[2]) {
@@ -9,6 +9,8 @@ if (!process.argv[2]) {
 }
 
 const places = require('./' + process.argv[2]).places;
+
+const langs = ['es', 'en'];
 
 function getDistance(place1, place2, mode) {
     const url =
@@ -55,7 +57,6 @@ async function main() {
             var place = await db.Place.findOne({
                 where: {
                     osmId: places[i].osmId,
-                    name: places[i].name,
                     lat: places[i].lat,
                     lon: places[i].lon,
                 },
@@ -64,12 +65,33 @@ async function main() {
                 continue;
             }
 
+            // Create translations
+            const name = await db.Translation.create({
+                type: 1,
+            });
+            const description = await db.Translation.create({
+                type: 2,
+            });
+
+            for (let j = 0; j < langs.length; j++) {
+                const lang = langs[j];
+                // Create texts
+                await db.Text.create({
+                    TranslationId: name.id,
+                    language: langs[j],
+                    string: places[i].name[lang],
+                });
+                await db.Text.create({
+                    TranslationId: description.id,
+                    language: langs[j],
+                    string: places[i].description[lang],
+                });
+            }
+
             place = await db.Place.create({
                 fsqId: places[i].fsqId,
                 gmapsUrl: places[i].gmapsUrl,
                 osmId: places[i].osmId,
-                name: places[i].name,
-                description: places[i].description,
                 timeSpent: places[i].timeSpent,
                 lat: places[i].lat,
                 lon: places[i].lon,
@@ -88,6 +110,8 @@ async function main() {
                 wikipedia: places[i].wikipedia,
                 wheelchair: places[i].wheelchair,
                 images: places[i].images,
+                TranslationNameId: name.id,
+                TranslationDescriptionId: description.id 
             });
 
             for (let j = 0; j < places[i].hours.length; j++) {
@@ -144,7 +168,7 @@ async function main() {
                 console.error(places[i].name + ' has no known categories');
             }
         } catch (e) {
-            console.error(places[i].id + ', ' + places[i].name);
+            console.error((i+1) + ', ' + places[i].name['es']);
             console.error(e);
             console.error('');
             process.exit(1);
