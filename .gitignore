@@ -38,9 +38,8 @@ artifacts.json
 bower_components
 build/Release
 Cargo.lock
-config.json
+server/config.json
 coverage
-db.json
 dist
 ff
 index.node

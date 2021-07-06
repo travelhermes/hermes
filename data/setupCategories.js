@@ -7,8 +7,8 @@ async function main() {
     db.sequelize.options.logging = false;
     console.log("Adding categories");
 
-    for (let i = 0; i < CONFIG.foursquare.categories.length; i++) {
-        const cat = CONFIG.foursquare.categories[i];
+    for (let i = 0; i < CONFIG.categories.length; i++) {
+        const cat = CONFIG.categories[i];
 
         // Create translations
         const name = await db.Translation.create({
