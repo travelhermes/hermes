@@ -1,0 +1,12 @@
+upstream backend {
+   server hermes1; 
+   server hermes2;
+}
+
+server {
+   listen 80; 
+
+   location / {
+      proxy_pass http://backend;
+   }
+}

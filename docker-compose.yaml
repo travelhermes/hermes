@@ -1,16 +1,44 @@
 version: "3"
 
 services:
-    hermes:
+    nginx:
+        image: nginx:alpine
+        networks:
+            - default
+        volumes:
+            - ./example_nginx:/etc/nginx/conf.d/default.conf
+        ports:
+            - 8080:80
+        security_opt:
+            - no-new-privileges:true
+        restart: always
+
+    hermes1:
         image: srgmc/hermes
+        depends_on:
+            - mariadb
+            - nginx
         networks:
             - default
         env_file:
             - ./hermes.env
         volumes:
-            - ./web:/usr/src/app/web:ro
-        ports:
-            - 8080:80
+            - ./web/assets/places:/usr/src/app/web/assets/places:ro
+        security_opt:
+            - no-new-privileges:true
+        restart: always
+
+    hermes2:
+        image: srgmc/hermes
+        depends_on:
+            - mariadb
+            - nginx
+        networks:
+            - default
+        env_file:
+            - ./hermes.env
+        volumes:
+            - ./web/assets/places:/usr/src/app/web/assets/places:ro
         security_opt:
             - no-new-privileges:true
         restart: always
