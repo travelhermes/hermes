@@ -842,10 +842,18 @@ function insertPlace(button) {
     var place;
     if (searchMode == 'search') {
         place = getElementByKey(searchPlaces, 'id', id);
-        umami.trackEvent('Insert searched place', 'click');
+        try {
+            umami.trackEvent('Insert searched place', 'click');
+        } catch (e) {
+            console.log("Umami not available");
+        }
     } else if (searchMode == 'suggestions') {
         place = getElementByKey(suggestionPlaces, 'id', id);
-        umami.trackEvent('Insert suggested place', 'click');
+        try {
+            umami.trackEvent('Insert suggested place', 'click');
+        } catch (e) {
+            console.log("Umami not available");
+        }
     }
     plan.days[currentDay].route.splice(index + 1, 0, {
         id: -1,
