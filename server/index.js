@@ -117,7 +117,7 @@ if (cluster.isMaster) {
                 'default-src': ["'self'"],
                 'font-src': ["'self'"],
                 'frame-src': ["'self'", 'https://*.hcaptcha.com'],
-                'img-src': ["'self'", 'data:', 'travelhermes.com', '*.travelhermes.com'],
+                'img-src': ["'self'", 'data:', 'travelhermes.com', '*.travelhermes.com', 'openstreetmap.org', '*.openstreetmap.org'],
                 'manifest-src': ["'self'"],
                 'media-src': ["'self'"],
                 'object-src': ["'none'"],
@@ -135,7 +135,7 @@ if (cluster.isMaster) {
         },
     });
     fastify.register(fastifyCors, {
-        origin: [/\.galisteo\.me$/, /\.hcaptcha\.com$/],
+        origin: [/\.galisteo\.me$/, /\.hcaptcha\.com$/, /\.openstreetmap.org$/],
         methods: ['GET', 'PUT', 'POST'],
     });
     fastify.register(fastifyCookie, {
