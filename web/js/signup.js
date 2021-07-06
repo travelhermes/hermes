@@ -243,7 +243,6 @@ function signup() {
         surname: document.querySelector('#inputSurname').value,
         email: document.querySelector('#inputEmail').value,
         password: sha256(document.querySelector('#inputPassword').value),
-        country: document.querySelector('#inputCountry').value,
         preferences: preferences,
         hCaptcha: document
             .querySelector('#step1')
