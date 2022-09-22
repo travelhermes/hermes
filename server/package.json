@@ -29,7 +29,7 @@
         "fastify-cors": "^5.2.0",
         "fastify-helmet": "^5.2.0",
         "fastify-language-parser": "^3.0.0",
-        "fastify-rate-limit": "^5.4.1",
+        "fastify-rate-limit": "^5.9.0",
         "fastify-static": "^4.4.1",
         "fastify-strip-html": "^0.0.2",
         "fastify-url-data": "^3.0.3",
