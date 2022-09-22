@@ -38,7 +38,7 @@
         "mariadb": "^2.5.3",
         "memfs": "^3.2.2",
         "mime-types": "^2.1.31",
-        "nodemailer": "^6.5.0",
+        "nodemailer": "^6.7.8",
         "ora": "^5.4.0",
         "pg": "^8.6.0",
         "pg-hstore": "^2.3.3",
