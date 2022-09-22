@@ -36,7 +36,7 @@
         "geolib": "^3.3.1",
         "handlebars": "^4.7.7",
         "mariadb": "^2.5.3",
-        "memfs": "^3.2.2",
+        "memfs": "^3.4.7",
         "mime-types": "^2.1.31",
         "nodemailer": "^6.5.0",
         "ora": "^5.4.0",
